@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\products;
-use App\Models\purchase_details;
-use App\Models\sale_details;
 use App\Models\stock;
 use App\Models\units;
 use App\Models\warehouses;
@@ -15,38 +13,11 @@ class StockController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $warehouse = $request->warehouse ?? 'all';
         $products = products::all();
-        foreach($products as $product)
-        {
-           $stock = 0;
-           $stock_value = 0;
-           if($warehouse == 'all')
-           {
-             $purchases = purchase_details::where('productID', $product->id)->get();
-           }
-           else
-           {
-             $purchases = purchase_details::where('productID', $product->id)->where('warehouseID', $warehouse)->get();
-           }
-          
-          foreach($purchases as $purchase)
-          {
-            $sales = sale_details::where('purchase_id', $purchase->id)->sum('qty');
-            $purchase_stock = $purchase->qty - $sales;
-            if($purchase_stock > 0)
-            {
-                $stock += $purchase_stock;
-                $stock_value += $purchase_stock * $purchase->pprice;
-            }
-          }
-          $product->stock = $stock;
-          $product->stock_value = $stock_value;
-        }
         $warehouses = warehouses::all();
-        return view('stock.index', compact('products', 'warehouse', 'warehouses'));
+        return view('stock.index', compact('products', 'warehouses'));
     }
 
     /**

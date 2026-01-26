@@ -1,2 +1,70 @@
 <?php
- namespace App\Http\Controllers; use App\Models\expenseCategories; use Illuminate\Http\Request; use PHPUnit\Framework\Attributes\BackupGlobals; class ExpenseCategoriesController extends Controller { public function index() { $cats = expenseCategories::orderBy("\x6e\141\155\145", "\141\x73\x63")->get(); return view("\106\151\156\x61\156\143\x65\x2e\x65\x78\x70\145\x6e\163\x65\x2e\143\x61\164\x65\x67\x6f\x72\151\x65\x73", compact("\143\x61\164\163")); } public function create() { } public function store(Request $request) { expenseCategories::create($request->all()); return back()->with("\x6d\x73\147", "\103\x61\164\145\x67\x6f\x72\x79\40\x43\x72\145\141\164\145\144"); } public function show(expenseCategories $categories) { } public function edit(expenseCategories $categories) { } public function update(Request $request, $id) { expenseCategories::find($id)->update($request->all()); return back()->with("\155\163\x67", "\103\x61\164\145\147\157\x72\x79\x20\125\160\144\x61\164\145\144"); } public function destroy(expenseCategories $categories) { } }
+
+namespace App\Http\Controllers;
+
+use App\Models\expenseCategories;
+use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+
+class ExpenseCategoriesController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $cats = expenseCategories::orderBy('name', 'asc')->get();
+
+        return view('Finance.expense.categories', compact('cats'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        expenseCategories::create($request->all());
+        return back()->with('msg', 'Category Created');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(expenseCategories $categories)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(expenseCategories $categories)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        expenseCategories::find($id)->update($request->all());
+        return back()->with('msg', 'Category Updated');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(expenseCategories $categories)
+    {
+        //
+    }
+}

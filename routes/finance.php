@@ -5,13 +5,11 @@ use App\Http\Controllers\authController;
 use App\Http\Controllers\DepositWithdrawController;
 use App\Http\Controllers\ExpenseCategoriesController;
 use App\Http\Controllers\ExpensesController;
-use App\Http\Controllers\ExtraProfitController;
 use App\Http\Controllers\GroupedAccountsController;
 use App\Http\Controllers\PaymentReceivingController;
 use App\Http\Controllers\profileController;
 use App\Http\Controllers\TransferController;
 use App\Http\Middleware\confirmPassword;
-use App\Models\attachment;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -40,25 +38,11 @@ Route::middleware('auth')->group(function () {
     Route::get('receiving/delete/{ref}', [PaymentReceivingController::class, 'delete'])->name('receiving.delete')->middleware(confirmPassword::class);
     Route::get('receiving/pdf/{id}', [PaymentReceivingController::class, 'pdf'])->name('receiving.pdf');
 
-    Route::resource('extra_profit', ExtraProfitController::class);
-    Route::get('extra_profit/delete/{ref}', [ExtraProfitController::class, 'destroy'])->name('extra_profit.delete')->middleware(confirmPassword::class);
-
     Route::get('/accountbalance/{id}', function ($id) {
         // Call your Laravel helper function here
         $result = getAccountBalance($id);
 
         return response()->json(['data' => $result]);
     });
-
-     Route::get("/attachment/{ref}", function($ref)
-    {
-        $attachment = attachment::where("refID", $ref)->first();
-        if(!$attachment)
-        {
-            return redirect()->back()->with('error', "No Attachement Found");
-        }
-
-        return response()->file(public_path($attachment->path));
-    })->name('viewAttachment');
 });
 

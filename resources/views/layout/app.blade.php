@@ -39,10 +39,10 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="{{ route('dashboard') }}" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <h3 class="text-white">{{ projectNameShort() }}</h3>
+                                    <h3 class="text-dark">{{ projectNameShort() }}</h3>
                                 </span>
                                 <span class="logo-lg">
-                                    <h3 class="text-white mt-3">{{ projectName() }}</h3>
+                                    <h3 class="text-dark mt-3">{{ projectName() }}</h3>
                                 </span>
                             </a>
                             <!-- Light Logo-->
@@ -99,15 +99,15 @@
                                     <span class="text-start ms-xl-2">
                                         <span
                                             class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ auth()->user()->name }}</span>
-                                        <span
-                                            class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ auth()->user()->role == 1 ? 'Admin' : 'Operator' }}</span>
+                                        <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">
+                                            {{ auth()->user()->roles->first()?->name }}</span>
                                     </span>
                                 </span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
                                 <h6 class="dropdown-header">Welcome {{ auth()->user()->name }}!</h6>
-                                <a class="dropdown-item" href="{{-- {{ route('profile') }} --}}"><i
+                                <a class="dropdown-item" href="{{ route('profile') }}"><i
                                         class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
                                         class="align-middle">Profile</span></a>
                                 <a class="dropdown-item" href="{{ route('logout') }}"><i

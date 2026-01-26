@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\expenses;
-use App\Models\extraProfit;
 use App\Models\products;
 use App\Models\sale_details;
 use App\Models\sales;
@@ -18,17 +17,24 @@ class profitController extends Controller
 
     public function data($from, $to)
     {
-        $products = products::orderBy('name', 'asc')->get();
+        $products = products::all();
+        $data = [];
         foreach($products as $product)
         {
-            
-            $sales = sale_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->get();
-            $product->sales = $sales;
+            $purchaseRate = avgPurchasePrice($from, $to, $product->id);
+            $saleRate = avgSalePrice($from, $to, $product->id);
+            $sold = sale_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('qty');
+            $ppu = $saleRate - $purchaseRate;
+            $profit = $ppu * $sold;
+            $stock = getStock($product->id);
+            $stockValue = productStockValue($product->id);
+
+            $data[] = ['name' => $product->name, 'purchaseRate' => $purchaseRate, 'saleRate' => $saleRate, 'sold' => $sold, 'ppu' => $ppu, 'profit' => $profit, 'stock' => $stock, 'stockValue' => $stockValue];
         }
 
         $expenses = expenses::whereBetween('date', [$from, $to])->sum('amount');
-        $extraProfit = extraProfit::whereBetween('date', [$from, $to])->sum('amount');
+        $discounts = sales::whereBetween('date', [$from, $to])->sum('discount');
 
-        return view('reports.profit.details', compact('from', 'to', 'expenses', 'products', 'extraProfit'));
+        return view('reports.profit.details', compact('from', 'to', 'data', 'expenses', 'discounts'));
     }
 }

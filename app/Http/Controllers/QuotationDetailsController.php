@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\warehouses;
+use App\Models\quotationDetails;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class WarehousesController extends Controller
+class QuotationDetailsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $warehouses = warehouses::all();
-
-        return view('warehouses.index', compact('warehouses'));
+        //
     }
 
     /**
@@ -23,7 +20,7 @@ class WarehousesController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -31,16 +28,13 @@ class WarehousesController extends Controller
      */
     public function store(Request $request)
     {
-
-        warehouses::create($request->all());
-
-        return back()->with("success", "Warehouse Created");
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(warehouses $warehouses)
+    public function show(quotationDetails $quotationDetails)
     {
         //
     }
@@ -48,7 +42,7 @@ class WarehousesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(warehouses $warehouses)
+    public function edit(quotationDetails $quotationDetails)
     {
         //
     }
@@ -56,17 +50,15 @@ class WarehousesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, warehouses $warehouse)
+    public function update(Request $request, quotationDetails $quotationDetails)
     {
-        $warehouse->update($request->all());
-
-        return back()->with('success', "Warehouse Updated");
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(warehouses $warehouses)
+    public function destroy(quotationDetails $quotationDetails)
     {
         //
     }

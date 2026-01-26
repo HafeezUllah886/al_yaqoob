@@ -12,7 +12,6 @@ Route::middleware('auth')->group(function () {
     Route::get("sales/getproduct/{id}", [SalesController::class, 'getSignleProduct']);
     Route::get("sales/delete/{id}", [SalesController::class, 'destroy'])->name('sale.delete')->middleware(confirmPassword::class);
     Route::get("sales/pdf/{id}", [SalesController::class, 'pdf'])->name('sale.pdf');
-    Route::get("sales/gate_pass/{id}", [SalesController::class, 'gate_pass'])->name('sale.gate_pass');
 
     Route::get("product/searchByCode/{code}", [SalesController::class, 'getProductByCode'])->name('product.searchByCode');
 

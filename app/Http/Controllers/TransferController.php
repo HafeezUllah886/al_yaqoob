@@ -133,9 +133,6 @@ class TransferController extends Controller
             $toAccount = $transfer->toAccount->title;
             createTransaction($request->from,$request->date, 0, $request->amount, "Transfered to $toAccount <br> $request->notes", $ref, 'Transfer');
             createTransaction($request->to, $request->date, $request->amount, 0, "Transfered from $fromAccount <br> $request->notes", $ref, 'Transfer');
-            if($request->has('file')){
-                createAttachment($request->file('file'), $ref);
-            }
             DB::commit();
             session()->forget('confirmed_password');
             return to_route('transfers.index')->with('success', "Transfer Updated");

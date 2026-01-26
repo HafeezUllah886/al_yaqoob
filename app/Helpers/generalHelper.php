@@ -66,7 +66,7 @@ function projectName()
 
 function projectNameMedium()
 {
-    return 'Al-Yaqoob';
+    return 'Al-Yaqoob Business';
 }
 function projectNameShort()
 {

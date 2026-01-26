@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\accounts;
 use App\Models\categories;
 use App\Models\products;
 use App\Models\units;
@@ -15,10 +14,9 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $items = products::with('category', 'unit')->orderBy('name', 'asc')->paginate(1000);
+        $items = products::with('category', 'unit')->paginate(1000);
         $cats = categories::orderBy('name', 'asc')->get();
-        $vendors = accounts::vendor()->get();
-        return view('products.product', compact('items', 'cats', 'vendors'));
+        return view('products.product', compact('items', 'cats'));
     }
 
     /**
@@ -122,32 +120,5 @@ class ProductsController extends Controller
         }
 
         return "C$value";
-    }
-
-    public function price_list()
-    {
-        $vendors = accounts::vendor()->get();
-        return view('products.price_list.index', compact('vendors'));
-    }
-
-    public function price_list_details($vendor, $from, $to)
-    {
-        $start = $from;
-        $end = $to;
-
-       $productsQuery = products::query();
-
-// 2. Filter by vendor if necessary
-if ($vendor != "All") {
-    $vendorData = accounts::find($vendor);
-    $productsQuery->where('vendor', $vendorData->title);
-}
-
-// 3. Fetch the data from the database
-$products = $productsQuery->get();
-
-// 4. Sort the Collection in memory using Natural Sorting
-$products = $products->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)->values();
-        return view('products.price_list.details', compact('products', 'start', 'end'));
     }
 }

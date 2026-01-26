@@ -54,9 +54,6 @@ class PaymentReceivingController extends Controller
             createTransaction($request->accountID, $request->date, $request->amount, 0, "Amount Received <br>" . $request->notes, $ref, "Payment Receiving");
             createTransaction($request->fromID, $request->date, 0, $request->amount, "Amount Received <bt>" . $request->notes, $ref, "Payment Receiving");
 
-            if($request->has('file')){
-                createAttachment($request->file('file'), $ref);
-            }
             DB::commit();
             return back()->with('success', 'Receipt Saved');
         }
