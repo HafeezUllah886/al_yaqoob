@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <title>BMS | Nexgen Pakistan</title>
+    <title>{{ projectTypeShort() }} | Nexgen Pakistan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
         content="Paces is a modern, responsive admin dashboard available on ThemeForest. Ideal for building CRM, CMS, project management tools, and custom web applications with a clean UI, flexible layouts, and rich features.">
     <meta name="keywords"
         content="Paces, admin dashboard, ThemeForest, Bootstrap 5 admin, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template">
-    <meta name="author" content="Coderthemes">
+    <meta name="author" content="Nexgen Pakistan">
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
@@ -22,6 +22,7 @@
 
     <!-- App css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
+    @stack('page-css')
 
 </head>
 
@@ -34,22 +35,22 @@
                     <!-- Topbar Brand Logo -->
                     <div class="logo-topbar">
                         <!-- Logo light -->
-                        <a href="index-1.html" class="logo-light">
+                        <a href="{{ route('dashboard') }}" class="logo-light">
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo.png') }}" alt="logo">
+                                <h3 class="text-dark fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
                             </span>
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo">
+                                <h3 class="text-dark fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
                             </span>
                         </a>
 
                         <!-- Logo Dark -->
-                        <a href="index-1.html" class="logo-dark">
+                        <a href="{{ route('dashboard') }}" class="logo-dark">
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo-black.png') }}" alt="dark logo">
+                                <h3 class="text-dark fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
                             </span>
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="small logo">
+                                <h3 class="text-dark fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
                             </span>
                         </a>
                     </div>
@@ -125,8 +126,8 @@
                                     class="rounded-circle me-lg-2 d-flex" alt="user-image">
                                 <div class="d-lg-flex align-items-center gap-1 d-none">
                                     <span>
-                                        <h5 class="my-0 lh-1 pro-username">David Dev</h5>
-                                        <span class="fs-xs lh-1">Admin Head</span>
+                                        <h5 class="my-0 lh-1 pro-username">{{ Auth::user()->name }}</h5>
+                                        <span class="fs-xs lh-1">{{ Auth::user()->role }}</span>
                                     </span>
                                     <i class="ti ti-chevron-down align-middle"></i>
                                 </div>
@@ -156,15 +157,23 @@
         <!-- Topbar End -->
         <div class="sidenav-menu">
             <!-- Brand Logo -->
-            <a href="index-1.html" class="logo">
+            <a href="{{ route('dashboard') }}" class="logo">
                 <span class="logo logo-light">
-                    <span class="logo-lg"><img src="assets/images/logo.png" alt="logo"></span>
-                    <span class="logo-sm"><img src="assets/images/logo-sm.png" alt="small logo"></span>
+                    <span class="logo-lg">
+                        <h3 class="text-white fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
+                    </span>
+                    <span class="logo-sm">
+                        <h3 class="text-white fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
+                    </span>
                 </span>
 
                 <span class="logo logo-dark">
-                    <span class="logo-lg"><img src="assets/images/logo-black.png" alt="dark logo"></span>
-                    <span class="logo-sm"><img src="assets/images/logo-sm.png" alt="small logo"></span>
+                    <span class="logo-lg">
+                        <h3 class="text-white fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
+                    </span>
+                    <span class="logo-sm">
+                        <h3 class="text-white fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
+                    </span>
                 </span>
             </a>
 
@@ -186,8 +195,8 @@
                             <a href="#!" class="link-reset">
                                 <img src="assets/images/users/user-1.jpg" alt="user-image"
                                     class="rounded-circle mb-2 avatar-md">
-                                <span class="sidenav-user-name fw-bold">David Dev</span>
-                                <span class="fs-12 fw-semibold" data-lang="user-role">Art Director</span>
+                                <span class="sidenav-user-name fw-bold">{{ Auth::user()->name }}</span>
+                                <span class="fs-12 fw-semibold" data-lang="user-role">{{ Auth::user()->role }}</span>
                             </a>
                         </div>
                         <div>
@@ -210,7 +219,7 @@
                                 </a>
 
                                 <!-- Logout -->
-                                <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold">
+                                <a href="{{ route('logout') }}" class="dropdown-item text-danger fw-semibold">
                                     <i class="ti ti-logout me-1 fs-lg align-middle"></i>
                                     <span class="align-middle">Log Out</span>
                                 </a>
@@ -271,17 +280,31 @@
             <div class="container-fluid">
                 <div class="page-title-head d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h4 class="page-main-title m-0">Starter</h4>
+                        <h4 class="page-main-title m-0">@yield('page-title')</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Paces</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                            <li class="breadcrumb-item active">Starter</li>
+                            @php
+                                $breadcrumbContent = trim($__env->yieldContent('page-breadcrumb'));
+                                $breadcrumbs = json_decode($breadcrumbContent, true);
+                                if (json_last_error() !== JSON_ERROR_NONE) {
+                                    $breadcrumbs = json_decode(html_entity_decode($breadcrumbContent), true);
+                                }
+                            @endphp
+                            @if (is_array($breadcrumbs))
+                                @foreach ($breadcrumbs as $breadcrumb)
+                                    <li class="breadcrumb-item"><a
+                                            href="javascript: void(0);">{{ $breadcrumb }}</a></li>
+                                @endforeach
+                            @else
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">@yield('page-breadcrumb')</a></li>
+                            @endif
+                            <li class="breadcrumb-item active">@yield('page-title')</li>
                         </ol>
                     </div>
                 </div>
+                @yield('content')
             </div>
             <!-- container -->
 
@@ -317,6 +340,7 @@
 
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
+    @stack('page-js')
 
 </body>
 

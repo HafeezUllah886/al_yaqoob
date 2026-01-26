@@ -42,8 +42,8 @@
                             <div class="col-lg-6">
                                 <div class="card-body">
                                     <div class="auth-brand text-center mb-4 position-relative">
-                                        <h2 class="fw-bold text-dark mt-3">Al-Yaqoob Management System</h2>
-                                        <p class="text-muted w-lg-75 mx-auto">Business Management System</p>
+                                        <h2 class="fw-bold text-dark mt-3">{{ projectName() }}</h2>
+                                        <p class="text-muted w-lg-75 mx-auto">{{ projectType() }}</p>
                                     </div>
                                     <p class="text-center text-muted my-3 auth-line">
                                         <span> Welcome Back </span>
@@ -84,7 +84,7 @@
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
-                                        BMS — by
+                                        {{ projectTypeShort() }} — by
                                         <span class="fw-bold">Nexgen Pakistan</span>
                                     </p>
                                 </div>
