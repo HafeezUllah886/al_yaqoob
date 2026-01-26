@@ -1,347 +1,250 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+    data-sidebar-image="none" data-preloader="disable" data-theme="default" data-theme-colors="default">
 
 <head>
-    <meta charset="utf-8">
-    <title>{{ projectTypeShort() }} | Nexgen Pakistan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description"
-        content="Paces is a modern, responsive admin dashboard available on ThemeForest. Ideal for building CRM, CMS, project management tools, and custom web applications with a clean UI, flexible layouts, and rich features.">
-    <meta name="keywords"
-        content="Paces, admin dashboard, ThemeForest, Bootstrap 5 admin, responsive admin, CRM dashboard, CMS admin, web app UI, admin theme, premium admin template">
-    <meta name="author" content="Nexgen Pakistan">
-
+    <meta charset="utf-8" />
+    <title>Business Management System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Business Management System" name="description" />
+    <meta content="Hafeez Ullah" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
-    <!-- Theme Config Js -->
-    <script src="{{ asset('assets/js/config.js') }}"></script>
-    <script src="{{ asset('assets/js/demo.js') }}"></script>
 
-    <!-- Vendor css -->
-    <link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- Layout config Js -->
+    <script src="{{ asset('assets/js/layout.js') }}"></script>
+    <!-- Bootstrap Css -->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="{{ asset('assets/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
-    <!-- App css -->
-    <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
-    @stack('page-css')
+    <link href="{{ asset('assets/libs/toastify/toastify.min.css') }}" rel="stylesheet" type="text/css" />
+
+    @yield('page-css')
 
 </head>
 
 <body>
     <!-- Begin page -->
-    <div class="wrapper">
-        <header class="app-topbar">
-            <div class="container-fluid topbar-menu">
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Topbar Brand Logo -->
-                    <div class="logo-topbar">
-                        <!-- Logo light -->
-                        <a href="{{ route('dashboard') }}" class="logo-light">
-                            <span class="logo-lg">
-                                <h3 class="text-dark fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
-                            </span>
-                            <span class="logo-sm">
-                                <h3 class="text-dark fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
-                            </span>
-                        </a>
-
-                        <!-- Logo Dark -->
-                        <a href="{{ route('dashboard') }}" class="logo-dark">
-                            <span class="logo-lg">
-                                <h3 class="text-dark fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
-                            </span>
-                            <span class="logo-sm">
-                                <h3 class="text-dark fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
-                            </span>
-                        </a>
-                    </div>
-
-                    <!-- Sidebar Menu Toggle Button -->
-                    <button class="sidenav-toggle-button btn btn-primary btn-icon">
-                        <i class="ti ti-menu-4"></i>
-                    </button>
-
-                    <!-- Horizontal Menu Toggle Button -->
-                    <button class="topnav-toggle-button px-2" data-bs-toggle="collapse" data-bs-target="#topnav-menu">
-                        <i class="ti ti-menu-4"></i>
-                    </button>
-                </div>
-
-                <div class="d-flex align-items-center gap-2">
-                    <div id="theme-dropdown" class="topbar-item d-none d-sm-flex">
-                        <div class="dropdown">
-                            <button class="topbar-link" data-bs-toggle="dropdown" type="button" aria-haspopup="false"
-                                aria-expanded="false">
-                                <i class="ti ti-sun topbar-link-icon d-none" id="theme-icon-light"></i>
-                                <i class="ti ti-moon topbar-link-icon d-none" id="theme-icon-dark"></i>
-                                <i class="ti ti-sun-moon topbar-link-icon d-none" id="theme-icon-system"></i>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-end" data-thememode="dropdown">
-                                <label class="dropdown-item cursor-pointer">
-                                    <input class="form-check-input" type="radio" name="data-bs-theme" value="light"
-                                        style="display: none">
-                                    <i class="ti ti-sun align-middle me-1 fs-16"></i>
-                                    <span class="align-middle">Light</span>
-                                </label>
-                                <label class="dropdown-item cursor-pointer">
-                                    <input class="form-check-input" type="radio" name="data-bs-theme" value="dark"
-                                        style="display: none">
-                                    <i class="ti ti-moon align-middle me-1 fs-16"></i>
-                                    <span class="align-middle">Dark</span>
-                                </label>
-                                <label class="dropdown-item cursor-pointer">
-                                    <input class="form-check-input" type="radio" name="data-bs-theme" value="system"
-                                        style="display: none">
-                                    <i class="ti ti-sun-moon align-middle me-1 fs-16"></i>
-                                    <span class="align-middle">System</span>
-                                </label>
-                            </div>
-                            <!-- end dropdown-menu-->
-                        </div>
-                        <!-- end dropdown-->
-                    </div>
-                    <div id="fullscreen-toggler" class="topbar-item d-none d-md-flex">
-                        <button class="topbar-link" type="button" data-toggle="fullscreen">
-                            <i class="ti ti-maximize topbar-link-icon"></i>
-                            <i class="ti ti-minimize topbar-link-icon d-none"></i>
-                        </button>
-                    </div>
-
-                    <div id="monochrome-toggler" class="topbar-item d-none d-xl-flex">
-                        <button id="monochrome-mode" class="topbar-link" type="button" data-toggle="monochrome">
-                            <i class="ti ti-palette topbar-link-icon"></i>
-                        </button>
-                    </div>
-
-                    <div class="topbar-item d-none d-sm-flex">
-                        <button class="topbar-link btn-theme-setting" data-bs-toggle="offcanvas"
-                            data-bs-target="#theme-settings-offcanvas" type="button">
-                            <i class="ti ti-settings topbar-link-icon"></i>
-                        </button>
-                    </div>
-                    <div id="user-dropdown-detailed" class="topbar-item nav-user">
-                        <div class="dropdown">
-                            <a class="topbar-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
-                                href="#!" aria-haspopup="false" aria-expanded="false">
-                                <img src="assets/images/users/user-1.jpg" width="32"
-                                    class="rounded-circle me-lg-2 d-flex" alt="user-image">
-                                <div class="d-lg-flex align-items-center gap-1 d-none">
-                                    <span>
-                                        <h5 class="my-0 lh-1 pro-username">{{ Auth::user()->name }}</h5>
-                                        <span class="fs-xs lh-1">{{ Auth::user()->role }}</span>
-                                    </span>
-                                    <i class="ti ti-chevron-down align-middle"></i>
-                                </div>
+    <div id="layout-wrapper">
+        <header id="page-topbar">
+            <div class="layout-width">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box horizontal-logo">
+                            <a href="{{ route('dashboard') }}" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <h3 class="text-white">{{ projectNameShort() }}</h3>
+                                </span>
+                                <span class="logo-lg">
+                                    <h3 class="text-white mt-3">{{ projectName() }}</h3>
+                                </span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <!-- Header -->
-                                <div class="dropdown-header noti-title">
-                                    <h6 class="text-overflow m-0">Welcome back 👋!</h6>
-                                </div>
+                            <!-- Light Logo-->
+                            <a href="{{ route('dashboard') }}" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <h3 class="text-white">{{ projectNameShort() }}</h3>
+                                </span>
+                                <span class="logo-lg">
+                                    <h3 class="text-white mt-3">{{ projectName() }}</h3>
+                                </span>
+                            </a>
+                        </div>
 
-                                <!-- My Profile -->
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ti ti-user-circle me-1 fs-lg align-middle"></i>
-                                    <span class="align-middle">Profile</span>
-                                </a>
-                                <!-- Logout -->
-                                <a href="{{ route('logout') }}" class="dropdown-item fw-semibold">
-                                    <i class="ti ti-logout me-1 fs-lg align-middle"></i>
-                                    <span class="align-middle">Log Out</span>
-                                </a>
+                        <button type="button"
+                            class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger material-shadow-none"
+                            id="topnav-hamburger-icon">
+                            <span class="hamburger-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
+
+                    </div>
+
+                    <div class="d-flex align-items-center">
+
+                        {{-- <div class="ms-1 header-item d-none d-sm-flex">
+                            <a onclick="newWindow('{{ route('pos') }}')"
+                                class="btn btn-info btn-icon btn-topbar material-shadow-none text-white rounded-circle">
+                                POS
+                            </a>
+                        </div> --}}
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle"
+                                data-toggle="fullscreen">
+                                <i class='bx bx-fullscreen fs-22'></i>
+                            </button>
+                        </div>
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <button type="button"
+                                class="btn btn-icon btn-topbar material-shadow-none btn-ghost-secondary rounded-circle light-dark-mode">
+                                <i class='bx bx-moon fs-22'></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown ms-sm-3 header-item topbar-user">
+                            <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="d-flex align-items-center">
+                                    <img class="rounded-circle header-profile-user"
+                                        src="{{ asset('assets/images/users/avatar-1.jpg') }}" alt="Header Avatar">
+                                    <span class="text-start ms-xl-2">
+                                        <span
+                                            class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ auth()->user()->name }}</span>
+                                        <span
+                                            class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ auth()->user()->role == 1 ? 'Admin' : 'Operator' }}</span>
+                                    </span>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <h6 class="dropdown-header">Welcome {{ auth()->user()->name }}!</h6>
+                                <a class="dropdown-item" href="{{-- {{ route('profile') }} --}}"><i
+                                        class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                        class="align-middle">Profile</span></a>
+                                <a class="dropdown-item" href="{{ route('logout') }}"><i
+                                        class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                        class="align-middle" data-key="t-logout">Logout</span></a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
-        <!-- Topbar End -->
-        <div class="sidenav-menu">
-            <!-- Brand Logo -->
-            <a href="{{ route('dashboard') }}" class="logo">
-                <span class="logo logo-light">
-                    <span class="logo-lg">
-                        <h3 class="text-white fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
-                    </span>
-                    <span class="logo-sm">
-                        <h3 class="text-white fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
-                    </span>
-                </span>
 
-                <span class="logo logo-dark">
-                    <span class="logo-lg">
-                        <h3 class="text-white fs-3 text-center mt-3 mb-2 p-0">{{ projectNameMedium() }}</h3>
-                    </span>
-                    <span class="logo-sm">
-                        <h3 class="text-white fs-3 mt-3 mb-2 p-0">{{ projectNameShort() }}</h3>
-                    </span>
-                </span>
-            </a>
+        <!-- ========== App Menu ========== -->
+        @include('layout.sidebar')
+        <!-- Left Sidebar End -->
+        <!-- Vertical Overlay-->
+        <div class="vertical-overlay"></div>
 
-            <!-- Sidebar Hover Menu Toggle Button -->
-            <button class="button-on-hover">
-                <i class="ti ti-circle align-middle"></i>
-            </button>
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
 
-            <!-- Full Sidebar Menu Close Button -->
-            <button class="button-close-offcanvas">
-                <i class="ti ti-menu-4 align-middle"></i>
-            </button>
+            <div class="page-content">
+                <div class="container-fluid">
 
-            <div class="scrollbar" data-simplebar="">
-                <div id="user-profile-settings" class="sidenav-user"
-                    style="background: url(assets/images/user-bg-pattern.svg)">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <a href="#!" class="link-reset">
-                                <img src="assets/images/users/user-1.jpg" alt="user-image"
-                                    class="rounded-circle mb-2 avatar-md">
-                                <span class="sidenav-user-name fw-bold">{{ Auth::user()->name }}</span>
-                                <span class="fs-12 fw-semibold" data-lang="user-role">{{ Auth::user()->role }}</span>
-                            </a>
+                    @yield('content')
+
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script> © BMS.
                         </div>
-                        <div>
-                            <a class="dropdown-toggle drop-arrow-none link-reset sidenav-user-set-icon"
-                                data-bs-toggle="dropdown" data-bs-offset="0,12" href="#!" aria-haspopup="false"
-                                aria-expanded="false">
-                                <i class="ti ti-settings fs-24 align-middle ms-1"></i>
-                            </a>
-
-                            <div class="dropdown-menu">
-                                <!-- Header -->
-                                <div class="dropdown-header noti-title">
-                                    <h6 class="text-overflow m-0">Welcome back!</h6>
-                                </div>
-
-                                <!-- My Profile -->
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ti ti-user-circle me-1 fs-lg align-middle"></i>
-                                    <span class="align-middle">Profile</span>
-                                </a>
-
-                                <!-- Logout -->
-                                <a href="{{ route('logout') }}" class="dropdown-item text-danger fw-semibold">
-                                    <i class="ti ti-logout me-1 fs-lg align-middle"></i>
-                                    <span class="align-middle">Log Out</span>
-                                </a>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Design & Develop by Nexgen Pakistan
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!--- Sidenav Menu -->
-                @include('layout.sidebar')
-            </div>
-        </div>
-        <!-- Sidenav Menu End -->
-
-
-        <script>
-            // Sidenav Link Activation
-            const currentUrlT = window.location.href.split(/[?#]/)[0];
-            const currentPageT = window.location.pathname.split("/").pop();
-            const sideNavT = document.querySelector('.side-nav');
-
-            document.querySelectorAll('.side-nav-link[href]').forEach(link => {
-                const linkHref = link.getAttribute('href');
-                if (!linkHref) return;
-
-                const match = linkHref === currentPageT || link.href === currentUrlT;
-
-                if (match) {
-                    // Mark link and its li active
-                    link.classList.add('active');
-                    const li = link.closest('li.side-nav-item');
-                    if (li) li.classList.add('active');
-
-                    // Expand all parent .collapse and set toggles
-                    let parentCollapse = link.closest('.collapse');
-                    while (parentCollapse) {
-                        parentCollapse.classList.add('show');
-
-                        const parentToggle = document.querySelector(`a[href="#${parentCollapse.id}"]`);
-                        if (parentToggle) {
-                            parentToggle.setAttribute('aria-expanded', 'true');
-                            const parentLi = parentToggle.closest('li.side-nav-item');
-                            if (parentLi) parentLi.classList.add('active');
-                        }
-
-                        parentCollapse = parentCollapse.parentElement.closest('.collapse');
-                    }
-                }
-            });
-        </script>
-
-
-        <!-- ============================================================== -->
-        <!-- Start Main Content -->
-        <!-- ============================================================== -->
-
-        <div class="content-page">
-            <div class="container-fluid">
-                <div class="page-title-head d-flex align-items-center">
-                    <div class="flex-grow-1">
-                        <h4 class="page-main-title m-0">@yield('page-title')</h4>
-                    </div>
-
-                    <div class="text-end">
-                        <ol class="breadcrumb m-0 py-0">
-                            @php
-                                $breadcrumbContent = trim($__env->yieldContent('page-breadcrumb'));
-                                $breadcrumbs = json_decode($breadcrumbContent, true);
-                                if (json_last_error() !== JSON_ERROR_NONE) {
-                                    $breadcrumbs = json_decode(html_entity_decode($breadcrumbContent), true);
-                                }
-                            @endphp
-                            @if (is_array($breadcrumbs))
-                                @foreach ($breadcrumbs as $breadcrumb)
-                                    <li class="breadcrumb-item"><a
-                                            href="javascript: void(0);">{{ $breadcrumb }}</a></li>
-                                @endforeach
-                            @else
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">@yield('page-breadcrumb')</a></li>
-                            @endif
-                            <li class="breadcrumb-item active">@yield('page-title')</li>
-                        </ol>
-                    </div>
-                </div>
-                @yield('content')
-            </div>
-            <!-- container -->
-
-            <!-- Footer Start -->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6 text-center text-md-start">
-                            ©
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script>
-                            BMS By
-                            <span class="fw-semibold">Nexgen Pakistan</span>
-                        </div>
-                    </div>
-                </div>
             </footer>
-            <!-- end Footer -->
-
         </div>
+        <!-- end main content-->
 
-        <!-- ============================================================== -->
-        <!-- End of Main Content -->
-        <!-- ============================================================== -->
     </div>
-    <!-- END wrapper -->
+    <!-- END layout-wrapper -->
 
-    @include('layout.ui_settings')
-    <!-- end offcanvas-->
-    <!-- Vendor js -->
-    <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+
+
+    <!--start back-to-top-->
+    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    <!--end back-to-top-->
+
+    <!--preloader-->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="customizer-setting d-none d-md-block">
+        <div class="btn-info rounded-pill shadow-lg btn btn-icon btn-lg p-2" data-bs-toggle="offcanvas"
+            data-bs-target="#theme-settings-offcanvas" aria-controls="theme-settings-offcanvas">
+            <i class='mdi mdi-spin mdi-cog-outline fs-22'></i>
+        </div>
+    </div>
+
+    <!-- Theme Settings -->
+    @include('layout.settings')
+
+    <!-- JAVASCRIPT -->
+    <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
+    {{--     <script src="{{ asset('assets/js/plugins.js') }}"></script> --}}
 
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
-    @stack('page-js')
+    <script src="{{ asset('assets/libs/toastify/toastify.min.js') }}"></script>
 
+    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+
+
+    @if (Session::get('success'))
+        <script>
+            Toastify({
+                text: "{{ Session::get('success') }}",
+                className: "info",
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "center", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #01CB3E, #96c93d)",
+                }
+            }).showToast();
+        </script>
+    @endif
+    @if (Session::get('error'))
+        <script>
+            Toastify({
+                text: "{{ Session::get('error') }}",
+                className: "info",
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "center", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #FF5733, #E70000)",
+                }
+            }).showToast();
+        </script>
+    @endif
+    <script>
+        function newWindow(route) {
+            var width = screen.width;
+            var height = screen.height;
+
+            window.open(route, '_blank', `width=${width},height=${height}`);
+        }
+    </script>
+
+    @yield('page-js')
 </body>
 
 </html>
