@@ -2,19 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\units;
+use App\Http\Middleware\confirmPassword;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\DB;
 
-class UnitsController extends Controller
+class UnitsController extends Controller implements HasMiddleware
 {
     /**
-     * Display a listing of the resource.
+     * Get the middleware that should be assigned to the controller.
      */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware(confirmPassword::class, only: ['destroy']),
+        ];
+    }
+
     public function index()
     {
-        $units = units::all();
+        $this->authorize('View Units');
+        $units = Unit::all();
 
-        return view('products.units', compact('units'));
+        return view('units.index', compact('units'));
     }
 
     /**
@@ -30,14 +42,29 @@ class UnitsController extends Controller
      */
     public function store(Request $request)
     {
-        units::create($request->all());
-        return back()->with('success', 'Unit Created');
+        $this->authorize('Create Units');
+        $request->validate([
+            'name' => 'required|unique:units,name',
+            'value' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            Unit::create($request->all());
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('units.index')->with('success', 'Unit Created Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(units $units)
+    public function show(Unit $unit)
     {
         //
     }
@@ -45,7 +72,7 @@ class UnitsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(units $units)
+    public function edit(Unit $unit)
     {
         //
     }
@@ -55,16 +82,43 @@ class UnitsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $unit = units::find($id);
-        $unit->update($request->only('name', 'value'));
-        return back()->with('success', "Unit Updated");
+        $this->authorize('Edit Units');
+        $request->validate([
+            'name' => 'required|unique:units,name,'.$id,
+            'value' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $unit = Unit::find($id);
+            $unit->update($request->all());
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('units.index')->with('success', 'Unit Updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(units $units)
+    public function destroy($id)
     {
-        //
+        $this->authorize('Delete Units');
+        try {
+            DB::beginTransaction();
+            $unit = Unit::find($id);
+            $unit->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('units.index')->with('success', 'Unit Deleted Successfully');
     }
 }

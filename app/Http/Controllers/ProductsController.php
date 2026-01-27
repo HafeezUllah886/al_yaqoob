@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\categories;
-use App\Models\products;
-use App\Models\units;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -14,9 +15,12 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $items = products::with('category', 'unit')->paginate(1000);
-        $cats = categories::orderBy('name', 'asc')->get();
-        return view('products.product', compact('items', 'cats'));
+        $this->authorize('View Products');
+        $products = Product::with('category', 'unit')->get();
+        $categories = Category::orderBy('name', 'asc')->get();
+        $units = Unit::all();
+
+        return view('products.index', compact('products', 'categories', 'units'));
     }
 
     /**
@@ -32,24 +36,32 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'code' => "unique:products,code",
-            ],
-            [
-            'code.unique' => "Product Code already In Use",
-            ]
-        );
+        $this->authorize('Create Products');
+        $request->validate([
+            'name' => 'required',
+            'code' => 'required|unique:products,code',
+            'category_id' => 'nullable',
+            'unit_id' => 'required',
+            'price' => 'required',
+        ]);
 
-        products::create($request->all());
+        try {
+            DB::beginTransaction();
+            Product::create($request->all());
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        return back()->with('success', 'Product Created');
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product Created Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(products $products)
+    public function show(Product $product)
     {
         //
     }
@@ -57,7 +69,7 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(products $products)
+    public function edit(Product $product)
     {
         //
     }
@@ -67,55 +79,77 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate(
-            [
-                'code' => "unique:products,code,".$id,
-            ],
-            [
-            'code.unique' => "Product code already in Use",
-            ]
-        );
+        $this->authorize('Edit Products');
+        $request->validate([
+            'name' => 'required',
+            'code' => 'required|unique:products,code,'.$id,
+            'category_id' => 'nullable',
+            'unit_id' => 'required',
+            'price' => 'required',
+        ]);
 
-        $product = products::find($id);
-        $product->update($request->all());
+        try {
+            DB::beginTransaction();
+            $product = Product::find($id);
+            $product->update($request->all());
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        return back()->with('success', 'Product Updated');
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product Updated Successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(products $products)
+    public function destroy($id)
     {
-        //
+        $this->authorize('Delete Products');
+        try {
+            DB::beginTransaction();
+            $product = Product::find($id);
+            $product->delete();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product Deleted Successfully');
     }
 
-    public function ajaxCreate(request $request)
+    public function ajaxCreate(Request $request)
     {
-        $check = products::where('name', $request->name)->count();
-        if($check > 0)
-        {
+        $check = Product::where('name', $request->name)->count();
+        if ($check > 0) {
             return response()->json(
-                ['response' => "Exists",]
+                ['response' => 'Exists']
             );
         }
-        $product = products::create($request->all());
+        $product = Product::create($request->all());
+
         return response()->json(
-            ['response' => $product->id,]
+            ['response' => $product->id]
         );
     }
 
     public function barcodePrint($id)
     {
-        $product = products::find($id);
-        return view('products.barcode',compact('product'));
+        $product = Product::find($id);
+
+        return view('products.barcode', compact('product'));
     }
 
-    public function generateCode(){
+    public function generateCode()
+    {
         gen:
         $value = rand(1111111111, 9999999999);
-        $check = products::where('code', "C$value")->count();
-        if($check > 0){
+        $check = Product::where('code', "C$value")->count();
+        if ($check > 0) {
             goto gen;
         }
 

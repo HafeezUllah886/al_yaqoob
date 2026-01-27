@@ -91,6 +91,34 @@
                         </a>
                     </li> <!-- end Dashboard Menu -->
                 @endcan
+                @canany(['View Products', 'View Categories', 'View Units'])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#products" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-product-hunt-line"></i><span data-key="t-apps">Products Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="products">
+                            <ul class="nav nav-sm flex-column">
+                                @can('View Products')
+                                    <li class="nav-item">
+                                        <a href="{{ route('product.index') }}" class="nav-link" data-key="t-chat">List</a>
+                                    </li>
+                                @endcan
+                                @can('View Categories')
+                                    <li class="nav-item">
+                                        <a href="{{ route('categories.index') }}" class="nav-link"
+                                            data-key="t-chat">Categories</a>
+                                    </li>
+                                @endcan
+                                @can('View Units')
+                                    <li class="nav-item">
+                                        <a href="{{ route('units.index') }}" class="nav-link" data-key="t-chat">Units</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
             </ul>
         </div>
         <!-- Sidebar -->
