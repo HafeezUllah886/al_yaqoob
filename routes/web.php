@@ -1,12 +1,11 @@
 <?php
 
+use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\UnitsController;
-use App\Http\Controllers\WarehousesController;
 use App\Http\Middleware\confirmPassword;
 use Illuminate\Support\Facades\Route;
 
@@ -35,13 +34,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/productAjax', [ProductsController::class, 'ajaxCreate']);
 
-    Route::resource('warehouses', WarehousesController::class);
+    Route::resource('branches', BranchesController::class);
     Route::resource('stockTransfer', StockTransferController::class);
 
     Route::get('stockTransfer/delete/{id}', [StockTransferController::class, 'destroy'])->name('stockTransfer.delete')->middleware(confirmPassword::class);
-
-    Route::resource('claims', ClaimController::class);
-    Route::get('claim/delete/{ref}', [ClaimController::class, 'delete'])->name('claim.delete')->middleware(confirmPassword::class);
-    Route::get('claim/status/{status}/{ref}', [ClaimController::class, 'status'])->name('claim.status');
 
 });

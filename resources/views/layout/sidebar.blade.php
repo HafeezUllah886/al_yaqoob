@@ -72,7 +72,7 @@
                             <ul class="nav nav-sm flex-column">
                                 @can('View Users')
                                     <li class="nav-item">
-                                        <a href="{{-- {{ route('user.index') }} --}}" class="nav-link" data-key="t-chat">Users List</a>
+                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-chat">Users List</a>
                                     </li>
                                 @endcan
                                 @can('View Roles')
@@ -84,6 +84,13 @@
                         </div>
                     </li>
                 @endcanany
+                @can('View Branches')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('branches.index') }}">
+                            <i class="ri-building-line"></i> <span data-key="t-dashboards">Branches</span>
+                        </a>
+                    </li> <!-- end Dashboard Menu -->
+                @endcan
             </ul>
         </div>
         <!-- Sidebar -->

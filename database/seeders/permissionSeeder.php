@@ -15,9 +15,8 @@ class permissionSeeder extends Seeder
         $permissions = [
             ['name' => 'View Users', 'group' => 'Users'],
             ['name' => 'Create Users', 'group' => 'Users'],
-            ['name' => 'Edit Users', 'group' => 'Users'],
-            ['name' => 'Active Users', 'group' => 'Users'],
-            ['name' => 'Inactive Users', 'group' => 'Users'],
+            ['name' => 'Change User Password', 'group' => 'Users'],
+            ['name' => 'Change User Status', 'group' => 'Users'],
             ['name' => 'View Roles', 'group' => 'Roles'],
             ['name' => 'Create Roles', 'group' => 'Roles'],
             ['name' => 'Edit Roles', 'group' => 'Roles'],
@@ -26,6 +25,9 @@ class permissionSeeder extends Seeder
             ['name' => 'Create Products', 'group' => 'Products'],
             ['name' => 'Edit Products', 'group' => 'Products'],
             ['name' => 'Delete Products', 'group' => 'Products'],
+            ['name' => 'View Branches', 'group' => 'Branches'],
+            ['name' => 'Create Branches', 'group' => 'Branches'],
+            ['name' => 'Edit Branches', 'group' => 'Branches'],
         ];
         foreach ($permissions as $permission) {
             Permission::create($permission);
