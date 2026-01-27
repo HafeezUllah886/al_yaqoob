@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\dashboardController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\UnitsController;
@@ -24,7 +24,7 @@ require __DIR__.'/users.php';
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', [dashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('units', UnitsController::class);
     Route::resource('categories', CategoriesController::class);
