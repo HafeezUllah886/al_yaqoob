@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Unit;
+use App\Models\Product_units;
+use App\Models\products;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -14,37 +13,32 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $electronics = Category::where('name', 'Electronics')->first();
-        $grocery = Category::where('name', 'Grocery')->first();
-        $piece = Unit::where('name', 'Piece')->first();
-        $kg = Unit::where('name', 'Kg')->first();
 
         $products = [
             [
-                'name' => 'iPhone 15',
-                'code' => 'P001',
-                'category_id' => $electronics ? $electronics->id : null,
-                'unit_id' => $piece ? $piece->id : 1,
-                'price' => 999.99,
-            ],
-            [
-                'name' => 'Samsung TV',
-                'code' => 'P002',
-                'category_id' => $electronics ? $electronics->id : null,
-                'unit_id' => $piece ? $piece->id : 1,
-                'price' => 599.50,
+                'name' => 'Plastic',
+                'category_id' => 1,
             ],
             [
                 'name' => 'Rice',
-                'code' => 'P003',
-                'category_id' => $grocery ? $grocery->id : null,
-                'unit_id' => $kg ? $kg->id : 1,
-                'price' => 2.50,
+                'category_id' => 2,
             ],
         ];
 
         foreach ($products as $product) {
-            Product::create($product);
+            $prod = products::create($product);
+            Product_units::create([
+                'product_id' => $prod->id,
+                'unit_name' => 'Piece',
+                'value' => 1,
+                'price' => 0,
+            ]);
+            Product_units::create([
+                'product_id' => $prod->id,
+                'unit_name' => 'Kg',
+                'value' => 1,
+                'price' => 0,
+            ]);
         }
     }
 }

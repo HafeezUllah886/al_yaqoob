@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ProductUnitsController;
 use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\UnitsController;
 use App\Http\Middleware\confirmPassword;
@@ -28,11 +29,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('units', UnitsController::class);
     Route::resource('categories', CategoriesController::class);
-    Route::get('product/generateCode', [ProductsController::class, 'generateCode'])->name('product.generatecode');
-    Route::get('product/printbarcode/{id}', [ProductsController::class, 'barcodePrint'])->name('product.barcodePrint');
     Route::resource('product', ProductsController::class);
-
-    Route::get('/productAjax', [ProductsController::class, 'ajaxCreate']);
+    Route::resource('product_units', ProductUnitsController::class);
 
     Route::resource('branches', BranchesController::class);
     Route::resource('stockTransfer', StockTransferController::class);

@@ -38,7 +38,18 @@
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->code }}</td>
                                     <td>{{ $product->category->name ?? 'N/A' }}</td>
-                                    <td>{{ $product->unit->name ?? 'N/A' }}</td>
+                                    <td>
+                                        {{ $product->unit->name ?? 'N/A' }}
+                                        @if ($product->units->count() > 0)
+                                            <br>
+                                            <small class="text-muted">
+                                                @foreach ($product->units as $u)
+                                                    {{ $u->unit->name }}
+                                                    ({{ (float) $u->conversion_factor }}){{ !$loop->last ? ',' : '' }}
+                                                @endforeach
+                                            </small>
+                                        @endif
+                                    </td>
                                     <td>{{ number_format($product->price, 2) }}</td>
                                     <td>
                                         @can('Edit Products')
@@ -102,10 +113,52 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group mt-2">
-                                                        <label for="price">Sale Price</label>
+                                                        <label for="price">Base Unit Price</label>
                                                         <input type="number" step="any" name="price" required
                                                             class="form-control" value="{{ $product->price }}">
                                                     </div>
+
+                                                    <hr>
+                                                    <h5>Other Units</h5>
+                                                    <table class="table table-bordered"
+                                                        id="edit_units_table_{{ $product->id }}">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Unit</th>
+                                                                <th>Factor</th>
+                                                                <th>Price</th>
+                                                                <th><button type="button" class="btn btn-sm btn-success"
+                                                                        onclick="addUnitRow('edit_units_table_{{ $product->id }}')">+</button>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($product->units as $p_unit)
+                                                                <tr>
+                                                                    <td>
+                                                                        <select name="units[{{ $loop->index }}][unit_id]"
+                                                                            class="form-control">
+                                                                            @foreach ($units as $unit)
+                                                                                <option value="{{ $unit->id }}"
+                                                                                    {{ $p_unit->unit_id == $unit->id ? 'selected' : '' }}>
+                                                                                    {{ $unit->name }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                    <td><input type="number" step="any"
+                                                                            name="units[{{ $loop->index }}][conversion_factor]"
+                                                                            class="form-control"
+                                                                            value="{{ $p_unit->conversion_factor }}"></td>
+                                                                    <td><input type="number" step="any"
+                                                                            name="units[{{ $loop->index }}][price]"
+                                                                            class="form-control"
+                                                                            value="{{ $p_unit->price }}"></td>
+                                                                    <td><button type="button" class="btn btn-sm btn-danger"
+                                                                            onclick="removeUnitRow(this)">-</button></td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -193,10 +246,26 @@
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="price">Price</label>
+                            <label for="price">Base Unit Price</label>
                             <input type="number" step="any" name="price" required id="price"
                                 class="form-control" value="0">
                         </div>
+
+                        <hr>
+                        <h5>Other Units</h5>
+                        <table class="table table-bordered" id="new_units_table">
+                            <thead>
+                                <tr>
+                                    <th>Unit</th>
+                                    <th>Factor</th>
+                                    <th>Price</th>
+                                    <th><button type="button" class="btn btn-sm btn-success"
+                                            onclick="addUnitRow('new_units_table')">+</button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -236,6 +305,34 @@
                     $(btn).closest('.input-group').find('input').val(res);
                 }
             });
+        }
+
+        function addUnitRow(tableId) {
+            var table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+
+            cell1.innerHTML = `<select name="units[${Date.now()}][unit_id]" class="form-control">
+                                    @foreach ($units as $unit)
+                                        <option value="{{ $unit->id }}">{{ $unit->name }}</option>
+                                    @endforeach
+                                </select>`;
+            cell2.innerHTML =
+                `<input type="number" step="any" name="units[${Date.now()}][conversion_factor]" class="form-control" value="1">`;
+            cell3.innerHTML =
+                `<input type="number" step="any" name="units[${Date.now()}][price]" class="form-control" value="0">`;
+            cell4.innerHTML =
+                `<button type="button" class="btn btn-sm btn-danger" onclick="removeUnitRow(this)">-</button>`;
+        }
+
+        function removeUnitRow(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
         }
     </script>
 @endsection

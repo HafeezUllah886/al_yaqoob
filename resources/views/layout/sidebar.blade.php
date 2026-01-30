@@ -62,6 +62,42 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
+                @canany(['Create Accounts', 'View Accounts'])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#accounts" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-book-3-line"></i><span data-key="t-apps">Accounts Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="accounts">
+                            <ul class="nav nav-sm flex-column">
+                                @can('Create Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('account.create') }}" class="nav-link" data-key="t-chat">Create
+                                            Account</a>
+                                    </li>
+                                @endcan
+                                @can('View Business Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('accountsList', 'Business') }}" class="nav-link"
+                                            data-key="t-chat">Business Accounts</a>
+                                    </li>
+                                @endcan
+                                @can('View Vendor Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('accountsList', 'Vendor') }}" class="nav-link"
+                                            data-key="t-chat">Vendor Accounts</a>
+                                    </li>
+                                @endcan
+                                @can('View Customer Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('accountsList', 'Customer') }}" class="nav-link"
+                                            data-key="t-chat">Customer Accounts</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
                 @canany(['View Users', 'View Roles'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"

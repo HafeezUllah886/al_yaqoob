@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\accounts;
 use App\Models\transactions;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class AccountsController extends Controller
 {
@@ -18,7 +16,7 @@ class AccountsController extends Controller
     {
         $accounts = accounts::where('type', $filter)->orderBy('id', 'asc')->get();
 
-        return view('Finance.accounts.index', compact('accounts', 'filter'));
+        return view('finance.accounts.index', compact('accounts', 'filter'));
     }
 
     /**
@@ -26,7 +24,7 @@ class AccountsController extends Controller
      */
     public function create()
     {
-        return view('Finance.accounts.create');
+        return view('finance.accounts.create');
     }
 
     /**
@@ -36,58 +34,49 @@ class AccountsController extends Controller
     {
         $request->validate(
             [
-                'title' => 'required|unique:accounts,title'
+                'title' => 'required|unique:accounts,title',
             ],
             [
-                'title.required' => "Please Enter Account Title",
-                'title.unique'  => "Account with this title already exists"
+                'title.required' => 'Please Enter Account Title',
+                'title.unique' => 'Account with this title already exists',
             ]
         );
 
-        try
-        {
+        try {
             DB::beginTransaction();
 
-                $ref = getRef();
-                if($request->type != "Business")
-                {
-                    $account = accounts::create(
-                        [
-                            'title' => $request->title,
-                            'type' => $request->type,
-                            'category' => $request->category,
-                            'contact' => $request->contact,
-                            'address' => $request->address,
-                        ]
-                    );
-                }
-                else
-                {
-                    $account = accounts::create(
-                        [
-                            'title' => $request->title,
-                            'type' => $request->type,
-                            'category' => $request->category
-                        ]
-                    );
-                }
+            $ref = getRef();
+            if ($request->type != 'Business') {
+                $account = accounts::create(
+                    [
+                        'title' => $request->title,
+                        'type' => $request->type,
+                        'category' => $request->category,
+                        'contact' => $request->contact,
+                        'address' => $request->address,
+                    ]
+                );
+            } else {
+                $account = accounts::create(
+                    [
+                        'title' => $request->title,
+                        'type' => $request->type,
+                        'category' => $request->category,
+                    ]
+                );
+            }
 
-                if($request->initial > 0)
-                {
-                    if($request->initialType == '0')
-                    {
-                        createTransaction($account->id,now(), $request->initial,0, "Initial Amount", $ref, 'Initial');
-                    }
-                    else
-                    {
-                        createTransaction($account->id,now(), 0, $request->initial, "Initial Amount", $ref, 'Initial');
-                    }
+            if ($request->initial > 0) {
+                if ($request->initialType == '0') {
+                    createTransaction($account->id, now(), $request->initial, 0, 'Initial Amount', $ref, 'Initial');
+                } else {
+                    createTransaction($account->id, now(), 0, $request->initial, 'Initial Amount', $ref, 'Initial');
                 }
-           DB::commit();
-           return back()->with('success', "Account Created Successfully");
-        }
-        catch(\Exception $e)
-        {
+            }
+            DB::commit();
+
+            return back()->with('success', 'Account Created Successfully');
+        } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
@@ -99,45 +88,26 @@ class AccountsController extends Controller
     {
         $account = accounts::find($id);
 
-        $transactions = transactions::where('accountID', $id)->whereBetween('date', [$from, $to])->orderBy('date', 'asc')->get();
+        $transactions = transactions::where('account_id', $id)->whereBetween('date', [$from, $to])->orderBy('date', 'asc')->get();
 
-        $pre_cr = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('cr');
-        $pre_db = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('db');
+        $pre_cr = transactions::where('account_id', $id)->whereDate('date', '<', $from)->sum('cr');
+        $pre_db = transactions::where('account_id', $id)->whereDate('date', '<', $from)->sum('db');
         $pre_balance = $pre_cr - $pre_db;
 
-        $cur_cr = transactions::where('accountID', $id)->sum('cr');
-        $cur_db = transactions::where('accountID', $id)->sum('db');
+        $cur_cr = transactions::where('account_id', $id)->sum('cr');
+        $cur_db = transactions::where('account_id', $id)->sum('db');
 
         $cur_balance = $cur_cr - $cur_db;
 
-        return view('Finance.accounts.statment', compact('account', 'transactions', 'pre_balance', 'cur_balance', 'from', 'to'));
+        return view('finance.accounts.statment', compact('account', 'transactions', 'pre_balance', 'cur_balance', 'from', 'to'));
     }
-
-    public function pdf($id, $from, $to)
-    {
-        $account = accounts::find($id);
-
-        $transactions = transactions::where('accountID', $id)->whereBetween('date', [$from, $to])->get();
-
-        $pre_cr = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('cr');
-        $pre_db = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('db');
-        $pre_balance = $pre_cr - $pre_db;
-
-        $cur_cr = transactions::where('accountID', $id)->sum('cr');
-        $cur_db = transactions::where('accountID', $id)->sum('db');
-
-        $cur_balance = $cur_cr - $cur_db;
-        $pdf = Pdf::loadview('Finance.accounts.pdf', compact('account', 'transactions', 'pre_balance', 'cur_balance', 'from', 'to'));
-    return $pdf->download("Account Statement - $account->id.pdf");
-    }
-
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(accounts $account)
     {
-        return view('Finance.accounts.edit', compact('account'));
+        return view('finance.accounts.edit', compact('account'));
     }
 
     /**
@@ -147,11 +117,11 @@ class AccountsController extends Controller
     {
         $request->validate(
             [
-                'title' => "required|unique:accounts,title,". $request->accountID,
+                'title' => 'required|unique:accounts,title,'.$request->accountID,
             ],
             [
-                'title.required' => "Please Enter Account Title",
-                'title.unique'  => "Account with this title already exists"
+                'title.required' => 'Please Enter Account Title',
+                'title.unique' => 'Account with this title already exists',
             ]
         );
         $account = accounts::find($request->accountID)->update(
@@ -163,7 +133,7 @@ class AccountsController extends Controller
             ]
         );
 
-        return redirect()->route('accountsList', $request->type)->with('success', "Account Updated");
+        return redirect()->route('accountsList', $request->type)->with('success', 'Account Updated');
     }
 
     /**

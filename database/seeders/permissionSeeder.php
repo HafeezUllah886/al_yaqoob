@@ -36,6 +36,15 @@ class permissionSeeder extends Seeder
             ['name' => 'Create Units', 'group' => 'Units'],
             ['name' => 'Edit Units', 'group' => 'Units'],
             ['name' => 'Delete Units', 'group' => 'Units'],
+            ['name' => 'Create Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Business Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Vendor Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Customer Accounts', 'group' => 'Accounts'],
+            ['name' => 'Edit Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Business Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Vendor Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Customer Accounts', 'group' => 'Accounts'],
+
         ];
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission['name']], $permission);
