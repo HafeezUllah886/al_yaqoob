@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product_units;
-use App\Models\products;
+use App\Models\Products;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            $prod = products::create($product);
+            $prod = Products::create($product);
             Product_units::create([
                 'product_id' => $prod->id,
                 'unit_name' => 'Piece',
