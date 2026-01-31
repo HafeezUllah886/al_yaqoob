@@ -186,7 +186,7 @@
                             id + ')" id="unit_' + id + '">';
                         units.forEach(function(unit) {
                             html += '<option data-unit="' + unit.value + '" value="' + unit.id + '">' +
-                                unit.unit_name + '</option>';
+                                unit.unit_name + ' (' + unit.value + ')</option>';
                         });
                         html += '</select></td>';
                         html +=
@@ -216,17 +216,9 @@
 
         function updateChanges(id) {
             var qty = parseFloat($('#qty_' + id).val());
-            var unit = $('#unit_' + id).find('option:selected');
-            unit = unit.data('unit');
-            var newQty = qty * unit;
-            var pprice = parseFloat($('#pprice_' + id).val());
-            var tp = parseFloat($('#tp_' + id).val());
-            var bonus = parseFloat($('#bonus_' + id).val());
-
-            var gstValue = (tp * 18 / 100) * (newQty + bonus);
-            var amount = newQty * pprice;
+            var price = parseFloat($('#price_' + id).val());
+            var amount = qty * price;
             $("#amount_" + id).val(amount.toFixed(2));
-            $("#gstValue_" + id).val(gstValue.toFixed(2));
             updateTotal();
         }
 
