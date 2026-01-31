@@ -44,6 +44,10 @@ class permissionSeeder extends Seeder
             ['name' => 'View Business Accounts', 'group' => 'Accounts'],
             ['name' => 'View Vendor Accounts', 'group' => 'Accounts'],
             ['name' => 'View Customer Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Purchases', 'group' => 'Purchases'],
+            ['name' => 'View Purchases', 'group' => 'Purchases'],
+            ['name' => 'Edit Purchases', 'group' => 'Purchases'],
+            ['name' => 'Delete Purchases', 'group' => 'Purchases'],
 
         ];
         foreach ($permissions as $permission) {

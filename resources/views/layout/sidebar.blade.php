@@ -62,6 +62,29 @@
                         <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboards</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
+                @canany(['Create Purchases', 'View Purchases'])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#purchases" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-book-3-line"></i><span data-key="t-apps">Purchases Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="purchases">
+                            <ul class="nav nav-sm flex-column">
+                                @can('Create Purchases')
+                                    <li class="nav-item">
+                                        <a href="{{ route('purchase.create') }}" class="nav-link" data-key="t-chat">Create
+                                            Purchase</a>
+                                    </li>
+                                @endcan
+                                @can('View Purchases')
+                                    <li class="nav-item">
+                                        <a href="{{ route('purchase.index') }}" class="nav-link" data-key="t-chat">History</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
                 @canany(['Create Accounts', 'View Accounts'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#accounts" data-bs-toggle="collapse" role="button"

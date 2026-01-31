@@ -17,4 +17,11 @@ class Branches extends Model
     {
         return $this->users()->sync($users);
     }
+
+    public function scopeCurrentUser($query)
+    {
+        return $query->whereHas('users', function ($query) {
+            $query->where('user_id', auth()->id());
+        });
+    }
 }
