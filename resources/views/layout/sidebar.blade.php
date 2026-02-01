@@ -121,6 +121,31 @@
                         </div>
                     </li>
                 @endcanany
+                @canany([
+                    'Create Expenses',
+                    'Create Transfers',
+                    'Create Receivings',
+                    'Create Payments',
+                    'Create Account
+                    Adjustments',
+                    ])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#finance" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-safe-2-line"></i><span data-key="t-apps">Finance Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="finance">
+                            <ul class="nav nav-sm flex-column">
+                                @can('Create Expenses')
+                                    <li class="nav-item">
+                                        <a href="{{ route('expenses.index') }}" class="nav-link" data-key="t-chat">Expenses</a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
                 @canany(['View Users', 'View Roles'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"
@@ -131,7 +156,8 @@
                             <ul class="nav nav-sm flex-column">
                                 @can('View Users')
                                     <li class="nav-item">
-                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-chat">Users List</a>
+                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-chat">Users
+                                            List</a>
                                     </li>
                                 @endcan
                                 @can('View Roles')

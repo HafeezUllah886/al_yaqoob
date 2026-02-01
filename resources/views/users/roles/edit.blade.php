@@ -30,14 +30,15 @@
                             <div id="permissions">
                                 <div class="row">
                                     @foreach ($permissions as $group => $perms)
-                                        <div class="col-md-3">
+                                        <div class="col-md-3 ">
                                             <fieldset class="mb-2">
                                                 <legend class="h6">
                                                     <div class="form-check d-inline-block">
                                                         <input class="form-check-input group-select" type="checkbox"
                                                             id="group-{{ Str::slug($group) }}"
                                                             data-group="{{ Str::slug($group) }}">
-                                                        <label class="form-check-label" for="group-{{ Str::slug($group) }}">
+                                                        <label class="form-check-label fw-bold"
+                                                            for="group-{{ Str::slug($group) }}">
                                                             {{ $group }}
                                                         </label>
                                                     </div>

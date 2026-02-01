@@ -13,7 +13,6 @@
                                 <div class="col-6 d-flex flex-row-reverse"><a href="{{ route('purchase.index') }}"
                                         class="btn btn-danger">Close</a></div>
                             </div>
-
                         </div>
                     </div>
                 </div><!--end row-->
@@ -32,9 +31,7 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-12">
-
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <th width="30%">Item</th>
@@ -89,7 +86,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-12 mt-2">
                                 <div class="card-header">
                                     <div class="row">
@@ -99,7 +95,6 @@
                                         <div class="col-6 d-flex flex-row-reverse"><span onclick="addExpense()"
                                                 class="btn btn-primary">Add</span></div>
                                     </div>
-
                                 </div>
                                 <table class="table table-striped table-hover">
                                     <thead>
@@ -112,12 +107,9 @@
                                         </tr>
                                     </thead>
                                     <tbody id="expenses">
-
                                     </tbody>
                                 </table>
-
                             </div>
-
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="notes">Notes</label>
@@ -130,7 +122,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
             <!--end card-->
         </div>
@@ -138,7 +129,6 @@
     </div>
     <!--end row-->
 @endsection
-
 @section('page-css')
     <link rel="stylesheet" href="{{ asset('assets/libs/selectize/selectize.min.css') }}">
     <style>
@@ -146,7 +136,6 @@
             padding: 5px 5px !important;
         }
     </style>
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('page-js')
@@ -161,7 +150,6 @@
                     this.clear();
                     this.focus();
                 }
-
             },
         });
         var existingProducts = [];

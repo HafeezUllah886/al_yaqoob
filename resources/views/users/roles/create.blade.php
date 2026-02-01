@@ -35,7 +35,8 @@
                                                         <input class="form-check-input group-select" type="checkbox"
                                                             id="group-{{ Str::slug($group) }}"
                                                             data-group="{{ Str::slug($group) }}">
-                                                        <label class="form-check-label" for="group-{{ Str::slug($group) }}">
+                                                        <label class="form-check-label fw-bold"
+                                                            for="group-{{ Str::slug($group) }}">
                                                             {{ $group }}
                                                         </label>
                                                     </div>

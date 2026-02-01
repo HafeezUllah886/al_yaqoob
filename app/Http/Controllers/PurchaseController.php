@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\accounts;
 use App\Models\Branches;
+use App\Models\expenseCategories;
 use App\Models\products;
 use App\Models\purchase;
 use App\Models\purchase_details;
@@ -41,7 +42,7 @@ class PurchaseController extends Controller
         $products = products::orderby('name', 'asc')->get();
         $vendors = accounts::vendor()->get();
         $branches = Branches::currentUser()->get();
-        $expense_categories = [];
+        $expense_categories = expenseCategories::all();
         $accounts = accounts::business()->get();
 
         return view('purchase.create', compact('products', 'vendors', 'branches', 'expense_categories', 'accounts'));

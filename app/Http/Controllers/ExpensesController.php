@@ -16,10 +16,12 @@ class ExpensesController extends Controller
      */
     public function index()
     {
+        $this->authorize('Create Expenses');
         $expenses = expenses::orderby('id', 'desc')->get();
         $accounts = accounts::business()->get();
         $categories = expenseCategories::all();
-        return view('Finance.expense.index', compact('expenses', 'accounts', 'categories'));
+
+        return view('finance.expense.index', compact('expenses', 'accounts', 'categories'));
     }
 
     /**
@@ -35,14 +37,13 @@ class ExpensesController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             DB::beginTransaction();
             $ref = getRef();
             expenses::create(
                 [
-                    'accountID' => $request->accountID,
-                    'catID' => $request->catID,
+                    'account_id' => $request->accountID,
+                    'category_id' => $request->catID,
                     'amount' => $request->amount,
                     'date' => $request->date,
                     'notes' => $request->notes,
@@ -50,14 +51,14 @@ class ExpensesController extends Controller
                 ]
             );
 
-            createTransaction($request->accountID, $request->date, 0, $request->amount, "Expense - ".$request->notes, $ref, 'Expense');
+            createTransaction($request->accountID, $request->date, 0, $request->amount, 'Expense - '.$request->notes, $ref, 'Expense');
 
             DB::commit();
+
             return back()->with('success', 'Expense Saved');
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             DB::rollBack();
+
             return back()->with('error', $e->getMessage());
         }
     }
@@ -91,19 +92,19 @@ class ExpensesController extends Controller
      */
     public function delete($ref)
     {
-        try
-        {
+        $this->authorize('Delete Expenses');
+        try {
             DB::beginTransaction();
             expenses::where('refID', $ref)->delete();
             transactions::where('refID', $ref)->delete();
             DB::commit();
             session()->forget('confirmed_password');
-            return redirect()->route('expenses.index')->with('success', "Expense Deleted");
-        }
-        catch(\Exception $e)
-        {
+
+            return redirect()->route('expenses.index')->with('success', 'Expense Deleted');
+        } catch (\Exception $e) {
             DB::rollBack();
             session()->forget('confirmed_password');
+
             return redirect()->route('expenses.index')->with('error', $e->getMessage());
         }
     }
