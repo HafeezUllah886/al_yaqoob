@@ -13,7 +13,7 @@ class purchase_details extends Model
 
     public function product()
     {
-        return $this->belongsTo(products::class);
+        return $this->belongsTo(Products::class);
     }
 
     public function unit()
