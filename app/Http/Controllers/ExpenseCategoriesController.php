@@ -15,7 +15,7 @@ class ExpenseCategoriesController extends Controller
         $this->authorize('Create Expense Categories');
         $cats = expenseCategories::orderBy('name', 'asc')->get();
 
-        return view('Finance.expense.categories', compact('cats'));
+        return view('finance.expense.categories', compact('cats'));
     }
 
     /**
