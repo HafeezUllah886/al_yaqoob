@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\categories;
 use App\Models\Category;
-use App\Models\product_units;
-use App\Models\products;
+use App\Models\Product_units;
+use App\Models\Products;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -17,7 +17,7 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         $s_cat = $request->s_cat ?? 'all';
-        $products = products::query();
+        $products = Products::query();
 
         if ($s_cat != 'all') {
             $products->where('category_id', $s_cat);
@@ -55,12 +55,12 @@ class ProductsController extends Controller
             ]
         );
 
-        $product = products::create($request->only(['name', 'category_id']));
+        $product = Products::create($request->only(['name', 'category_id']));
 
         $units = $request->unit_names;
 
         foreach ($units as $key => $unit) {
-            product_units::create(
+            Product_units::create(
                 [
                     'product_id' => $product->id,
                     'unit_name' => $unit,
@@ -86,7 +86,7 @@ class ProductsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(products $product)
+    public function edit(Products $product)
     {
         $cats = Category::orderBy('name', 'asc')->get();
 
@@ -107,7 +107,7 @@ class ProductsController extends Controller
             ]
         );
 
-        $product = products::find($id);
+        $product = Products::find($id);
         $product->update($request->only(['name', 'nameurdu', 'catID', 'brandID', 'pprice', 'price', 'discount', 'status', 'vendorID', 'fright', 'labor', 'claim', 'sfright', 'sclaim', 'discountp', 'branchID']));
 
         return redirect()->back()->with('success', 'Product Updated');
