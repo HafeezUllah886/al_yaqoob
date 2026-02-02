@@ -43,7 +43,7 @@ class ExpensesController extends Controller
             expenses::create(
                 [
                     'account_id' => $request->accountID,
-                    'category_id' => $request->catID,
+                    'category_id' => $request->cat,
                     'amount' => $request->amount,
                     'date' => $request->date,
                     'notes' => $request->notes,
