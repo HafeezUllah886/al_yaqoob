@@ -8,6 +8,7 @@ use App\Models\expenseCategories;
 use App\Models\expenses;
 use App\Models\Product_units;
 use App\Models\products;
+use App\Models\Products as ModelsProducts;
 use App\Models\purchase;
 use App\Models\purchase_details;
 use App\Models\purchase_expense_categories;
@@ -43,7 +44,7 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        $products = products::orderby('name', 'asc')->get();
+        $products = ModelsProducts::orderby('name', 'asc')->get();
         $vendors = accounts::vendor()->get();
         $branches = Branches::currentUser()->get();
         $expense_categories = expenseCategories::all();
