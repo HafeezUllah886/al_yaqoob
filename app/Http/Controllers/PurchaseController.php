@@ -7,8 +7,7 @@ use App\Models\Branches;
 use App\Models\expenseCategories;
 use App\Models\expenses;
 use App\Models\Product_units;
-use App\Models\products;
-use App\Models\Products as ModelsProducts;
+use App\Models\Products;
 use App\Models\purchase;
 use App\Models\purchase_details;
 use App\Models\purchase_expense_categories;
@@ -17,7 +16,6 @@ use App\Models\purchase_payments;
 use App\Models\stock;
 use App\Models\transactions;
 use App\Models\units;
-use App\Models\warehouses;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,7 +42,7 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        $products = ModelsProducts::orderby('name', 'asc')->get();
+        $products = Products::orderby('name', 'asc')->get();
         $vendors = accounts::vendor()->get();
         $branches = Branches::currentUser()->get();
         $expense_categories = expenseCategories::all();
@@ -337,7 +335,7 @@ class PurchaseController extends Controller
 
     public function getSignleProduct($id)
     {
-        $product = products::with('units')->find($id);
+        $product = Products::with('units')->find($id);
 
         return $product;
     }
