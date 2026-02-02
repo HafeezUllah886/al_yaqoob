@@ -80,7 +80,7 @@
                             <select name="cat" id="category" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($categories as $category)
-                                    <option>{{ $category->name }}
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
