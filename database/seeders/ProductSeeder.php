@@ -31,13 +31,13 @@ class ProductSeeder extends Seeder
                 'product_id' => $prod->id,
                 'unit_name' => 'Piece',
                 'value' => 1,
-                'price' => 0,
+                'price' => 150,
             ]);
             Product_units::create([
                 'product_id' => $prod->id,
                 'unit_name' => 'Kg',
-                'value' => 1,
-                'price' => 0,
+                'value' => 1000,
+                'price' => 300,
             ]);
         }
     }

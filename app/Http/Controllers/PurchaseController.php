@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\accounts;
 use App\Models\Branches;
 use App\Models\expenseCategories;
+use App\Models\expenses;
+use App\Models\Product_units;
 use App\Models\products;
 use App\Models\purchase;
 use App\Models\purchase_details;
@@ -19,6 +21,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use function App\Helpers\createStock;
+
 class PurchaseController extends Controller
 {
     /**
@@ -29,7 +33,7 @@ class PurchaseController extends Controller
         $start = $request->start ?? now()->toDateString();
         $end = $request->end ?? now()->toDateString();
 
-        $purchases = purchase::with('payments')->whereBetween('date', [$start, $end])->orderby('id', 'desc')->get();
+        $purchases = purchase::whereBetween('date', [$start, $end])->orderby('id', 'desc')->get();
 
         return view('purchase.index', compact('purchases', 'start', 'end'));
     }
@@ -61,14 +65,11 @@ class PurchaseController extends Controller
             $ref = getRef();
             $purchase = purchase::create(
                 [
-                    'vendorID' => $request->vendorID,
-                    'warehouseID' => $request->warehouseID,
+                    'vendor_id' => $request->vendorID,
+                    'branch_id' => $request->branchID,
                     'date' => $request->date,
                     'notes' => $request->notes,
-                    'discount' => $request->discount,
-                    'fright' => $request->fright,
-                    'fright1' => $request->fright1,
-                    'wh' => $request->whTax,
+                    'total' => 0,
                     'inv' => $request->inv,
                     'refID' => $ref,
                 ]
@@ -78,84 +79,44 @@ class PurchaseController extends Controller
 
             $total = 0;
             foreach ($ids as $key => $id) {
-                $unit = units::find($request->unit[$key]);
-                $qty = ($request->qty[$key] * $unit->value) + $request->bonus[$key];
-                $qty1 = $request->qty[$key] * $unit->value;
-                $pprice = $request->pprice[$key];
+                $unit = Product_units::find($request->unit[$key]);
+                $qty = $request->qty[$key];
                 $price = $request->price[$key];
-                $wsprice = $request->wsprice[$key];
-                $tp = $request->tp[$key];
-                $amount = $pprice * $qty1;
+                $amount = $price * $qty;
                 $total += $amount;
 
                 purchase_details::create(
                     [
-                        'purchaseID' => $purchase->id,
-                        'productID' => $id,
-                        'pprice' => $pprice,
+                        'purchase_id' => $purchase->id,
+                        'product_id' => $id,
                         'price' => $price,
-                        'wsprice' => $wsprice,
-                        'tp' => $tp,
-                        'qty' => $qty1,
-                        'gstValue' => $request->gstValue[$key],
+                        'qty' => $qty,
                         'amount' => $amount,
                         'date' => $request->date,
-                        'bonus' => $request->bonus[$key],
-                        'unitID' => $unit->id,
-                        'unitValue' => $unit->value,
+                        'unit_id' => $unit->id,
+                        'unit_value' => $unit->value,
                         'refID' => $ref,
                     ]
                 );
-                createStock($id, $qty, 0, $request->date, 'Purchased', $ref, $request->warehouseID);
-
-                $product = products::find($id);
-                $product->update(
-                    [
-                        'pprice' => $pprice,
-                        'price' => $price,
-                        'wsprice' => $wsprice,
-                    ]
-                );
+                $qty = $qty * $unit->value;
+                createStock($id, $qty, 0, $request->date, 'Purchased in Inv No. '.$request->inv.' Notes: '.$request->notes, $ref, $request->branchID);
             }
-
-            $whTax = $total * $request->whTax / 100;
-
-            $net = ($total + $whTax + $request->fright1) - ($request->discount + $request->fright);
 
             $purchase->update(
                 [
-
-                    'whValue' => $whTax,
-                    'net' => $net,
+                    'total' => $total,
                 ]
             );
 
-            if ($request->status == 'paid') {
-                purchase_payments::create(
-                    [
-                        'purchaseID' => $purchase->id,
-                        'accountID' => $request->accountID,
-                        'date' => $request->date,
-                        'amount' => $net,
-                        'notes' => 'Full Paid',
-                        'refID' => $ref,
-                    ]
-                );
-
-                createTransaction($request->accountID, $request->date, 0, $net, "Payment of Purchase No. $purchase->id", $ref);
-            } else {
-                createTransaction($request->vendorID, $request->date, 0, $net, "Pending Amount of Purchase No. $purchase->id", $ref);
-
-            }
+            createTransaction($request->vendorID, $request->date, 0, $total, "Pending Amount of Purchase No. $purchase->id", $ref);
 
             $categories = $request->category;
             if ($categories) {
                 foreach ($categories as $key => $category) {
-                    purchase_expenses::create(
+                    expenses::create(
                         [
-                            'purchaseID' => $purchase->id,
-                            'accountID' => $request->expense_account[$key],
-                            'cat' => $category,
+                            'account_id' => $request->expense_account[$key],
+                            'category_id' => $category,
                             'date' => $request->date,
                             'amount' => $request->expense_amount[$key],
                             'notes' => $request->expense_notes[$key],
@@ -354,14 +315,11 @@ class PurchaseController extends Controller
         try {
             DB::beginTransaction();
             $purchase = purchase::find($id);
-            foreach ($purchase->payments as $payment) {
-                transactions::where('refID', $payment->refID)->delete();
-                $payment->delete();
-            }
             foreach ($purchase->details as $product) {
                 stock::where('refID', $product->refID)->delete();
                 $product->delete();
             }
+            expenses::where('refID', $purchase->refID)->delete();
             transactions::where('refID', $purchase->refID)->delete();
             $purchase->delete();
             DB::commit();

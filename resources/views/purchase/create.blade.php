@@ -170,10 +170,11 @@
                         html +=
                             '<td class="no-padding">' + product.name + '</td>';
                         html +=
-                            '<td class="no-padding"><select name="unit[]" class="form-control text-center no-padding" onchange="updateChanges(' +
+                            '<td class="no-padding"><select name="unit[]" class="form-control text-center no-padding" onchange="changeUnit(' +
                             id + ')" id="unit_' + id + '">';
                         units.forEach(function(unit) {
-                            html += '<option data-unit="' + unit.value + '" value="' + unit.id + '">' +
+                            html += '<option data-unit="' + unit.value + '" data-price="' + unit.price +
+                                '" value="' + unit.id + '">' +
                                 unit.unit_name + ' (' + unit.value + ')</option>';
                         });
                         html += '</select></td>';
@@ -208,6 +209,13 @@
             var amount = qty * price;
             $("#amount_" + id).val(amount.toFixed(2));
             updateTotal();
+        }
+
+        function changeUnit(id) {
+            var unit = $('#unit_' + id).find('option:selected');
+            unit = unit.data('price');
+            $("#price_" + id).val(unit);
+            updateChanges(id);
         }
 
         function updateTotal() {

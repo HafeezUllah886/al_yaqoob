@@ -6,7 +6,7 @@
                 <div class="card-header d-flex justify-content-between">
                     <h3>Expenses</h3>
                     <div>
-                        <a href="{{ route('expensesCategories.index') }}" class="btn btn-info ">Catetgories</a>
+                        <a href="{{ route('expensesCategories.index') }}" class="btn btn-info ">Categories</a>
                         <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create
                             New</button>
                     </div>
@@ -37,7 +37,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $tran->refID }}</td>
-                                    <td>{{ $tran->cat }}</td>
+                                    <td>{{ $tran->category->name }}</td>
                                     <td>{{ $tran->account->title }}</td>
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>

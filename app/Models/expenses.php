@@ -13,11 +13,11 @@ class expenses extends Model
 
     public function account()
     {
-        return $this->belongsTo(accounts::class, 'accountID');
+        return $this->belongsTo(accounts::class);
     }
 
     public function category()
     {
-        return $this->belongsTo(expenseCategories::class, 'catID');
+        return $this->belongsTo(expenseCategories::class);
     }
 }

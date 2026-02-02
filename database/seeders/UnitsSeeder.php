@@ -16,7 +16,7 @@ class UnitsSeeder extends Seeder
             ['name' => 'Piece', 'value' => 1],
             ['name' => 'Dozen', 'value' => 12],
             ['name' => 'Box', 'value' => 24],
-            ['name' => 'Kg', 'value' => 1],
+            ['name' => 'Kg', 'value' => 1000],
             ['name' => 'Packet', 'value' => 1],
         ];
 

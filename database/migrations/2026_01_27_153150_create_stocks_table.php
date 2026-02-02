@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id')->constrained('accounts', 'id');
-            $table->foreignId('category_id')->constrained('expense_categories', 'id');
+            $table->foreignId('product_id')->constrained('products', 'id');
+            $table->foreignId('branch_id')->constrained('branches', 'id');
             $table->date('date');
-            $table->float('amount');
+            $table->float('cr')->default(0);
+            $table->float('db')->default(0);
             $table->text('notes')->nullable();
             $table->bigInteger('refID');
             $table->timestamps();
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('stocks');
     }
 };
