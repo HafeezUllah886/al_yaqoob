@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product_units;
-use App\Models\products;
+use App\Models\Products;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -47,7 +47,7 @@ class ProductUnitsController extends Controller
     public function show($id)
     {
         $product_units = Product_units::where('product_id', $id)->get();
-        $product = products::find($id);
+        $product = Products::find($id);
 
         $units = Unit::all();
 
