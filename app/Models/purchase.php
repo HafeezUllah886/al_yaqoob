@@ -20,4 +20,9 @@ class purchase extends Model
     {
         return $this->hasMany(purchase_details::class);
     }
+
+    public function scopeCurrentBranches($query)
+    {
+        return $query->whereIn('branch_id', auth()->user()->branches->pluck('id'));
+    }
 }

@@ -24,4 +24,9 @@ class Branches extends Model
             $query->where('user_id', auth()->id());
         });
     }
+
+    public function accounts()
+    {
+        return $this->hasMany(Accounts::class);
+    }
 }

@@ -4,18 +4,30 @@
         <div class="col-12">
             <form>
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">From</span>
                             <input type="date" class="form-control" placeholder="Username" name="start"
                                 value="{{ $start }}" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-3">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">To</span>
                             <input type="date" class="form-control" placeholder="Username" name="end"
                                 value="{{ $end }}" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Branch</span>
+                            <select name="branch_id" id="branch_id" class="form-control">
+                                <option value="">All Branches</option>
+                                @foreach (Auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}" @selected($branch_id == $branch->id)>{{ $branch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -26,6 +38,8 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h3>Purchases</h3>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create
+                        New</button>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -37,7 +51,6 @@
                             </ul>
                         </div>
                     @endif
-
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
@@ -45,7 +58,6 @@
                             <th>Vendor</th>
                             <th>Date</th>
                             <th>Amount</th>
-
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -99,6 +111,35 @@
             </div>
         </div>
     </div>
+    <div id="new" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">Create Expense</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
+                </div>
+                <form action="{{ route('purchase.create') }}" method="get">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group mt-2">
+                            <label for="branch_id">Branch</label>
+                            <select name="branch_id" id="branch_id" required class="selectize">
+                                <option value="">Select Branch</option>
+                                @foreach (Auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <!-- Default Modals -->
 @endsection
 
@@ -108,6 +149,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/selectize/selectize.min.css') }}">
 @endsection
 @section('page-js')
     <script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js') }}"></script>
@@ -121,4 +163,8 @@
     <script src="{{ asset('assets/libs/datatable/jszip.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+    <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
+    <script>
+        $('.selectize').selectize();
+    </script>
 @endsection

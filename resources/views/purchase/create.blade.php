@@ -69,11 +69,9 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label for="warehouse">Branch</label>
-                                    <select name="branchID" id="branch" class="selectize1">
-                                        @foreach ($branches as $branch)
-                                            <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" name="branch" id="branch" value="{{ $branch->name }}"
+                                        class="form-control" readonly>
+                                    <input type="hidden" name="branch_id" id="branch_id" value="{{ $branch->id }}">
                                 </div>
                             </div>
                             <div class="col-3">

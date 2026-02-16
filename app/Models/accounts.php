@@ -32,13 +32,8 @@ class accounts extends Model
         return $this->hasMany(transactions::class, 'accountID');
     }
 
-    public function sale()
+    public function branch()
     {
-        return $this->hasMany(sales::class, 'customerID');
-    }
-
-    public function area()
-    {
-        return $this->belongsTo(areas::class, 'areaID');
+        return $this->belongsTo(Branches::class, 'branch_id');
     }
 }

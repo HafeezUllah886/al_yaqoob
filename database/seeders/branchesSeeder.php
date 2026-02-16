@@ -18,8 +18,14 @@ class branchesSeeder extends Seeder
             'address' => 'Main Branch',
             'phone' => '1234567890',
         ]);
+        $branch2 = Branches::create([
+            'name' => 'Branch 2',
+            'address' => 'Branch 2',
+            'phone' => '1234567890',
+        ]);
 
         $users = User::all();
         $branch->syncUsers($users->pluck('id')->toArray());
+        $branch2->syncUsers($users->pluck('id')->toArray());
     }
 }

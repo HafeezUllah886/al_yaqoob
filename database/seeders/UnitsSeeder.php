@@ -13,11 +13,8 @@ class UnitsSeeder extends Seeder
     public function run(): void
     {
         $units = [
-            ['name' => 'Piece', 'value' => 1],
-            ['name' => 'Dozen', 'value' => 12],
-            ['name' => 'Box', 'value' => 24],
-            ['name' => 'Kg', 'value' => 1000],
-            ['name' => 'Packet', 'value' => 1],
+            ['name' => 'Kg', 'value' => 1],
+            ['name' => 'Bag', 'value' => 25],
         ];
 
         foreach ($units as $unit) {

@@ -14,14 +14,23 @@ class ExpensesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $from = $request->from ?? firstDayOfMonth();
+        $to = $request->to ?? lastDayOfMonth();
+        $branch_id = $request->branch_id ?? 'All';
         $this->authorize('Create Expenses');
-        $expenses = expenses::orderby('id', 'desc')->get();
+        $expenses = expenses::whereBetween('date', [$from, $to])->orderby('id', 'desc');
+        if ($branch_id != 'All') {
+            $expenses = $expenses->where('branch_id', $branch_id);
+        } else {
+            $expenses = $expenses->currentBranches();
+        }
+        $expenses = $expenses->get();
         $accounts = accounts::business()->get();
         $categories = expenseCategories::all();
 
-        return view('finance.expense.index', compact('expenses', 'accounts', 'categories'));
+        return view('finance.expense.index', compact('expenses', 'accounts', 'categories', 'from', 'to', 'branch_id'));
     }
 
     /**
@@ -45,6 +54,7 @@ class ExpensesController extends Controller
                     'account_id' => $request->accountID,
                     'category_id' => $request->cat,
                     'amount' => $request->amount,
+                    'branch_id' => $request->branch_id,
                     'date' => $request->date,
                     'notes' => $request->notes,
                     'refID' => $ref,

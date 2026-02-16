@@ -2,6 +2,39 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            <form>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">From</span>
+                            <input type="date" class="form-control" placeholder="Username" name="start"
+                                value="{{ $from }}" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">To</span>
+                            <input type="date" class="form-control" placeholder="Username" name="end"
+                                value="{{ $to }}" aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Branch</span>
+                            <select name="branch_id" id="branch_id" class="form-control">
+                                <option value="">All Branches</option>
+                                @foreach (Auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}" @selected($branch_id == $branch->id)>{{ $branch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Filter" class="btn btn-success w-100">
+                    </div>
+                </div>
+            </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h3>Expenses</h3>
@@ -68,11 +101,18 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mt-2">
+                            <label for="branch_id">Branch</label>
+                            <select name="branch_id" id="branch_id" onchange="getAccounts(this.value)" class="selectize">
+                                <option value="">Select Branch</option>
+                                @foreach (Auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-2">
                             <label for="account">Account</label>
                             <select name="accountID" id="account" required class="selectize">
-                                @foreach ($accounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
-                                @endforeach
+
                             </select>
                         </div>
                         <div class="form-group mt-2">
@@ -134,5 +174,29 @@
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
         $(".selectize").selectize();
+        var accountSelectize = $("#account").selectize()[0].selectize;
+
+        function getAccounts(branch_id) {
+            var accountSelectize = $('#account')[0].selectize; // Access the selectize instance
+            if (branch_id) {
+                // Make an AJAX call to fetch sectors for selected town
+                $.ajax({
+                    url: '/get_branch_accounts/' + branch_id,
+                    type: 'GET',
+                    success: function(data) {
+                        console.log(data);
+
+                        // Clear previous options 
+                        accountSelectize.clearOptions();
+
+                        // Add new options
+                        accountSelectize.addOption(data); // data should be an array of {value: '', text: ''}
+                        accountSelectize.refreshOptions(false);
+                    }
+                });
+            } else {
+                accountSelectize.clearOptions();
+            }
+        }
     </script>
 @endsection

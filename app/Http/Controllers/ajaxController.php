@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\accounts;
 use App\Models\products;
 use Illuminate\Http\Request;
 
@@ -20,5 +21,13 @@ class ajaxController extends Controller
         });
 
         return response()->json(['products' => $formattedProducts], 200, ['Content-Type' => 'application/json; charset=UTF-8']);
+    }
+
+    public function getBranchAccounts($branch_id)
+    {
+
+        $accounts = accounts::where('branch_id', $branch_id)->business()->select('id as value', 'title as text')->get();
+
+        return response()->json($accounts);
     }
 }

@@ -62,6 +62,17 @@
                             </div>
                             <div class="col-12 mt-2">
                                 <div class="form-group">
+                                    <label for="branch_id">Branch</label>
+                                    <select name="branch_id" id="branch_id" class="form-control">
+                                        <option value="">Select Branch</option>
+                                        @foreach ($branches as $branch)
+                                            <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <div class="form-group">
                                     <label for="initial">Initial Amount</label>
                                     <div class="input-group">
                                         <input type="number" step="any" id="initial" name="initial" value="0"

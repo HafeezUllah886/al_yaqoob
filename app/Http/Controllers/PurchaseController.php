@@ -31,24 +31,31 @@ class PurchaseController extends Controller
     {
         $start = $request->start ?? now()->toDateString();
         $end = $request->end ?? now()->toDateString();
+        $branch_id = $request->branch_id ?? 'All';
 
-        $purchases = purchase::whereBetween('date', [$start, $end])->orderby('id', 'desc')->get();
+        $purchases = purchase::whereBetween('date', [$start, $end])->orderby('id', 'desc');
+        if ($branch_id != 'All') {
+            $purchases = $purchases->where('branch_id', $branch_id);
+        } else {
+            $purchases = $purchases->currentBranches();
+        }
+        $purchases = $purchases->get();
 
-        return view('purchase.index', compact('purchases', 'start', 'end'));
+        return view('purchase.index', compact('purchases', 'start', 'end', 'branch_id'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $products = Products::orderby('name', 'asc')->get();
         $vendors = accounts::vendor()->get();
-        $branches = Branches::currentUser()->get();
+        $branch = Branches::find($request->branch_id);
         $expense_categories = expenseCategories::all();
-        $accounts = accounts::business()->get();
+        $accounts = accounts::business()->where('branch_id', $branch->id)->get();
 
-        return view('purchase.create', compact('products', 'vendors', 'branches', 'expense_categories', 'accounts'));
+        return view('purchase.create', compact('products', 'vendors', 'branch', 'expense_categories', 'accounts'));
     }
 
     /**

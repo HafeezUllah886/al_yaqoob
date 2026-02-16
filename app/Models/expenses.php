@@ -20,4 +20,14 @@ class expenses extends Model
     {
         return $this->belongsTo(expenseCategories::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branches::class);
+    }
+
+    public function scopeCurrentBranches($query)
+    {
+        return $query->whereIn('branch_id', auth()->user()->branches->pluck('id'));
+    }
 }

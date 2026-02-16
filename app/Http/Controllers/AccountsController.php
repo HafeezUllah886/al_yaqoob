@@ -24,7 +24,9 @@ class AccountsController extends Controller
      */
     public function create()
     {
-        return view('finance.accounts.create');
+        $branches = auth()->user()->branches;
+
+        return view('finance.accounts.create', compact('branches'));
     }
 
     /**
@@ -54,6 +56,7 @@ class AccountsController extends Controller
                         'category' => $request->category,
                         'contact' => $request->contact,
                         'address' => $request->address,
+                        'branch_id' => $request->branch_id,
                     ]
                 );
             } else {
@@ -62,15 +65,16 @@ class AccountsController extends Controller
                         'title' => $request->title,
                         'type' => $request->type,
                         'category' => $request->category,
+                        'branch_id' => $request->branch_id,
                     ]
                 );
             }
 
             if ($request->initial > 0) {
                 if ($request->initialType == '0') {
-                    createTransaction($account->id, now(), $request->initial, 0, 'Initial Amount', $ref, 'Initial');
+                    createTransaction($account->id, now(), $request->initial, 0, 'Initial Amount', $ref);
                 } else {
-                    createTransaction($account->id, now(), 0, $request->initial, 'Initial Amount', $ref, 'Initial');
+                    createTransaction($account->id, now(), 0, $request->initial, 'Initial Amount', $ref);
                 }
             }
             DB::commit();
