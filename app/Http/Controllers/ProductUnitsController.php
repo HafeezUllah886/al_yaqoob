@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product_units;
+use App\Models\Product_units;
 use App\Models\products;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -29,7 +29,7 @@ class ProductUnitsController extends Controller
     {
 
         $unit = Unit::find($request->unit);
-        product_units::create(
+        Product_units::create(
             [
                 'product_id' => $request->product_id,
                 'unit_name' => $unit->name,
@@ -46,7 +46,7 @@ class ProductUnitsController extends Controller
      */
     public function show($id)
     {
-        $product_units = product_units::where('product_id', $id)->get();
+        $product_units = Product_units::where('product_id', $id)->get();
         $product = products::find($id);
 
         $units = Unit::all();
@@ -67,7 +67,7 @@ class ProductUnitsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        product_units::where('id', $id)->update(
+        Product_units::where('id', $id)->update(
             [
                 'unit_name' => $request->unit_name,
                 'value' => $request->value,
