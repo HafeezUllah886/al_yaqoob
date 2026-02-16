@@ -29,14 +29,14 @@ class ProductSeeder extends Seeder
             $prod = Products::create($product);
             Product_units::create([
                 'product_id' => $prod->id,
-                'unit_name' => 'Piece',
-                'value' => 1,
-                'price' => 150,
+                'unit_name' => 'Bag',
+                'value' => 25,
+                'price' => 1500,
             ]);
             Product_units::create([
                 'product_id' => $prod->id,
                 'unit_name' => 'Kg',
-                'value' => 1000,
+                'value' => 1,
                 'price' => 300,
             ]);
         }
