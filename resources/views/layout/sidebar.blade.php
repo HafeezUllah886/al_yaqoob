@@ -130,36 +130,36 @@
                         </div>
                     </li>
                 @endcanany
-                @canany(['View Users', 'View Roles'])
+                @canany(['View Stocks', 'Transfer Stocks', 'Stock Adjustments'])
                     <li class="nav-item">
-                        <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"
+                        <a class="nav-link menu-link" href="#stock" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarApps">
-                            <i class="ri-group-line"></i><span data-key="t-apps">Users Management</span>
+                            <i class="ri-store-2-line"></i><span data-key="t-apps">Stock Management</span>
                         </a>
-                        <div class="collapse menu-dropdown" id="sales">
+                        <div class="collapse menu-dropdown" id="stock">
                             <ul class="nav nav-sm flex-column">
-                                @can('View Users')
+                                @can('View Stocks')
                                     <li class="nav-item">
-                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-chat">Users
-                                            List</a>
+                                        <a href="{{ route('product_stock.index') }}" class="nav-link" data-key="t-chat">View
+                                            Stock</a>
                                     </li>
                                 @endcan
-                                @can('View Roles')
+                                @can('Transfer Stocks')
                                     <li class="nav-item">
-                                        <a href="{{ route('roles.index') }}" class="nav-link" data-key="t-chat">Roles</a>
+                                        <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-chat">Transfer
+                                            Stock</a>
+                                    </li>
+                                @endcan
+                                @can('Stock Adjustments')
+                                    <li class="nav-item">
+                                        <a href="{{ route('units.index') }}" class="nav-link" data-key="t-chat">Stock
+                                            Adjustments</a>
                                     </li>
                                 @endcan
                             </ul>
                         </div>
                     </li>
                 @endcanany
-                @can('View Branches')
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="{{ route('branches.index') }}">
-                            <i class="ri-building-line"></i> <span data-key="t-dashboards">Branches</span>
-                        </a>
-                    </li> <!-- end Dashboard Menu -->
-                @endcan
                 @canany(['View Products', 'View Categories', 'View Units'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#products" data-bs-toggle="collapse" role="button"
@@ -188,6 +188,38 @@
                         </div>
                     </li>
                 @endcanany
+                @canany(['View Users', 'View Roles'])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-group-line"></i><span data-key="t-apps">Users Management</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="sales">
+                            <ul class="nav nav-sm flex-column">
+                                @can('View Users')
+                                    <li class="nav-item">
+                                        <a href="{{ route('users.index') }}" class="nav-link" data-key="t-chat">Users
+                                            List</a>
+                                    </li>
+                                @endcan
+                                @can('View Roles')
+                                    <li class="nav-item">
+                                        <a href="{{ route('roles.index') }}" class="nav-link" data-key="t-chat">Roles</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
+
+                @can('View Branches')
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('branches.index') }}">
+                            <i class="ri-building-line"></i> <span data-key="t-dashboards">Branches</span>
+                        </a>
+                    </li> <!-- end Dashboard Menu -->
+                @endcan
+
             </ul>
         </div>
         <!-- Sidebar -->

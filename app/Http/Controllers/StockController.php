@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branches;
+use App\Models\Product_units;
 use App\Models\products;
 use App\Models\stock;
 use Illuminate\Http\Request;
@@ -14,6 +16,14 @@ class StockController extends Controller
     public function index()
     {
         $products = products::all();
+        $user_branches = auth()->user()->branches()->pluck('branch_id')->toArray();
+
+        foreach ($products as $product) {
+            $product->stock = stock::where('product_id', $product->id)->whereIn('branch_id', $user_branches)->sum('cr') - stock::where('product_id', $product->id)->whereIn('branch_id', $user_branches)->sum('db');
+            $first_unit = $product->units()->first();
+            $product->stock = $product->stock / $first_unit->value;
+            $product->unit = $first_unit->unit_name;
+        }
 
         return view('stock.index', compact('products'));
     }
@@ -37,32 +47,41 @@ class StockController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id, $warehouse, $from, $to)
+    public function show(Request $request, $id)
     {
+        $from = $request->from;
+        $to = $request->to;
+        $unit = $request->unit;
+        $branch = $request->branch;
         $product = products::find($id);
 
-        if ($warehouse == 'all') {
-            $stocks = stock::where('productID', $id)->whereBetween('date', [$from, $to])->get();
+        if ($branch == 'all') {
+            $branches = Auth()->user()->branches()->pluck('branch_id')->toArray();
+            $stocks = stock::where('product_id', $id)->whereBetween('date', [$from, $to])->whereIn('branch_id', $branches)->get();
 
-            $pre_cr = stock::where('productID', $id)->whereDate('date', '<', $from)->sum('cr');
-            $pre_db = stock::where('productID', $id)->whereDate('date', '<', $from)->sum('db');
+            $pre_cr = stock::where('product_id', $id)->whereDate('date', '<', $from)->whereIn('branch_id', $branches)->sum('cr');
+            $pre_db = stock::where('product_id', $id)->whereDate('date', '<', $from)->whereIn('branch_id', $branches)->sum('db');
 
-            $cur_cr = stock::where('productID', $id)->sum('cr');
-            $cur_db = stock::where('productID', $id)->sum('db');
+            $cur_cr = stock::where('product_id', $id)->sum('cr');
+            $cur_db = stock::where('product_id', $id)->sum('db');
         } else {
-            $stocks = stock::where('productID', $id)->whereBetween('date', [$from, $to])->where('warehouseID', $warehouse)->get();
 
-            $pre_cr = stock::where('productID', $id)->whereDate('date', '<', $from)->where('warehouseID', $warehouse)->sum('cr');
-            $pre_db = stock::where('productID', $id)->whereDate('date', '<', $from)->where('warehouseID', $warehouse)->sum('db');
+            $stocks = stock::where('product_id', $id)->whereBetween('date', [$from, $to])->where('branch_id', $branch)->get();
 
-            $cur_cr = stock::where('productID', $id)->where('warehouseID', $warehouse)->sum('cr');
-            $cur_db = stock::where('productID', $id)->where('warehouseID', $warehouse)->sum('db');
+            $pre_cr = stock::where('product_id', $id)->whereDate('date', '<', $from)->where('branch_id', $branch)->sum('cr');
+            $pre_db = stock::where('product_id', $id)->whereDate('date', '<', $from)->where('branch_id', $branch)->sum('db');
+
+            $cur_cr = stock::where('product_id', $id)->where('branch_id', $branch)->sum('cr');
+            $cur_db = stock::where('product_id', $id)->where('branch_id', $branch)->sum('db');
+            $branch = Branches::find($branch)->name;
         }
 
         $pre_balance = $pre_cr - $pre_db;
         $cur_balance = $cur_cr - $cur_db;
 
-        return view('stock.details', compact('product', 'pre_balance', 'cur_balance', 'stocks', 'from', 'to'));
+        $unit = Product_units::find($unit);
+
+        return view('stock.details', compact('product', 'pre_balance', 'cur_balance', 'stocks', 'from', 'to', 'unit', 'branch'));
     }
 
     /**
