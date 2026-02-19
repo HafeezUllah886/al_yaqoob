@@ -63,6 +63,9 @@ class ExpensesController extends Controller
 
             createTransaction($request->accountID, $request->date, 0, $request->amount, 'Expense - '.$request->notes, $ref, 'Expense');
 
+            if ($request->has('file')) {
+                createAttachment($request->file('file'), $ref);
+            }
             DB::commit();
 
             return back()->with('success', 'Expense Saved');
