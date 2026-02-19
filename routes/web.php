@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductUnitsController;
 use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\UnitsController;
 use App\Http\Middleware\confirmPassword;
+use App\Models\attachment;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
@@ -30,5 +31,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('stockTransfer', StockTransferController::class);
 
     Route::get('stockTransfer/delete/{id}', [StockTransferController::class, 'destroy'])->name('stockTransfer.delete')->middleware(confirmPassword::class);
+
+    Route::get('/attachment/{ref}', function ($ref) {
+        $attachment = attachment::where('refID', $ref)->first();
+        if (! $attachment) {
+            return redirect()->back()->with('error', 'No Attachement Found');
+        }
+
+        return response()->file(public_path($attachment->path));
+    })->name('viewAttachment');
 
 });

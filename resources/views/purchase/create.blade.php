@@ -17,7 +17,7 @@
                     </div>
                 </div><!--end row-->
                 <div class="card-body">
-                    <form action="{{ route('purchase.store') }}" method="post">
+                    <form action="{{ route('purchase.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -53,13 +53,13 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label for="comp">Purchase Inv No.</label>
                                     <input type="text" name="inv" id="inv" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                                 <div class="form-group">
                                     <label for="date">Date</label>
                                     <input type="date" name="date" id="date" value="{{ date('Y-m-d') }}"
@@ -82,6 +82,12 @@
                                             <option value="{{ $vendor->id }}">{{ $vendor->title }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="form-group">
+                                    <label for="attachement">Attachment</label>
+                                    <input type="file" name="file" id="attachement" class="form-control">
                                 </div>
                             </div>
                             <div class="col-12 mt-2">

@@ -13,7 +13,7 @@ class ExpenseCategoriesController extends Controller
     public function index()
     {
         $this->authorize('Create Expense Categories');
-        $cats = expenseCategories::orderBy('name', 'asc')->get();
+        $cats = expenseCategories::with('parent')->orderBy('parent_id', 'asc')->orderBy('name', 'asc')->get();
 
         return view('finance.expense.categories', compact('cats'));
     }
@@ -58,7 +58,7 @@ class ExpenseCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $this->authorize('Edit Expense Categories');
-        expenseCategories::find($id)->update($request->all());
+        expenseCategories::findOrFail($id)->update($request->all());
 
         return back()->with('msg', 'Category Updated');
     }

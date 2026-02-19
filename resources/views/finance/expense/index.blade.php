@@ -120,7 +120,13 @@
                             <select name="cat" id="category" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @if ($category->parent_id == null)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @foreach ($category->subcategories as $sub)
+                                            <option value="{{ $sub->id }}">{{ $category->name }} >
+                                                {{ $sub->name }}</option>
+                                        @endforeach
+                                    @endif
                                 @endforeach
                             </select>
                         </div>

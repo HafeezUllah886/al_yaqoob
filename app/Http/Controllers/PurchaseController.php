@@ -72,7 +72,7 @@ class PurchaseController extends Controller
             $purchase = purchase::create(
                 [
                     'vendor_id' => $request->vendorID,
-                    'branch_id' => $request->branchID,
+                    'branch_id' => $request->branch_id,
                     'date' => $request->date,
                     'notes' => $request->notes,
                     'total' => 0,
@@ -105,7 +105,7 @@ class PurchaseController extends Controller
                     ]
                 );
                 $qty = $qty * $unit->value;
-                createStock($id, $qty, 0, $request->date, 'Purchased in Inv No. '.$request->inv.' Notes: '.$request->notes, $ref, $request->branchID);
+                createStock($id, $qty, 0, $request->date, 'Purchased in Inv No. '.$request->inv.' Notes: '.$request->notes, $ref, $request->branch_id);
             }
 
             $purchase->update(
@@ -134,6 +134,9 @@ class PurchaseController extends Controller
 
                     createTransaction($request->expense_account[$key], $request->date, 0, $request->expense_amount[$key], "Expense of Purchase No. $purchase->id Notes: $notes", $ref);
                 }
+            }
+            if ($request->has('file')) {
+                createAttachment($request->file('file'), $ref);
             }
             DB::commit();
 

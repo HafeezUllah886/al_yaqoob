@@ -24,6 +24,7 @@
                         <thead>
                             <th>#</th>
                             <th>Name</th>
+                            <th>City</th>
                             <th>Address</th>
                             <th>Phone</th>
                             <th>Users</th>
@@ -34,6 +35,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $branch->name }}</td>
+                                    <td>{{ $branch->city }}</td>
                                     <td>{{ $branch->address }}</td>
                                     <td>{{ $branch->phone }}</td>
                                     <td>
@@ -63,6 +65,18 @@
                                                                     <label for="name">Name</label>
                                                                     <input type="text" name="name" required id="name"
                                                                         class="form-control" value="{{ $branch->name }}">
+                                                                </div>
+                                                                <div class="form-group mt-2">
+                                                                    <label for="city">City</label>
+                                                                    <select name="city" id="city" required
+                                                                        class="selectize">
+                                                                        <option value="">Select City</option>
+                                                                        @foreach ($cities as $city)
+                                                                            <option value="{{ $city }}"
+                                                                                @selected($branch->city == $city)>
+                                                                                {{ $city }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                                 <div class="form-group mt-2">
                                                                     <label for="address">Address</label>
@@ -127,6 +141,16 @@
                             <input type="text" name="name" required id="name" class="form-control">
                         </div>
                         <div class="form-group mt-2">
+                            <label for="city">City</label>
+                            <select name="city" id="city_new" required class="selectize">
+                                <option value="">Select City</option>
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city }}">
+                                        {{ $city }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-2">
                             <label for="address">Address</label>
                             <input type="text" name="address" required id="address" class="form-control">
                         </div>
@@ -146,10 +170,7 @@
                                     </label>
                                 </div>
                             @endforeach
-
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -185,6 +206,8 @@
 
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
-        $(".selectize").selectize();
+        $(".selectize").selectize({
+            create: true
+        });
     </script>
 @endsection

@@ -17,8 +17,9 @@ class BranchesController extends Controller
         $this->authorize('View Branches');
         $branches = Branches::all();
         $users = User::all();
+        $cities = Branches::distinct()->pluck('city');
 
-        return view('branches.index', compact('branches', 'users'));
+        return view('branches.index', compact('branches', 'users', 'cities'));
     }
 
     /**

@@ -54,6 +54,7 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
+                            <th>Ref #</th>
                             <th>Inv #</th>
                             <th>Vendor</th>
                             <th>Date</th>
@@ -64,6 +65,8 @@
                             @foreach ($purchases as $key => $purchase)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td><a href="{{ route('viewAttachment', $purchase->refID) }}"
+                                            target="_black">{{ $purchase->refID }} <i class="ri-attachment-2"></i></a></td>
                                     <td>{{ $purchase->inv }}</td>
                                     <td>{{ $purchase->vendor->title }}</td>
                                     <td>{{ date('d M Y', strtotime($purchase->date)) }}</td>

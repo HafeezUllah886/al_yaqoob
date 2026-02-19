@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\attachment;
 use App\Models\ref;
 use Carbon\Carbon;
 
@@ -57,6 +58,28 @@ function lastDayOfPreviousYear()
     $endOfPreviousYear = Carbon::now()->subYear()->endOfYear();
 
     return $endOfPreviousYear->format('Y-m-d');
+}
+
+function deleteAttachment($ref)
+{
+    $attachment = attachment::where('refID', $ref)->first();
+    if (file_exists(public_path($attachment->path))) {
+        unlink(public_path($attachment->path));
+    }
+    $attachment->delete();
+}
+
+function createAttachment($file, $ref)
+{
+    $filename = time().'.'.$file->getClientOriginalExtension();
+    $file->move('attachments', $filename);
+
+    attachment::create(
+        [
+            'path' => 'attachments/'.$filename,
+            'refID' => $ref,
+        ]
+    );
 }
 
 function projectName()

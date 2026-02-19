@@ -15,11 +15,13 @@ class branchesSeeder extends Seeder
     {
         $branch = Branches::create([
             'name' => 'Main Branch',
+            'city' => 'Quetta',
             'address' => 'Main Branch',
             'phone' => '1234567890',
         ]);
         $branch2 = Branches::create([
             'name' => 'Branch 2',
+            'city' => 'Lahore',
             'address' => 'Branch 2',
             'phone' => '1234567890',
         ]);
