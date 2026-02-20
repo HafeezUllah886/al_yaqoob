@@ -62,6 +62,7 @@
                             <th>Account</th>
                             <th>Date</th>
                             <th>Notes</th>
+                            <th>Source</th>
                             <th>Amount</th>
                             <th>Action</th>
                         </thead>
@@ -75,10 +76,13 @@
                                     <td>{{ $tran->account->title }}</td>
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>
+                                    <td>{{ $tran->source }}</td>
                                     <td>{{ number_format($tran->amount) }}</td>
                                     <td>
-                                        <a href="{{ route('expense.delete', $tran->refID) }}"
-                                            class="btn btn-danger">Delete</a>
+                                        @if ($tran->source == 'Expense')
+                                            <a href="{{ route('expense.delete', $tran->refID) }}"
+                                                class="btn btn-danger">Delete</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

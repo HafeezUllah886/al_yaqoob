@@ -18,3 +18,8 @@ function createStock($productID, $cr, $db, $date, $notes, $refID, $warehouseID)
         ]
     );
 }
+
+function getProductBranchStock($product_id, $branch_id)
+{
+    return stock::where('product_id', $product_id)->where('branch_id', $branch_id)->sum('cr') - stock::where('product_id', $product_id)->where('branch_id', $branch_id)->sum('db');
+}

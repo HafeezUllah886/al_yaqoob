@@ -5,9 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProductUnitsController;
-use App\Http\Controllers\StockTransferController;
 use App\Http\Controllers\UnitsController;
-use App\Http\Middleware\confirmPassword;
 use App\Models\attachment;
 use Illuminate\Support\Facades\Route;
 
@@ -28,9 +26,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('product_units', ProductUnitsController::class);
 
     Route::resource('branches', BranchesController::class);
-    Route::resource('stockTransfer', StockTransferController::class);
-
-    Route::get('stockTransfer/delete/{id}', [StockTransferController::class, 'destroy'])->name('stockTransfer.delete')->middleware(confirmPassword::class);
 
     Route::get('/attachment/{ref}', function ($ref) {
         $attachment = attachment::where('refID', $ref)->first();

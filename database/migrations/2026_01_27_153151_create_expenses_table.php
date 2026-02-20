@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('date');
             $table->float('amount');
             $table->text('notes')->nullable();
+            $table->string('source')->default('Expense');
             $table->bigInteger('refID');
             $table->timestamps();
         });

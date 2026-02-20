@@ -146,8 +146,8 @@
                                 @endcan
                                 @can('Transfer Stocks')
                                     <li class="nav-item">
-                                        <a href="{{ route('categories.index') }}" class="nav-link" data-key="t-chat">Transfer
-                                            Stock</a>
+                                        <a href="{{ route('stockTransfer.index') }}" class="nav-link"
+                                            data-key="t-chat">Transfer</a>
                                     </li>
                                 @endcan
                                 @can('Stock Adjustments')

@@ -123,6 +123,7 @@ class PurchaseController extends Controller
                             'amount' => $request->expense_amount[$key],
                             'notes' => $request->expense_notes[$key],
                             'branch_id' => $request->branch_id,
+                            'source' => 'Purchase',
                             'refID' => $ref,
                         ]
                     );
@@ -244,6 +245,7 @@ class PurchaseController extends Controller
                             'amount' => $request->expense_amount[$key],
                             'notes' => $request->expense_notes[$key],
                             'branch_id' => $request->branch_id,
+                            'source' => 'Purchase',
                             'refID' => $ref,
                         ]
                     );

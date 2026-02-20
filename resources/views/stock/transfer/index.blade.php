@@ -4,8 +4,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>{!! lang("Stock_Transfer") !!}</h3>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTransfer">{!! lang("Create") !!}</button>
+                    <h3>Stock Transfer</h3>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTransfer">Create</button>
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
@@ -21,19 +21,19 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>{!! lang("Product") !!}</th>
-                            <th>{!! lang("Qty") !!}</th>
-                            <th>{!! lang("From") !!}</th>
-                            <th>{!! lang("To") !!}</th>
-                            <th>{!! lang("Date") !!}</th>
-                            <th>{!! lang("Action") !!}</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Date</th>
+                            <th>Action</th>
                         </thead>
                         <tbody>
                             @foreach ($stockTransfers as $key => $transfer)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $transfer->product->name }}</td>
-                                    <td>{{ $transfer->qty }}</td>
+                                    <td>{{ $transfer->pcs }} {{ $transfer->unit->unit_name }}</td>
                                     <td>{{ $transfer->fromBranch->name }}</td>
                                     <td>{{ $transfer->toBranch->name }}</td>
                                     <td>{{ date('d M Y', strtotime($transfer->date)) }}</td>
@@ -44,7 +44,7 @@
                                                 <i class="ri-more-fill align-middle"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                               {{--  <li>
+                                                {{--  <li>
                                                     <button class="dropdown-item" onclick="newWindow('{{route('stockTransfers.show', $transfer->id)}}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
@@ -52,9 +52,10 @@
                                                     </button>
                                                 </li> --}}
                                                 <li>
-                                                    <a class="dropdown-item text-danger" href="{{route('stockTransfers.delete', $transfer->refID)}}">
+                                                    <a class="dropdown-item text-danger"
+                                                        href="{{ route('stockTransfer.delete', $transfer->refID) }}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
-                                                        {!! lang("Delete") !!}
+                                                        Delete
                                                     </a>
                                                 </li>
                                             </ul>
@@ -68,37 +69,46 @@
             </div>
         </div>
     </div>
-     <div id="createTransfer" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div id="createTransfer" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">{!! lang("Create") !!} {!! lang("Stock_Transfer") !!}</h5>
+                    <h5 class="modal-title" id="myModalLabel">Create Stock Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <form method="get" action="{{route('stockTransfers.create')}}" id="form">
-                         <div class="modal-body">
-                           <div class="form-group">
-                            <label for="">{!! lang("From") !!} {!! lang("Branch") !!}</label>
+                <form method="get" action="{{ route('stockTransfer.create') }}" id="form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">From Branch</label>
                             <select name="fromBranch" id="fromBranch" class="form-control">
-                                @foreach ($branches as $branch)
-                                    <option value="{{$branch->id}}">{{$branch->name}}</option>
+                                @foreach (auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
-                           </div>
-                           <div class="form-group mt-2">
-                            <label for="">{!! lang("To") !!} {!! lang("Branch") !!}</label>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="">To Branch</label>
                             <select name="toBranch" id="toBranch" class="form-control">
-                                @foreach ($toBranches as $branch)
-                                    <option value="{{$branch->id}}">{{$branch->name}}</option>
+                                @foreach ($branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
-                           </div>
-                         </div>
-                         <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">{!! lang("Close") !!}</button>
-                                <button type="submit" id="viewBtn" class="btn btn-primary">{!! lang("Create") !!}</button>
-                         </div>
-                  </form>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="">Product</label>
+                            <select name="product" id="product" class="selectize">
+                                @foreach ($products as $product)
+                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="viewBtn" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -111,6 +121,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/selectize/selectize.min.css') }}">
 @endsection
 @section('page-js')
     <script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js') }}"></script>
@@ -124,8 +135,8 @@
     <script src="{{ asset('assets/libs/datatable/jszip.min.js') }}"></script>
 
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
-
-   
+    <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
+    <script>
+        $(".selectize").selectize();
+    </script>
 @endsection
-
-
