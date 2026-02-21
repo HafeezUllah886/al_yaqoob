@@ -25,6 +25,7 @@
                             <th>Qty</th>
                             <th>From</th>
                             <th>To</th>
+                            <th>Transfered by</th>
                             <th>Date</th>
                             <th>Action</th>
                         </thead>
@@ -36,6 +37,7 @@
                                     <td>{{ $transfer->pcs }} {{ $transfer->unit->unit_name }}</td>
                                     <td>{{ $transfer->fromBranch->name }}</td>
                                     <td>{{ $transfer->toBranch->name }}</td>
+                                    <td>{{ $transfer->user->name }}</td>
                                     <td>{{ date('d M Y', strtotime($transfer->date)) }}</td>
                                     <td>
                                         <div class="dropdown">
@@ -44,20 +46,24 @@
                                                 <i class="ri-more-fill align-middle"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                {{--  <li>
-                                                    <button class="dropdown-item" onclick="newWindow('{{route('stockTransfers.show', $transfer->id)}}')"
+                                                <li>
+                                                    <button class="dropdown-item"
+                                                        onclick="newWindow('{{ route('stockTransfer.show', $transfer->id) }}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                        {!! lang("View") !!}
+                                                        View
                                                     </button>
-                                                </li> --}}
-                                                <li>
-                                                    <a class="dropdown-item text-danger"
-                                                        href="{{ route('stockTransfer.delete', $transfer->refID) }}">
-                                                        <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
-                                                        Delete
-                                                    </a>
                                                 </li>
+                                                @if (auth()->user()->id == $transfer->user_id)
+                                                    <li>
+                                                        <a class="dropdown-item text-danger"
+                                                            href="{{ route('stockTransfer.delete', $transfer->refID) }}">
+                                                            <i
+                                                                class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
+                                                            Delete
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </td>

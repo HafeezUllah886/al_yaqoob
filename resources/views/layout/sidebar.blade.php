@@ -170,7 +170,8 @@
                             <ul class="nav nav-sm flex-column">
                                 @can('View Products')
                                     <li class="nav-item">
-                                        <a href="{{ route('product.index') }}" class="nav-link" data-key="t-chat">List</a>
+                                        <a href="{{ route('product.index') }}" class="nav-link" data-key="t-chat">Products
+                                            List</a>
                                     </li>
                                 @endcan
                                 @can('View Categories')

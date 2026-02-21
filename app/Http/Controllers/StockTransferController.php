@@ -8,7 +8,6 @@ use App\Models\expenseCategories;
 use App\Models\expenses;
 use App\Models\Product_units;
 use App\Models\products;
-use App\Models\RouteExpenses;
 use App\Models\stock;
 use App\Models\StockTransfer;
 use App\Models\transactions;
@@ -124,9 +123,10 @@ class StockTransferController extends Controller
      */
     public function show($id)
     {
-        $stockTransfer = StockTransfer::with('details')->find($id);
+        $transfer = StockTransfer::find($id);
+        $expenses = expenses::where('refID', $transfer->refID)->get();
 
-        return view('stock.transfer.details', compact('stockTransfer'));
+        return view('stock.transfer.view', compact('transfer', 'expenses'));
     }
 
     /**
@@ -154,17 +154,17 @@ class StockTransferController extends Controller
             DB::beginTransaction();
             StockTransfer::where('refID', $ref)->delete();
             stock::where('refID', $ref)->delete();
-            RouteExpenses::where('refID', $ref)->delete();
+            expenses::where('refID', $ref)->delete();
             transactions::where('refID', $ref)->delete();
             DB::commit();
             session()->forget('confirmed_password');
 
-            return redirect()->route('stockTransfers.index')->with('success', 'Stock Transfer Deleted');
+            return redirect()->route('stockTransfer.index')->with('success', 'Stock Transfer Deleted');
         } catch (\Exception $e) {
             DB::rollBack();
             session()->forget('confirmed_password');
 
-            return redirect()->route('stockTransfers.index')->with('error', $e->getMessage());
+            return redirect()->route('stockTransfer.index')->with('error', $e->getMessage());
         }
     }
 }
