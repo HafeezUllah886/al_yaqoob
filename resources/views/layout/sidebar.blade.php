@@ -96,6 +96,12 @@
                         </a>
                         <div class="collapse menu-dropdown" id="finance">
                             <ul class="nav nav-sm flex-column">
+                                @can('Account Adjustments')
+                                    <li class="nav-item">
+                                        <a href="{{ route('account_adjustment.index') }}" class="nav-link"
+                                            data-key="t-chat">Account Adjustments</a>
+                                    </li>
+                                @endcan
                                 @can('Create Expenses')
                                     <li class="nav-item">
                                         <a href="{{ route('expenses.index') }}" class="nav-link" data-key="t-chat">Expenses</a>

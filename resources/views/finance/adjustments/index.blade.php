@@ -4,45 +4,39 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Purchase Expenses</h3>
-                    <div>
-                        <a href="{{ route('purchase_expense_categories.index') }}" class="btn btn-info ">Categories</a>
-
-                    </div>
+                    <h3>Account Adjustments</h3>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create
+                        New</button>
                 </div>
                 <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
                             <th>Ref #</th>
-                            <th>Purchase #</th>
-                            <th>Category</th>
                             <th>Account</th>
                             <th>Date</th>
                             <th>Notes</th>
+                            <th>Type</th>
                             <th>Amount</th>
+                            <th>Action</th>
                         </thead>
                         <tbody>
-                            @foreach ($expenses as $key => $tran)
+                            @foreach ($trans as $key => $tran)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $tran->refID }}</td>
-                                    <td>{{ $tran->purchaseID }}</td>
-                                    <td>{{ $tran->cat }}</td>
+                                    <td><a href="{{ route('viewAttachment', $tran->refID) }}"
+                                            target="_black">{{ $tran->refID }} <i class="ri-attachment-2"></i></a></td>
                                     <td>{{ $tran->account->title }}</td>
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>
+                                    <td><span
+                                            class="badge {{ $tran->type == 'Debit' ? 'bg-warning' : 'bg-info' }}">{{ $tran->type }}</span>
+                                    </td>
                                     <td>{{ number_format($tran->amount) }}</td>
-
+                                    <td>
+                                        <a href="{{ route('account_adjustment.delete', $tran->refID) }}"
+                                            class="btn btn-danger">Delete</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -58,33 +52,34 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Expense</h5>
+                    <h5 class="modal-title" id="myModalLabel">Create Account Adjustment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <form action="{{ route('expenses.store') }}" method="post">
+                <form action="{{ route('account_adjustment.store') }}" enctype="multipart/form-data" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-group mt-2">
-                            <label for="account">Account</label>
-                            <select name="accountID" id="account" required class="selectize">
-                                @foreach ($accounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mt-2">
-                            <label for="category">Category</label>
-                            <select name="cat" id="category" required class="selectize">
-                                <option value=""></option>
-                                @foreach ($categories as $category)
-                                    <option>{{ $category->name }}
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group mt-2">
+                        <div class="form-group">
                             <label for="amount">Amount</label>
                             <input type="number" step="any" name="amount" required id="amount"
                                 class="form-control">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="type">Type</label>
+                            <select name="type" id="type" class="form-control">
+                                <option value="Credit">Credit</option>
+                                <option value="Debit">Debit</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="account">Account</label>
+                            <select name="accountID" id="account" required class="selectize">
+                                <option value=""></option>
+                                @foreach ($accounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->title }} - {{ $account->type }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group mt-2">
                             <label for="date">Date</label>
@@ -92,8 +87,12 @@
                                 class="form-control">
                         </div>
                         <div class="form-group mt-2">
+                            <label for="file">Attachment</label>
+                            <input type="file" name="file" id="file" class="form-control">
+                        </div>
+                        <div class="form-group mt-2">
                             <label for="notes">Notes</label>
-                            <textarea name="notes" required id="notes" cols="30" class="form-control" rows="5"></textarea>
+                            <textarea name="notes" id="notes" cols="30" class="form-control" rows="5"></textarea>
                         </div>
 
                     </div>

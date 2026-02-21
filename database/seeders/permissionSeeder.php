@@ -59,11 +59,11 @@ class permissionSeeder extends Seeder
             ['name' => 'Edit Expense Categories', 'group' => 'Expenses'],
             ['name' => 'Create Transfers', 'group' => 'Transfers'],
             ['name' => 'Delete Transfers', 'group' => 'Transfers'],
-            ['name' => 'Create Account Adjustments', 'group' => 'Account Adjustments'],
+            ['name' => 'Account Adjustments', 'group' => 'Account Adjustments'],
             ['name' => 'Delete Account Adjustments', 'group' => 'Account Adjustments'],
-            ['name' => 'Create Receivings', 'group' => 'Receivings'],
+            ['name' => 'Receivings', 'group' => 'Receivings'],
             ['name' => 'Delete Receivings', 'group' => 'Receivings'],
-            ['name' => 'Create Payments', 'group' => 'Payments'],
+            ['name' => 'Payments', 'group' => 'Payments'],
             ['name' => 'Delete Payments', 'group' => 'Payments'],
         ];
         foreach ($permissions as $permission) {
