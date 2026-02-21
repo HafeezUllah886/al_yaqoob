@@ -2,6 +2,39 @@
 @section('content')
     <div class="row">
         <div class="col-12">
+            <form>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">From</span>
+                            <input type="date" class="form-control" name="from" value="{{ $start }}"
+                                aria-label="From Date" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">To</span>
+                            <input type="date" class="form-control" name="to" value="{{ $end }}"
+                                aria-label="To Date" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Branch</span>
+                            <select name="branch_id" id="branch_id" class="form-control">
+                                <option value="">All Branches</option>
+                                @foreach (Auth()->user()->branches as $branch)
+                                    <option value="{{ $branch->id }}" @selected($branch_id == $branch->id)>{{ $branch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Filter" class="btn btn-success w-100">
+                    </div>
+                </div>
+            </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h3>Transfers</h3>
@@ -33,13 +66,15 @@
                             @foreach ($transfers as $key => $tran)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $tran->refID }}</td>
+                                    <td><a href="{{ route('viewAttachment', $tran->refID) }}"
+                                            target="_black">{{ $tran->refID }} <i class="ri-attachment-2"></i></a></td>
                                     <td>{{ $tran->fromAccount->title }}</td>
                                     <td>{{ $tran->toAccount->title }}</td>
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>
                                     <td>{{ number_format($tran->amount) }}</td>
                                     <td>
+                                        <a href="{{ route('transfers.edit', $tran->id) }}" class="btn btn-primary">Edit</a>
                                         <a href="{{ route('transfers.delete', $tran->refID) }}"
                                             class="btn btn-danger">Delete</a>
                                     </td>
@@ -61,24 +96,26 @@
                     <h5 class="modal-title" id="myModalLabel">Create Transfer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <form action="{{ route('transfers.store') }}" method="post">
+                <form action="{{ route('transfers.store') }}" enctype="multipart/form-data" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mt-2">
-                            <label for="from">From</label>
-                            <select name="from" id="from" required class="selectize">
+                            <label for="from_id">From</label>
+                            <select name="from_id" id="from_id" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($accounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
+                                    <option value="{{ $account->id }}">{{ $account->title }} -
+                                        {{ $account->branch->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="to">To</label>
-                            <select name="to" id="to" required class="selectize">
+                            <label for="to_id">To</label>
+                            <select name="to_id" id="to_id" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($accounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
+                                    <option value="{{ $account->id }}">{{ $account->title }} -
+                                        {{ $account->branch->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -91,6 +128,10 @@
                             <label for="date">Date</label>
                             <input type="date" name="date" required id="date" value="{{ date('Y-m-d') }}"
                                 class="form-control">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="file">Attachment</label>
+                            <input type="file" name="file" id="file" class="form-control">
                         </div>
                         <div class="form-group mt-2">
                             <label for="notes">Notes</label>

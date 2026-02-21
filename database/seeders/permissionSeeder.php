@@ -57,7 +57,7 @@ class permissionSeeder extends Seeder
             ['name' => 'Delete Expenses', 'group' => 'Expenses'],
             ['name' => 'Create Expense Categories', 'group' => 'Expenses'],
             ['name' => 'Edit Expense Categories', 'group' => 'Expenses'],
-            ['name' => 'Create Transfers', 'group' => 'Transfers'],
+            ['name' => 'Transfers', 'group' => 'Transfers'],
             ['name' => 'Delete Transfers', 'group' => 'Transfers'],
             ['name' => 'Account Adjustments', 'group' => 'Account Adjustments'],
             ['name' => 'Delete Account Adjustments', 'group' => 'Account Adjustments'],

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\confirmPassword;
 use App\Models\accounts;
 use App\Models\transactions;
 use App\Models\transfer;
@@ -12,11 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(confirmPassword::class)->only('edit');
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -24,11 +18,18 @@ class TransferController extends Controller
     {
         $start = $request->from ?? firstDayOfMonth();
         $end = $request->to ?? now()->toDateString();
+        $branch_id = $request->branch_id ?? 'All';
 
-        $transfers = transfer::whereBetween('date', [$start, $end])->currentBranches()->orderBy('id', 'desc')->get();
+        $transfers = transfer::whereBetween('date', [$start, $end])->orderby('id', 'desc');
+        if ($branch_id != 'All') {
+            $transfers = $transfers->where('branch_id', $branch_id);
+        } else {
+            $transfers = $transfers->currentBranches();
+        }
+        $transfers = $transfers->get();
         $accounts = accounts::currentBranches()->get();
 
-        return view('finance.transfer.index', compact('transfers', 'accounts', 'start', 'end'));
+        return view('finance.transfer.index', compact('transfers', 'accounts', 'start', 'end', 'branch_id'));
     }
 
     /**
@@ -64,7 +65,7 @@ class TransferController extends Controller
                     'from_id' => $request->from_id,
                     'to_id' => $request->to_id,
                     'branch_id' => $fromAccount->branch_id,
-                    'user_id' => auth()->id(),
+                    'user_id' => auth()->user()->id,
                     'date' => $request->date,
                     'amount' => $request->amount,
                     'notes' => $request->notes,
