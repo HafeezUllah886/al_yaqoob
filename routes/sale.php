@@ -8,6 +8,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('sale', SaleController::class);
 
+    Route::get('sales/getproduct/{id}/{branch_id}', [SaleController::class, 'getSignleProduct']);
     Route::get('sales/delete/{id}', [SaleController::class, 'destroy'])->name('sales.delete')->middleware(confirmPassword::class);
 
 });

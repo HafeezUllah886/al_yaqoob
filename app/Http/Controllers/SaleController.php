@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use function App\Helpers\createStock;
+use function App\Helpers\getProductBranchStock;
 
 class SaleController extends Controller
 {
@@ -251,5 +252,14 @@ class SaleController extends Controller
 
             return redirect()->route('sale.index')->with('error', $e->getMessage());
         }
+    }
+
+    public function getSignleProduct($id, $branch_id)
+    {
+        $product = Products::with('units')->find($id);
+        $stock = getProductBranchStock($id, $branch_id);
+        $product->stock = $stock;
+
+        return $product;
     }
 }

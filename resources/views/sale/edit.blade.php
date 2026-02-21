@@ -37,6 +37,7 @@
                                     <thead>
                                         <th width="30%">Item</th>
                                         <th width="10%" class="text-center">Unit</th>
+                                        <th class="text-center">Stock</th>
                                         <th class="text-center">Qty</th>
                                         <th class="text-center">Price</th>
                                         <th class="text-center">Amount</th>
@@ -44,6 +45,14 @@
                                     </thead>
                                     <tbody id="products_list">
                                         @foreach ($sale->details as $detail)
+                                            @php
+                                                $currentStock = \App\Helpers\getProductBranchStock(
+                                                    $detail->product_id,
+                                                    $branch->id,
+                                                );
+                                                $reservedQty = $detail->qty * $detail->unit_value;
+                                                $totalBaseStock = $currentStock + $reservedQty;
+                                            @endphp
                                             <tr id="row_{{ $detail->product_id }}">
                                                 <td class="no-padding">{{ $detail->product->name }}</td>
                                                 <td class="no-padding">
@@ -59,6 +68,9 @@
                                                         @endforeach
                                                     </select>
                                                 </td>
+                                                <td class="no-padding"><input type="number" readonly
+                                                        class="form-control text-center no-padding"
+                                                        id="stock_{{ $detail->product_id }}" value="0"></td>
                                                 <td class="no-padding"><input type="number" name="qty[]"
                                                         oninput="updateChanges({{ $detail->product_id }})" min="0"
                                                         required step="any" value="{{ $detail->qty }}"
@@ -77,12 +89,14 @@
                                                         onclick="deleteRow({{ $detail->product_id }})">X</span> </td>
                                                 <input type="hidden" name="id[]" id="id_{{ $detail->product_id }}"
                                                     value="{{ $detail->product_id }}">
+                                                <input type="hidden" id="base_stock_{{ $detail->product_id }}"
+                                                    value="{{ $totalBaseStock }}">
                                             </tr>
                                         @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="2" class="text-end">Total</th>
+                                            <th colspan="3" class="text-end">Total</th>
                                             <th class="text-end" id="totalQty">0.00</th>
                                             <th></th>
                                             <th class="text-end" id="totalAmount">0.00</th>
@@ -177,6 +191,9 @@
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
         $(document).ready(function() {
+            existingProducts.forEach(function(id) {
+                changeUnit(id);
+            });
             updateTotal();
         });
         $(".selectize1").selectize();
@@ -194,7 +211,7 @@
 
         function getSingleProduct(id) {
             $.ajax({
-                url: "{{ url('purchases/getproduct/') }}/" + id,
+                url: "{{ url('sales/getproduct/') }}/" + id + "/" + $("#branch_id").val(),
                 method: "GET",
                 success: function(product) {
                     let found = $.grep(existingProducts, function(element) {
@@ -204,6 +221,7 @@
                         var id = product.id;
                         var units = product.units;
                         var price = units[0].price;
+                        var stock = product.stock;
                         var html = '<tr id="row_' + id + '">';
                         html +=
                             '<td class="no-padding">' + product.name + '</td>';
@@ -216,6 +234,9 @@
                                 unit.unit_name + ' (' + unit.value + ')</option>';
                         });
                         html += '</select></td>';
+                        html +=
+                            '<td class="no-padding"><input type="number" readonly class="form-control text-center no-padding" id="stock_' +
+                            id + '" value="' + stock + '"></td>';
                         html +=
                             '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' +
                             id +
@@ -232,10 +253,11 @@
                             '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow(' +
                             id + ')">X</span> </td>';
                         html += '<input type="hidden" name="id[]" id="id_' + id + '" value="' + id + '">';
+                        html += '<input type="hidden" id="base_stock_' + id + '" value="' + stock + '">';
                         html += '</tr>';
                         $("#products_list").prepend(html);
                         existingProducts.push(id);
-                        updateChanges(id);
+                        changeUnit(id);
                     }
                 }
             });
@@ -250,9 +272,16 @@
         }
 
         function changeUnit(id) {
-            var unit = $('#unit_' + id).find('option:selected');
-            unit = unit.data('price');
-            $("#price_" + id).val(unit);
+            var unit_option = $('#unit_' + id).find('option:selected');
+            var unit_price = unit_option.data('price');
+            var unit_value = unit_option.data('unit');
+            var base_stock = parseFloat($('#base_stock_' + id).val());
+            var available_stock = base_stock / unit_value;
+
+            $("#price_" + id).val(unit_price);
+            $("#stock_" + id).val(available_stock.toFixed(2));
+            $("#qty_" + id).attr('max', available_stock);
+
             updateChanges(id);
         }
 
