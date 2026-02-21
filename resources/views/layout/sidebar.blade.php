@@ -45,6 +45,13 @@
                         </a>
                     </li> <!-- end Dashboard Menu -->
                 @endcanany
+                @canany(['Create Sales', 'View Sales'])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('sale.index') }}">
+                            <i class="ri-shopping-bag-line"></i> <span data-key="t-dashboards">Sales</span>
+                        </a>
+                    </li> <!-- end Dashboard Menu -->
+                @endcanany
                 @canany(['Create Accounts', 'View Accounts'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#accounts" data-bs-toggle="collapse" role="button"
