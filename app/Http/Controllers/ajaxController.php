@@ -30,4 +30,12 @@ class ajaxController extends Controller
 
         return response()->json($accounts);
     }
+
+    public function getProductUnits($product_id)
+    {
+        $product = products::find($product_id);
+        $units = $product->units;
+
+        return response()->json($units);
+    }
 }

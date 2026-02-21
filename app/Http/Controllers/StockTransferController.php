@@ -24,6 +24,7 @@ class StockTransferController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('Transfer Stocks');
         $from = $request->start ?? firstDayOfMonth();
         $to = $request->end ?? date('Y-m-d');
         $user_branches = auth()->user()->branch_ids();
@@ -150,6 +151,7 @@ class StockTransferController extends Controller
      */
     public function destroy($ref)
     {
+        $this->authorize('Delete Transfer Stocks');
         try {
             DB::beginTransaction();
             StockTransfer::where('refID', $ref)->delete();

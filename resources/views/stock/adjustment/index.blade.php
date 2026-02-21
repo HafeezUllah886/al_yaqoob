@@ -4,20 +4,21 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>{!! lang("Stock_Adjustment") !!}</h3>
-                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">{!! lang("Create_New") !!}</button>
+                    <h3>Stock Adjustment</h3>
+                    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create
+                        New</button>
                 </div>
                 <div class="card-body">
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>{!! lang("Ref") !!} #</th>
-                            <th>{!! lang("Product") !!}</th>
-                            <th>{!! lang("Date") !!}</th>
-                            <th>{!! lang("Type") !!}</th>
-                            <th>{!! lang("Qty") !!}</th>
-                            <th>{!! lang("Notes") !!}</th>
-                            <th>{!! lang("Action") !!}</th>
+                            <th>Ref #</th>
+                            <th>Product</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Qty</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
                         </thead>
                         <tbody>
                             @foreach ($adjustments as $key => $item)
@@ -27,13 +28,14 @@
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ date('d M Y', strtotime($item->date)) }}</td>
                                     <td>
-                                        <span class="badge {{ $item->type == 'Stock-In' ? 'bg-info' : 'bg-warning' }}">{{ $item->type }}</span>
+                                        <span
+                                            class="badge {{ $item->type == 'Stock-In' ? 'bg-info' : 'bg-warning' }}">{{ $item->type }}</span>
                                     </td>
                                     <td>{{ number_format($item->qty) }}</td>
                                     <td>{{ $item->notes }}</td>
                                     <td>
                                         <a href="{{ route('stockAdjustment.delete', $item->refID) }}"
-                                            class="btn btn-danger">{!! lang("Delete") !!}</a>
+                                            class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -50,14 +52,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">{!! lang("Create_Stock_Adjustment") !!}</h5>
+                    <h5 class="modal-title" id="myModalLabel">Create Stock Adjustment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <form action="{{ route('stockAdjustments.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mt-2">
-                            <label for="product">{!! lang("Product") !!}</label>
+                            <label for="product">Product</label>
                             <select name="productID" id="product" required class="selectize">
                                 <option value=""></option>
                                 @foreach ($products as $product)
@@ -66,39 +68,44 @@
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="qty">{!! lang("Qty") !!}</label>
-                            <input type="number" name="qty" required id="qty"
-                                class="form-control">
+                            <label for="unit">Unit</label>
+                            <select name="unitID" id="unit" required class="selectize">
+                                <option value=""></option>
+                            </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="type">{!! lang("Type") !!}</label>
+                            <label for="qty">Qty</label>
+                            <input type="number" name="qty" required id="qty" class="form-control">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="type">Type</label>
                             <select name="type" id="type" class="form-control">
                                 <option value="Stock-In">Stock-In</option>
                                 <option value="Stock-Out">Stock-Out</option>
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="branch">{!! lang("Branch") !!}</label>
+                            <label for="branch">Branch</label>
                             <select name="branchID" id="branch" required class="selectize">
-                                @foreach ($branches as $branch)
+                                @foreach (auth()->user()->branches as $branch)
                                     <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="date">{!! lang("Date") !!}</label>
+                            <label for="date">Date</label>
                             <input type="date" name="date" required id="date" value="{{ date('Y-m-d') }}"
                                 class="form-control">
                         </div>
                         <div class="form-group mt-2">
-                            <label for="notes">{!! lang("Notes") !!}</label>
+                            <label for="notes">Notes</label>
                             <textarea name="notes" id="notes" cols="30" class="form-control" rows="5"></textarea>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">{!! lang("Close") !!}</button>
-                        <button type="submit" class="btn btn-primary">{!! lang("Save") !!}</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div><!-- /.modal-content -->
@@ -129,6 +136,28 @@
 
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
-        $(".selectize").selectize();
+        var $product = $('#product').selectize();
+        $('#branch').selectize();
+        var $unit = $('#unit').selectize();
+
+        $product[0].selectize.on('change', function(value) {
+            if (!value) return;
+
+            $.ajax({
+                url: "{{ url('/get_product_units') }}/" + value,
+                type: "GET",
+                success: function(data) {
+                    var unitSelectize = $unit[0].selectize;
+                    unitSelectize.clearOptions();
+                    $.each(data, function(index, unit) {
+                        unitSelectize.addOption({
+                            value: unit.id,
+                            text: unit.unit_name
+                        });
+                    });
+                    unitSelectize.refreshOptions();
+                }
+            });
+        });
     </script>
 @endsection

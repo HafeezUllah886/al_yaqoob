@@ -51,6 +51,7 @@ class permissionSeeder extends Seeder
             ['name' => 'View Stocks', 'group' => 'Stocks'],
             ['name' => 'Transfer Stocks', 'group' => 'Stocks'],
             ['name' => 'Delete Transfer Stocks', 'group' => 'Stocks'],
+            ['name' => 'Stock Adjustments', 'group' => 'Stocks'],
             ['name' => 'Delete Stock Adjustments', 'group' => 'Stocks'],
             ['name' => 'Create Expenses', 'group' => 'Expenses'],
             ['name' => 'Delete Expenses', 'group' => 'Expenses'],
