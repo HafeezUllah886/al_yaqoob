@@ -18,7 +18,6 @@
                                 value="{{ $to }}" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
-
                     <div class="col-md-4">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">Branch</span>
@@ -38,7 +37,7 @@
             </form>
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Payment Receiving</h3>
+                    <h3>Payments</h3>
                     <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#new">Create
                         New</button>
                 </div>
@@ -57,23 +56,23 @@
                         <thead>
                             <th>#</th>
                             <th>Ref #</th>
-                            <th>From</th>
+                            <th>To</th>
                             <th>Account</th>
-                            <th>Received By</th>
+                            <th>Paid By</th>
                             <th>Date</th>
                             <th>Notes</th>
                             <th>Amount</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            @foreach ($receivings as $key => $tran)
+                            @foreach ($payments as $key => $tran)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td><a href="{{ route('viewAttachment', $tran->refID) }}"
                                             target="_black">{{ $tran->refID }} <i class="ri-attachment-2"></i></a></td>
-                                    <td>{{ $tran->fromAccount->title }}</td>
-                                    <td>{{ $tran->inAccount->title }}</td>
-                                    <td>{{ $tran->receivedBy->name }}</td>
+                                    <td>{{ $tran->toAccount->title }}</td>
+                                    <td>{{ $tran->account->title }}</td>
+                                    <td>{{ $tran->paidBy->name }}</td>
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>
                                     <td>{{ number_format($tran->amount) }}</td>
@@ -86,7 +85,7 @@
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
                                                     <button class="dropdown-item"
-                                                        onclick="newWindow('{{ route('receivings.show', $tran->id) }}')"
+                                                        onclick="newWindow('{{ route('payments.show', $tran->id) }}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                         View
@@ -94,7 +93,7 @@
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item text-danger"
-                                                        href="{{ route('receiving.delete', $tran->refID) }}">
+                                                        href="{{ route('payment.delete', $tran->refID) }}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
                                                         Delete
                                                     </a>
@@ -117,27 +116,27 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Receipt</h5>
+                    <h5 class="modal-title" id="myModalLabel">Create Payment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
-                <form action="{{ route('receivings.store') }}" enctype="multipart/form-data" method="post">
+                <form action="{{ route('payments.store') }}" enctype="multipart/form-data" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group mt-2">
-                            <label for="fromID">From (Balance: <span id="accountBalance">0</span>)</label>
-                            <select name="fromID" id="fromID" onchange="getBalance()" required class="selectize">
+                            <label for="account">Account (Balance: <span id="accountBalance">0</span>)</label>
+                            <select name="accountID" id="account" onchange="getBalance()" required class="selectize">
                                 <option value=""></option>
-                                @foreach ($froms as $from)
-                                    <option value="{{ $from->id }}">{{ $from->title }}</option>
+                                @foreach ($accounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="account">Account</label>
-                            <select name="accountID" id="account" required class="selectize">
+                            <label for="toAccount">To (Balance: <span id="accountToBalance">0</span>)</label>
+                            <select name="toAccountID" id="toAccount" onchange="getBalanceTo()" required class="selectize">
                                 <option value=""></option>
-                                @foreach ($accounts as $account)
-                                    <option value="{{ $account->id }}">{{ $account->title }}</option>
+                                @foreach ($toaccounts as $toaccount)
+                                    <option value="{{ $toaccount->id }}">{{ $toaccount->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -196,7 +195,7 @@
         $(".selectize").selectize();
 
         function getBalance() {
-            var id = $("#fromID").find(":selected").val();
+            var id = $("#account").find(":selected").val();
             $.ajax({
                 url: "{{ url('/accountbalance/') }}/" + id,
                 method: 'GET',
@@ -208,6 +207,27 @@
                     } else {
                         $("#accountBalance").addClass('text-danger');
                         $("#accountBalance").removeClass('text-success');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function getBalanceTo() {
+            var id = $("#toAccount").find(":selected").val();
+            $.ajax({
+                url: "{{ url('/accountbalance/') }}/" + id,
+                method: 'GET',
+                success: function(response) {
+                    $("#accountToBalance").html(response.data);
+                    if (response.data > 0) {
+                        $("#accountToBalance").addClass('text-success');
+                        $("#accountToBalance").removeClass('text-danger');
+                    } else {
+                        $("#accountToBalance").addClass('text-danger');
+                        $("#accountToBalance").removeClass('text-success');
                     }
                 },
                 error: function(xhr, status, error) {

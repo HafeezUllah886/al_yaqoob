@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\ExpenseCategoriesController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\PaymentReceivingController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\TransferController;
 use App\Http\Middleware\confirmPassword;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('receivings', PaymentReceivingController::class);
     Route::get('receiving/delete/{ref}', [PaymentReceivingController::class, 'delete'])->name('receiving.delete')->middleware(confirmPassword::class);
-    Route::get('receiving/pdf/{id}', [PaymentReceivingController::class, 'pdf'])->name('receiving.pdf');
+
+    Route::resource('payments', PaymentsController::class);
+    Route::get('payment/delete/{ref}', [PaymentsController::class, 'delete'])->name('payment.delete')->middleware(confirmPassword::class);
 
     Route::get('/accountbalance/{id}', function ($id) {
         // Call your Laravel helper function here

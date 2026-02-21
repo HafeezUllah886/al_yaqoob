@@ -7,8 +7,8 @@ use App\Models\accounts;
 use App\Models\transactions;
 use App\Models\transfer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
@@ -16,18 +16,19 @@ class TransferController extends Controller
     {
         $this->middleware(confirmPassword::class)->only('edit');
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
+        $start = $request->from ?? firstDayOfMonth();
+        $end = $request->to ?? now()->toDateString();
 
-        $start = $request->start ?? firstDayOfMonth();
-        $end = $request->end ?? now()->toDateString();
+        $transfers = transfer::whereBetween('date', [$start, $end])->currentBranches()->orderBy('id', 'desc')->get();
+        $accounts = accounts::currentBranches()->get();
 
-        $transfers = transfer::whereBetween('date', [$start, $end])->orderBy('id', 'desc')->get();
-        $accounts = accounts::whereNotIn('id', [2,3])->get();
-        return view('Finance.transfer.index', compact('transfers', 'accounts', 'start', 'end'));
+        return view('finance.transfer.index', compact('transfers', 'accounts', 'start', 'end'));
     }
 
     /**
@@ -45,37 +46,40 @@ class TransferController extends Controller
     {
         $request->validate(
             [
-                'to' => 'different:from'
+                'to_id' => 'different:from_id',
             ],
             [
-                'to.different' => "From and To Accounts Must be different"
+                'to_id.different' => 'From and To Accounts Must be different',
             ]
         );
 
-        try
-        {
+        try {
             DB::beginTransaction();
             $ref = getRef();
+            $fromAccount = accounts::find($request->from_id);
+            $toAccount = accounts::find($request->to_id);
+
             $transfer = transfer::create(
                 [
-                    'from' => $request->from,
-                    'to' => $request->to,
+                    'from_id' => $request->from_id,
+                    'to_id' => $request->to_id,
+                    'branch_id' => $fromAccount->branch_id,
+                    'user_id' => auth()->id(),
                     'date' => $request->date,
                     'amount' => $request->amount,
                     'notes' => $request->notes,
                     'refID' => $ref,
                 ]
             );
-            $fromAccount = $transfer->fromAccount->title;
-            $toAccount = $transfer->toAccount->title;
-            createTransaction($request->from,$request->date, 0, $request->amount, "Transfered to $toAccount <br> $request->notes", $ref, 'Transfer');
-            createTransaction($request->to, $request->date, $request->amount, 0, "Transfered from $fromAccount <br> $request->notes", $ref, 'Transfer');
+
+            createTransaction($request->from_id, $request->date, 0, $request->amount, "Transfered to $toAccount->title <br> $request->notes", $ref);
+            createTransaction($request->to_id, $request->date, $request->amount, 0, "Transfered from $fromAccount->title <br> $request->notes", $ref);
             DB::commit();
-            return back()->with('success', "Transfered Successfully");
-        }
-        catch(\Exception $e)
-        {
+
+            return back()->with('success', 'Transfered Successfully');
+        } catch (\Exception $e) {
             DB::rollBack();
+
             return back()->with('error', $e->getMessage());
         }
     }
@@ -83,18 +87,16 @@ class TransferController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(transfer $transfer)
-    {
-       
-    }
+    public function show(transfer $transfer) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(transfer $transfer)
     {
-        $accounts = accounts::whereNotIn('id', [2,3])->get();
+        $accounts = accounts::whereNotIn('id', [2, 3])->get();
         session()->forget('confirmed_password');
+
         return view('Finance.transfer.edit', compact('transfer', 'accounts'));
     }
 
@@ -103,26 +105,22 @@ class TransferController extends Controller
      */
     public function update(Request $request, transfer $transfer)
     {
-
         $request->validate(
             [
-                'to' => 'different:from'
+                'to_id' => 'different:from_id',
             ],
             [
-                'to.different' => "From and To Accounts Must be different"
+                'to_id.different' => 'From and To Accounts Must be different',
             ]
         );
 
-       /*  $transfer = transfer::find($request->id);
- */
-        try
-        {
+        try {
             DB::beginTransaction();
             transactions::where('refID', $transfer->refID)->delete();
             $transfer->update(
                 [
-                    'from' => $request->from,
-                    'to' => $request->to,
+                    'from_id' => $request->from_id,
+                    'to_id' => $request->to_id,
                     'date' => $request->date,
                     'amount' => $request->amount,
                     'notes' => $request->notes,
@@ -131,16 +129,16 @@ class TransferController extends Controller
             $ref = $transfer->refID;
             $fromAccount = $transfer->fromAccount->title;
             $toAccount = $transfer->toAccount->title;
-            createTransaction($request->from,$request->date, 0, $request->amount, "Transfered to $toAccount <br> $request->notes", $ref, 'Transfer');
-            createTransaction($request->to, $request->date, $request->amount, 0, "Transfered from $fromAccount <br> $request->notes", $ref, 'Transfer');
+            createTransaction($request->from_id, $request->date, 0, $request->amount, "Transfered to $toAccount <br> $request->notes", $ref);
+            createTransaction($request->to_id, $request->date, $request->amount, 0, "Transfered from $fromAccount <br> $request->notes", $ref);
             DB::commit();
             session()->forget('confirmed_password');
-            return to_route('transfers.index')->with('success', "Transfer Updated");
-        }
-        catch(\Exception $e)
-        {
+
+            return to_route('transfers.index')->with('success', 'Transfer Updated');
+        } catch (\Exception $e) {
             DB::rollBack();
             session()->forget('confirmed_password');
+
             return to_route('transfers.index')->with('error', $e->getMessage());
         }
     }
@@ -150,19 +148,18 @@ class TransferController extends Controller
      */
     public function delete($ref)
     {
-        try
-        {
+        try {
             DB::beginTransaction();
             transfer::where('refID', $ref)->delete();
             transactions::where('refID', $ref)->delete();
             DB::commit();
             session()->forget('confirmed_password');
-            return redirect()->route('transfers.index')->with('success', "Transfer Deleted");
-        }
-        catch(\Exception $e)
-        {
+
+            return redirect()->route('transfers.index')->with('success', 'Transfer Deleted');
+        } catch (\Exception $e) {
             DB::rollBack();
             session()->forget('confirmed_password');
+
             return redirect()->route('transfers.index')->with('error', $e->getMessage());
         }
     }

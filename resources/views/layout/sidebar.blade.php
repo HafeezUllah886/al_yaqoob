@@ -81,14 +81,7 @@
                         </div>
                     </li>
                 @endcanany
-                @canany([
-                    'Create Expenses',
-                    'Create Transfers',
-                    'Create Receivings',
-                    'Create Payments',
-                    'Create Account
-                    Adjustments',
-                    ])
+                @canany(['Create Expenses', 'Create Transfers', 'Receivings', 'Payments', 'Account Adjustments'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#finance" data-bs-toggle="collapse" role="button"
                             aria-expanded="false" aria-controls="sidebarApps">
@@ -100,6 +93,24 @@
                                     <li class="nav-item">
                                         <a href="{{ route('account_adjustment.index') }}" class="nav-link"
                                             data-key="t-chat">Account Adjustments</a>
+                                    </li>
+                                @endcan
+                                @can('Receivings')
+                                    <li class="nav-item">
+                                        <a href="{{ route('receivings.index') }}" class="nav-link" data-key="t-chat">Payment
+                                            Receiving</a>
+                                    </li>
+                                @endcan
+                                @can('Payments')
+                                    <li class="nav-item">
+                                        <a href="{{ route('payments.index') }}" class="nav-link" data-key="t-chat">Issue
+                                            Payment</a>
+                                    </li>
+                                @endcan
+                                @can('Transfers')
+                                    <li class="nav-item">
+                                        <a href="{{ route('transfers.index') }}" class="nav-link" data-key="t-chat">
+                                            Transfers</a>
                                     </li>
                                 @endcan
                                 @can('Create Expenses')

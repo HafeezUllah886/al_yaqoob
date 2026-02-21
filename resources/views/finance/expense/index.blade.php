@@ -99,7 +99,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="myModalLabel">Create Expense</h5>
+                    <h5 class="modal-title" id="myModalLabel">Create Expense </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
                 </div>
                 <form action="{{ route('expenses.store') }}" method="post" enctype="multipart/form-data">
@@ -115,8 +115,8 @@
                             </select>
                         </div>
                         <div class="form-group mt-2">
-                            <label for="account">Account</label>
-                            <select name="accountID" id="account" required class="selectize">
+                            <label for="account">Account (Balance: <span id="accountBalance">0</span>)</label>
+                            <select name="accountID" id="account" required onchange="getBalance()" class="selectize">
 
                             </select>
                         </div>
@@ -212,6 +212,28 @@
             } else {
                 accountSelectize.clearOptions();
             }
+
+        }
+
+        function getBalance() {
+            var id = $("#fromID").find(":selected").val();
+            $.ajax({
+                url: "{{ url('/accountbalance/') }}/" + id,
+                method: 'GET',
+                success: function(response) {
+                    $("#accountBalance").html(response.data);
+                    if (response.data > 0) {
+                        $("#accountBalance").addClass('text-success');
+                        $("#accountBalance").removeClass('text-danger');
+                    } else {
+                        $("#accountBalance").addClass('text-danger');
+                        $("#accountBalance").removeClass('text-success');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
         }
     </script>
 @endsection

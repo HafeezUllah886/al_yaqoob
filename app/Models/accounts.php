@@ -36,4 +36,9 @@ class accounts extends Model
     {
         return $this->belongsTo(Branches::class, 'branch_id');
     }
+
+    public function scopeCurrentBranches($query)
+    {
+        return $query->whereIn('branch_id', auth()->user()->branches->pluck('id'));
+    }
 }

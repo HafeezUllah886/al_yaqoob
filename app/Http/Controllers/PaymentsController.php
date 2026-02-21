@@ -4,33 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Models\accounts;
 use App\Models\paymentReceiving;
+use App\Models\payments;
 use App\Models\transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PaymentReceivingController extends Controller
+class PaymentsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $this->authorize('Receivings');
         $from = $request->from ?? date('Y-m-01');
         $to = $request->to ?? date('Y-m-t');
         $branch_id = $request->branch_id ?? 'All';
 
-        $receivings = paymentReceiving::whereBetween('date', [$from, $to])->orderby('id', 'desc');
+        $payments = payments::whereBetween('date', [$from, $to])->orderby('id', 'desc');
         if ($branch_id != 'All') {
-            $receivings = $receivings->where('branch_id', $branch_id);
+            $payments = $payments->where('branch_id', $branch_id);
         } else {
-            $receivings = $receivings->currentBranches();
+            $payments = $payments->currentBranches();
         }
-        $receivings = $receivings->get();
-        $froms = accounts::where('type', '!=', 'Business')->currentBranches()->get();
-        $accounts = accounts::Business()->currentBranches()->get();
+        $payments = $payments->get();
 
-        return view('finance.receiving.index', compact('receivings', 'froms', 'accounts', 'from', 'to', 'branch_id'));
+        $accounts = accounts::Business()->currentBranches()->get();
+        $toaccounts = accounts::where('type', '!=', 'Business')->currentBranches()->get();
+
+        return view('finance.payments.index', compact('payments', 'toaccounts', 'accounts', 'from', 'to', 'branch_id'));
     }
 
     /**
@@ -46,33 +47,35 @@ class PaymentReceivingController extends Controller
      */
     public function store(Request $request)
     {
+
         try {
             DB::beginTransaction();
             $ref = getRef();
-            $from = accounts::find($request->fromID);
-            $to = accounts::find($request->accountID);
-            paymentReceiving::create(
+            $account = accounts::find($request->accountID);
+            $toAccount = accounts::find($request->toAccountID);
+
+            payments::create(
                 [
-                    'from_id' => $request->fromID,
-                    'to_id' => $request->accountID,
+                    'account_id' => $request->accountID,
+                    'to_account_id' => $request->toAccountID,
                     'user_id' => auth()->user()->id,
                     'amount' => $request->amount,
-                    'branch_id' => $to->branch_id,
+                    'branch_id' => $account->branch_id,
                     'date' => $request->date,
                     'notes' => $request->notes,
                     'refID' => $ref,
                 ]
             );
 
-            createTransaction($request->accountID, $request->date, $request->amount, 0, 'Amount Received in '.$to->title.' <br>'.$request->notes, $ref);
-            createTransaction($request->fromID, $request->date, 0, $request->amount, 'Amount Paid to '.$to->title.' <bt>'.$request->notes, $ref);
+            createTransaction($request->accountID, $request->date, 0, $request->amount, 'Payment to '.$toAccount->title.' <br>'.$request->notes, $ref);
+            createTransaction($request->toAccountID, $request->date, $request->amount, 0, 'Payment from '.$account->title.' <bt>'.$request->notes, $ref);
 
             if ($request->has('file')) {
                 createAttachment($request->file('file'), $ref);
             }
             DB::commit();
 
-            return back()->with('success', 'Receipt Saved');
+            return back()->with('success', 'Payment Saved');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -85,9 +88,9 @@ class PaymentReceivingController extends Controller
      */
     public function show($id)
     {
-        $receiving = paymentReceiving::find($id);
+        $tran = payments::find($id);
 
-        return view('finance.receiving.receipt', compact('receiving'));
+        return view('finance.payments.receipt', compact('tran'));
     }
 
     public function edit(paymentReceiving $paymentReceiving)
@@ -103,23 +106,26 @@ class PaymentReceivingController extends Controller
         //
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function delete($ref)
     {
-        $this->authorize('Delete Receivings');
+        $this->authorize('Delete Payments');
         try {
             DB::beginTransaction();
-            paymentReceiving::where('refID', $ref)->delete();
+            payments::where('refID', $ref)->delete();
             transactions::where('refID', $ref)->delete();
             deleteAttachment($ref);
             DB::commit();
             session()->forget('confirmed_password');
 
-            return redirect()->route('receivings.index')->with('success', 'Receiving Deleted');
+            return redirect()->route('payments.index')->with('success', 'Payment Deleted');
         } catch (\Exception $e) {
             DB::rollBack();
             session()->forget('confirmed_password');
 
-            return redirect()->route('receivings.index')->with('error', $e->getMessage());
+            return redirect()->route('payments.index')->with('error', $e->getMessage());
         }
     }
 }

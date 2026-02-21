@@ -10,15 +10,14 @@
                 </div>
                 <div class="card-body">
                     @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
@@ -97,7 +96,6 @@
                             <label for="notes">Notes</label>
                             <textarea name="notes" id="notes" cols="30" class="form-control" rows="5"></textarea>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -109,16 +107,15 @@
     </div><!-- /.modal -->
 @endsection
 @section('page-css')
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/datatable.bootstrap5.min.css') }}" />
-<!--datatable responsive css-->
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
-
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/datatable/datatable.bootstrap5.min.css') }}" />
+    <!--datatable responsive css-->
+    <link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/selectize/selectize.min.css') }}">
 @endsection
 
 @section('page-js')
-<script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/dataTables.buttons.min.js') }}"></script>
@@ -127,9 +124,7 @@
     <script src="{{ asset('assets/libs/datatable/vfs_fonts.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/pdfmake.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatable/jszip.min.js') }}"></script>
-
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
-
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
         $(".selectize").selectize();

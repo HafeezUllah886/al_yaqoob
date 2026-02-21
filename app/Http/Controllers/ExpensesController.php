@@ -27,7 +27,7 @@ class ExpensesController extends Controller
             $expenses = $expenses->currentBranches();
         }
         $expenses = $expenses->get();
-        $accounts = accounts::business()->get();
+        $accounts = accounts::currentBranches()->business()->get();
         $categories = expenseCategories::all();
 
         return view('finance.expense.index', compact('expenses', 'accounts', 'categories', 'from', 'to', 'branch_id'));
@@ -110,6 +110,7 @@ class ExpensesController extends Controller
             DB::beginTransaction();
             expenses::where('refID', $ref)->delete();
             transactions::where('refID', $ref)->delete();
+            deleteAttachment($ref);
             DB::commit();
             session()->forget('confirmed_password');
 

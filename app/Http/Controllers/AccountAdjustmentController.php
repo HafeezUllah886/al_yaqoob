@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AccountAdjustment;
 use App\Models\accounts;
+use App\Models\transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,7 @@ class AccountAdjustmentController extends Controller
      */
     public function index()
     {
+        $this->authorize('Account Adjustments');
         $trans = AccountAdjustment::currentBranches()->orderBy('id', 'desc')->get();
         $user_branches = auth()->user()->branch_ids();
         $accounts = accounts::whereIn('branch_id', $user_branches)->get();
@@ -76,10 +78,12 @@ class AccountAdjustmentController extends Controller
      */
     public function delete($ref)
     {
+        $this->authorize('Delete Account Adjustments');
         try {
             DB::beginTransaction();
             AccountAdjustment::where('refID', $ref)->delete();
-            \App\Models\transactions::where('refID', $ref)->delete();
+            transactions::where('refID', $ref)->delete();
+            deleteAttachment($ref);
             DB::commit();
             session()->forget('confirmed_password');
 
