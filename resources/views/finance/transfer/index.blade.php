@@ -73,11 +73,12 @@
                                     <td>{{ date('d M Y', strtotime($tran->date)) }}</td>
                                     <td>{{ $tran->notes }}</td>
                                     <td>{{ number_format($tran->amount) }}</td>
-                                    <td>
-                                        <a href="{{ route('transfers.edit', $tran->id) }}" class="btn btn-primary">Edit</a>
-                                        <a href="{{ route('transfers.delete', $tran->refID) }}"
-                                            class="btn btn-danger">Delete</a>
-                                    </td>
+                                    @can('Delete Transfers')
+                                        <td>
+                                            <a href="{{ route('transfers.delete', $tran->refID) }}"
+                                                class="btn btn-danger">Delete</a>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @endforeach
                         </tbody>
