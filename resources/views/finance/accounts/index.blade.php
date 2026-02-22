@@ -11,6 +11,7 @@
                         <thead>
                             <th>#</th>
                             <th>Title</th>
+                            <th>Branch</th>
                             @if ($filter == 'Business')
                                 <th>Category</th>
                             @endif
@@ -29,6 +30,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $account->title }}</td>
+                                    <td>{{ $account->branch->name }}</td>
                                     @if ($filter == 'Business')
                                         <td>{{ $account->category }}</td>
                                     @endif
@@ -67,9 +69,9 @@
                         <tfoot>
                             <tr>
                                 @if ($filter == 'Business')
-                                    <th colspan="3" class="text-end">Total</th>
+                                    <th colspan="4" class="text-end">Total</th>
                                 @else
-                                    <th colspan="2" class="text-end">Total</th>
+                                    <th colspan="3" class="text-end">Total</th>
                                 @endif
                                 <th>{{ number_format($totalBalance) }}</th>
                                 <th></th>

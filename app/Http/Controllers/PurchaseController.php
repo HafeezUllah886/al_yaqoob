@@ -46,9 +46,10 @@ class PurchaseController extends Controller
     public function create(Request $request)
     {
         $products = Products::orderby('name', 'asc')->get();
-        $vendors = accounts::vendor()->get();
+
         $branch = Branches::find($request->branch_id);
         $expense_categories = expenseCategories::all();
+        $vendors = accounts::vendor()->where('branch_id', $branch->id)->get();
         $accounts = accounts::business()->where('branch_id', $branch->id)->get();
 
         return view('purchase.create', compact('products', 'vendors', 'branch', 'expense_categories', 'accounts'));
