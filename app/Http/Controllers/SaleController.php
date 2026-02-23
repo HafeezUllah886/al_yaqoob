@@ -44,7 +44,7 @@ class SaleController extends Controller
      */
     public function create(Request $request)
     {
-        $products = Products::orderby('name', 'asc')->get();
+        $products = Products::active()->orderby('name', 'asc')->get();
 
         $branch = Branches::find($request->branch_id);
         $customers = accounts::Customer()->where('branch_id', $request->branch_id)->get();
@@ -82,7 +82,7 @@ class SaleController extends Controller
                 $unit = Product_units::find($request->unit[$key]);
                 $qty = $request->qty[$key];
                 $price = $request->price[$key];
-                $amount = $price * $qty;
+                $amount = $price * ($qty * $unit->value);
                 $total += $amount;
 
                 SaleDetail::create(
@@ -142,7 +142,7 @@ class SaleController extends Controller
      */
     public function edit(Sale $sale)
     {
-        $products = Products::orderby('name', 'asc')->get();
+        $products = Products::active()->orderby('name', 'asc')->get();
 
         $branch = Branches::find($sale->branch_id);
         $customers = accounts::Customer()->where('branch_id', $sale->branch_id)->get();
@@ -184,7 +184,7 @@ class SaleController extends Controller
                 $unit = Product_units::find($request->unit[$key]);
                 $qty = $request->qty[$key];
                 $price = $request->price[$key];
-                $amount = $price * $qty;
+                $amount = $price * ($qty * $unit->value);
                 $total += $amount;
 
                 SaleDetail::create(

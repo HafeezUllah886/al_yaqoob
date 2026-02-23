@@ -60,7 +60,7 @@
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-12 mt-2">
+                            <div class="col-12 branch mt-2">
                                 <div class="form-group">
                                     <label for="branch_id">Branch</label>
                                     <select name="branch_id" id="branch_id" class="form-control">
@@ -103,19 +103,28 @@
 @section('page-js')
     <script>
         $(".customer").hide();
+
         $("#type").on("change", function() {
             var type = $("#type").find(":selected").val();
 
             if (type === "Business") {
                 $("#catBox").show();
+                $(".business").show();
             } else {
                 $("#catBox").hide();
+                $(".business").hide();
             }
 
             if (type === "Customer") {
                 $(".customer").show();
             } else {
                 $(".customer").hide();
+            }
+
+            if (type === "Vendor") {
+                $(".branch").hide();
+            } else {
+                $(".branch").show();
             }
         });
     </script>

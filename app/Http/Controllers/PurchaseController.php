@@ -45,11 +45,11 @@ class PurchaseController extends Controller
      */
     public function create(Request $request)
     {
-        $products = Products::orderby('name', 'asc')->get();
+        $products = Products::active()->orderby('name', 'asc')->get();
 
         $branch = Branches::find($request->branch_id);
         $expense_categories = expenseCategories::all();
-        $vendors = accounts::vendor()->where('branch_id', $branch->id)->get();
+        $vendors = accounts::vendor()->get();
         $accounts = accounts::business()->where('branch_id', $branch->id)->get();
 
         return view('purchase.create', compact('products', 'vendors', 'branch', 'expense_categories', 'accounts'));
@@ -85,7 +85,7 @@ class PurchaseController extends Controller
                 $unit = Product_units::find($request->unit[$key]);
                 $qty = $request->qty[$key];
                 $price = $request->price[$key];
-                $amount = $price * $qty;
+                $amount = $price * ($qty * $unit->value);
                 $total += $amount;
 
                 purchase_details::create(
@@ -162,7 +162,7 @@ class PurchaseController extends Controller
      */
     public function edit(purchase $purchase)
     {
-        $products = Products::orderby('name', 'asc')->get();
+        $products = Products::active()->orderby('name', 'asc')->get();
         $vendors = accounts::vendor()->get();
         $branch = Branches::find($purchase->branch_id);
         $expense_categories = expenseCategories::all();
@@ -207,7 +207,7 @@ class PurchaseController extends Controller
                 $unit = Product_units::find($request->unit[$key]);
                 $qty = $request->qty[$key];
                 $price = $request->price[$key];
-                $amount = $price * $qty;
+                $amount = $price * ($qty * $unit->value);
                 $total += $amount;
 
                 purchase_details::create(

@@ -289,15 +289,15 @@
         function updateChanges(id) {
             var qty = parseFloat($('#qty_' + id).val());
             var price = parseFloat($('#price_' + id).val());
-            var amount = qty * price;
+            var unit = $('#unit_' + id).find('option:selected');
+            unit = unit.data('unit');
+            var amount = (qty * unit) * price;
             $("#amount_" + id).val(amount.toFixed(2));
             updateTotal();
         }
 
         function changeUnit(id) {
-            var unit = $('#unit_' + id).find('option:selected');
-            unit = unit.data('price');
-            $("#price_" + id).val(unit);
+
             updateChanges(id);
         }
 

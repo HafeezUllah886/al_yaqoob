@@ -59,7 +59,6 @@
                                             <thead>
                                                 <th>Unit</th>
                                                 <th class="text-center">Pack Size</th>
-                                                <th class="text-center">Price</th>
                                                 <th></th>
                                             </thead>
                                             <tbody id="units">
@@ -113,8 +112,7 @@
             html +=
                 '<td class="p-0"><input type="number" step="any" class="form-control form-control-sm text-center" name="unit_values[]" value="' +
                 packSize + '"></td>';
-            html +=
-                '<td class="p-0"><input type="number" step="any" class="form-control form-control-sm text-center" name="prices[]" value="0"></td>';
+
             html += '<td class="p-0"> <span class="btn btn-sm btn-danger" onclick="deleteRow(\'' +
                 unitId + '\')">X</span></td>';
             html += '</tr>';

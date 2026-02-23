@@ -186,8 +186,9 @@
                             id + '"></td>';
                         html +=
                             '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' +
-                            id + ')" required step="any" value="' + price +
-                            '" min="1" class="form-control text-center no-padding" id="price_' + id + '"></td>';
+                            id +
+                            ')" required step="any" value="0" min="1" class="form-control text-center no-padding" id="price_' +
+                            id + '"></td>';
                         html +=
                             '<td class="no-padding"><input type="number" name="amount[]" min="0.1" readonly required step="any" value="1" class="form-control text-center no-padding" id="amount_' +
                             id + '"></td>';
@@ -208,19 +209,19 @@
         function updateChanges(id) {
             var qty = parseFloat($('#qty_' + id).val());
             var price = parseFloat($('#price_' + id).val());
-            var amount = qty * price;
+            var unit = $('#unit_' + id).find('option:selected');
+            unit = unit.data('unit');
+            var amount = (qty * unit) * price;
             $("#amount_" + id).val(amount.toFixed(2));
             updateTotal();
         }
 
         function changeUnit(id) {
             var unit_option = $('#unit_' + id).find('option:selected');
-            var unit_price = unit_option.data('price');
+
             var unit_value = unit_option.data('unit');
             var base_stock = parseFloat($('#base_stock_' + id).val());
             var available_stock = base_stock / unit_value;
-
-            $("#price_" + id).val(unit_price);
             $("#stock_" + id).val(available_stock.toFixed(2));
             $("#qty_" + id).attr('max', available_stock);
 

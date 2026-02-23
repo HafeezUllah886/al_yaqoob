@@ -11,7 +11,7 @@
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <div class="row mt-2 mb-2">
-                            <div class="col-6">
+                            <div class="col-10">
                                 <div class="form-group ">
                                     <select name="unit" id="unit" class="form-control">
                                         @foreach ($units as $unit)
@@ -20,12 +20,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="form-group ">
-                                    <input type="number" name="price" id="price" placeholder="Price"
-                                        class="form-control" required>
-                                </div>
-                            </div>
+
                             <div class="col-2">
                                 <button type="submit" class="btn btn-primary w-100">Add</button>
                             </div>
@@ -37,7 +32,6 @@
                             <th>#</th>
                             <th>Unit</th>
                             <th>Pack Size</th>
-                            <th>Price</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -46,7 +40,6 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $product_unit->unit_name }}</td>
                                     <td>{{ $product_unit->value }}</td>
-                                    <td>{{ $product_unit->price }}</td>
                                     <td>
                                         <a href="#" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#edit_{{ $product_unit->id }}">Edit</a>
@@ -76,11 +69,7 @@
                                                         <input type="text" name="value" required id="value"
                                                             value="{{ $product_unit->value }}" class="form-control">
                                                     </div>
-                                                    <div class="form-group mt-2">
-                                                        <label for="price">Price</label>
-                                                        <input type="text" name="price" required id="price"
-                                                            value="{{ $product_unit->price }}" class="form-control">
-                                                    </div>
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light"

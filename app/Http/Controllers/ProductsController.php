@@ -27,7 +27,7 @@ class ProductsController extends Controller
 
         $cats = Category::orderBy('name', 'asc')->get();
 
-        return view('products.product', compact('items', 'cats', 's_cat'));
+        return view('products.index', compact('items', 'cats', 's_cat'));
     }
 
     /**
@@ -65,12 +65,11 @@ class ProductsController extends Controller
                     'product_id' => $product->id,
                     'unit_name' => $unit,
                     'value' => $request->unit_values[$key],
-                    'price' => $request->prices[$key],
                 ]
             );
         }
 
-        return back()->with('success', 'Product Created');
+        return to_route('product.index')->with('success', 'Product Created');
     }
 
     /**
@@ -108,9 +107,9 @@ class ProductsController extends Controller
         );
 
         $product = Products::find($id);
-        $product->update($request->only(['name', 'nameurdu', 'catID', 'brandID', 'pprice', 'price', 'discount', 'status', 'vendorID', 'fright', 'labor', 'claim', 'sfright', 'sclaim', 'discountp', 'branchID']));
+        $product->update($request->only(['name', 'category_id', 'status']));
 
-        return redirect()->back()->with('success', 'Product Updated');
+        return to_route('product.index')->with('success', 'Product Updated');
     }
 
     /**

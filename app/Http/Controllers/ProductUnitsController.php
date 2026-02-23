@@ -34,7 +34,6 @@ class ProductUnitsController extends Controller
                 'product_id' => $request->product_id,
                 'unit_name' => $unit->name,
                 'value' => $unit->value,
-                'price' => $request->price,
             ]
         );
 
@@ -71,7 +70,6 @@ class ProductUnitsController extends Controller
             [
                 'unit_name' => $request->unit_name,
                 'value' => $request->value,
-                'price' => $request->price,
             ]
         );
 

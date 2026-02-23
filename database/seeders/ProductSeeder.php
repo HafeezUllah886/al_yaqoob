@@ -18,10 +18,12 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Plastic',
                 'category_id' => 1,
+
             ],
             [
                 'name' => 'Rice',
                 'category_id' => 2,
+
             ],
         ];
 
@@ -31,13 +33,13 @@ class ProductSeeder extends Seeder
                 'product_id' => $prod->id,
                 'unit_name' => 'Bag',
                 'value' => 25,
-                'price' => 1500,
+
             ]);
             Product_units::create([
                 'product_id' => $prod->id,
                 'unit_name' => 'Kg',
                 'value' => 1,
-                'price' => 300,
+
             ]);
         }
     }

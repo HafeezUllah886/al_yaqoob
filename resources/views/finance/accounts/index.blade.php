@@ -11,7 +11,9 @@
                         <thead>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Branch</th>
+                            @if ($filter != 'Vendor')
+                                <th>Branch</th>
+                            @endif
                             @if ($filter == 'Business')
                                 <th>Category</th>
                             @endif
@@ -30,7 +32,9 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $account->title }}</td>
-                                    <td>{{ $account->branch->name }}</td>
+                                    @if ($filter != 'Vendor')
+                                        <td>{{ $account->branch->name }}</td>
+                                    @endif
                                     @if ($filter == 'Business')
                                         <td>{{ $account->category }}</td>
                                     @endif
@@ -70,6 +74,8 @@
                             <tr>
                                 @if ($filter == 'Business')
                                     <th colspan="4" class="text-end">Total</th>
+                                @elseif ($filter == 'Vendor')
+                                    <th colspan="2" class="text-end">Total</th>
                                 @else
                                     <th colspan="3" class="text-end">Total</th>
                                 @endif
