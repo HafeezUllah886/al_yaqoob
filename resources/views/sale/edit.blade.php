@@ -105,14 +105,14 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="date">Date</label>
                                     <input type="date" name="date" id="date" value="{{ $sale->date }}"
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="warehouse">Branch</label>
                                     <input type="text" name="branch" id="branch" value="{{ $branch->name }}"
@@ -120,7 +120,7 @@
                                     <input type="hidden" name="branch_id" id="branch_id" value="{{ $branch->id }}">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="customer">Customer</label>
                                     <select name="customerID" id="customer" class="selectize1">
@@ -131,14 +131,14 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="discount">Discount</label>
                                     <input type="number" name="discount" id="discount" step="any"
                                         value="{{ $sale->discount }}" oninput="updateTotal()" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="attachement">Attachment</label>
                                     <input type="file" name="file" id="attachement" class="form-control">

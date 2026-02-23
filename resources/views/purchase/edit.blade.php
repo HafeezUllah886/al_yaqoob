@@ -92,21 +92,21 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="comp">Purchase Inv No.</label>
                                     <input type="text" name="inv" id="inv" value="{{ $purchase->inv }}"
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="date">Date</label>
                                     <input type="date" name="date" id="date" value="{{ $purchase->date }}"
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="warehouse">Branch</label>
                                     <input type="text" name="branch" id="branch" value="{{ $branch->name }}"
@@ -114,7 +114,7 @@
                                     <input type="hidden" name="branch_id" id="branch_id" value="{{ $branch->id }}">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="vendor">Vendor</label>
                                     <select name="vendorID" id="vendor" class="selectize1">
@@ -125,7 +125,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="attachement">Attachment</label>
                                     <input type="file" name="file" id="attachement" class="form-control">
