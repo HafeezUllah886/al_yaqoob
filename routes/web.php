@@ -23,7 +23,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('units', UnitsController::class);
     Route::resource('categories', CategoriesController::class);
+    Route::get('product/delete/{id}', [ProductsController::class, 'delete'])->name('product.delete');
     Route::resource('product', ProductsController::class);
+    Route::get('product_units/delete/{id}', [ProductUnitsController::class, 'delete'])->name('product_units.delete');
     Route::resource('product_units', ProductUnitsController::class);
 
     Route::resource('branches', BranchesController::class);

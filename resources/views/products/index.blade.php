@@ -80,6 +80,14 @@
                                                         Units
                                                     </a>
                                                 </li>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('product.delete', $item->id) }}">
+                                                        <i
+                                                            class="ri-delete-bin-fill align-bottom me-2 text-muted text-danger"></i>
+                                                        Delete
+                                                    </a>
+                                                </li>
 
                                             </ul>
                                         </div>

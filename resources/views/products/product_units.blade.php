@@ -42,7 +42,9 @@
                                     <td>{{ $product_unit->value }}</td>
                                     <td>
                                         <a href="#" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#edit_{{ $product_unit->id }}">Edit</a>
+                                            data-bs-target="#edit_{{ $product_unit->id }}">Edit</a> /
+                                        <a href="{{ route('product_units.delete', $product_unit->id) }}"
+                                            class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
                                 <div id="edit_{{ $product_unit->id }}" class="modal fade" tabindex="-1"

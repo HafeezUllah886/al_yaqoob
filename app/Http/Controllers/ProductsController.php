@@ -6,6 +6,7 @@ use App\Models\categories;
 use App\Models\Category;
 use App\Models\Product_units;
 use App\Models\Products;
+use App\Models\stock;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 
@@ -115,8 +116,20 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(products $products)
+    public function delete($id)
     {
-        //
+        try {
+            $product = Products::find($id);
+            $check = stock::where('product_id', $product->id)->first();
+            if ($check) {
+                return to_route('product.index')->with('error', 'Product Already Used in Ref No. '.$check->refID);
+            }
+            $product->units()->delete();
+            $product->delete();
+
+            return to_route('product.index')->with('success', 'Product Deleted');
+        } catch (\Exception $e) {
+            return to_route('product.index')->with('error', 'Product Already Used in Ref No. '.$e->getMessage());
+        }
     }
 }
