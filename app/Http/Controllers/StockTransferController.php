@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\accounts;
-use App\Models\branches;
+use App\Models\Branches;
 use App\Models\expenseCategories;
 use App\Models\expenses;
 use App\Models\Product_units;
@@ -29,7 +29,7 @@ class StockTransferController extends Controller
         $to = $request->end ?? date('Y-m-d');
         $user_branches = auth()->user()->branch_ids();
         $stockTransfers = StockTransfer::whereBetween('date', [$from, $to])->whereIn('branch_from_id', $user_branches)->orWhereIn('branch_to_id', $user_branches)->get();
-        $branches = branches::all();
+        $branches = Branches::all();
         $products = Products::all();
 
         return view('stock.transfer.index', compact('stockTransfers', 'branches', 'from', 'to', 'products'));
@@ -44,8 +44,8 @@ class StockTransferController extends Controller
             return redirect()->back()->with('error', 'From and To Branch cannot be the same');
         }
 
-        $branchFrom = branches::find($request->fromBranch);
-        $branchTo = branches::find($request->toBranch);
+        $branchFrom = Branches::find($request->fromBranch);
+        $branchTo = Branches::find($request->toBranch);
         $product = Products::find($request->product);
         $stock = getProductBranchStock($request->product, $request->fromBranch);
         $expense_categories = expenseCategories::all();
@@ -78,8 +78,8 @@ class StockTransferController extends Controller
                 'user_id' => auth()->user()->id,
             ]);
 
-            $branchFrom = branches::find($request->from);
-            $branchTo = branches::find($request->to);
+            $branchFrom = Branches::find($request->from);
+            $branchTo = Branches::find($request->to);
 
             createStock($request->product_id, 0, $pcs, $request->date, "Transfered to $branchTo->name:  $request->notes", $ref, $request->from);
             createStock($request->product_id, $pcs, 0, $request->date, "Transfered from $branchFrom->name:  $request->notes", $ref, $request->to);
