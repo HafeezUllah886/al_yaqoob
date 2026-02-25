@@ -7,7 +7,7 @@ use App\Models\branches;
 use App\Models\expenseCategories;
 use App\Models\expenses;
 use App\Models\Product_units;
-use App\Models\products;
+use App\Models\Products;
 use App\Models\stock;
 use App\Models\StockTransfer;
 use App\Models\transactions;
@@ -30,7 +30,7 @@ class StockTransferController extends Controller
         $user_branches = auth()->user()->branch_ids();
         $stockTransfers = StockTransfer::whereBetween('date', [$from, $to])->whereIn('branch_from_id', $user_branches)->orWhereIn('branch_to_id', $user_branches)->get();
         $branches = branches::all();
-        $products = products::all();
+        $products = Products::all();
 
         return view('stock.transfer.index', compact('stockTransfers', 'branches', 'from', 'to', 'products'));
     }
@@ -46,7 +46,7 @@ class StockTransferController extends Controller
 
         $branchFrom = branches::find($request->fromBranch);
         $branchTo = branches::find($request->toBranch);
-        $product = products::find($request->product);
+        $product = Products::find($request->product);
         $stock = getProductBranchStock($request->product, $request->fromBranch);
         $expense_categories = expenseCategories::all();
         $accounts = accounts::with('branch')->business()->whereIn('branch_id', [$request->fromBranch, $request->toBranch])->get();

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branches;
 use App\Models\Product_units;
-use App\Models\products;
+use App\Models\Products;
 use App\Models\stock;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        $products = products::all();
+        $products = Products::all();
         $user_branches = auth()->user()->branch_ids();
 
         foreach ($products as $product) {
@@ -53,7 +53,7 @@ class StockController extends Controller
         $to = $request->to;
         $unit = $request->unit;
         $branch = $request->branch;
-        $product = products::find($id);
+        $product = Products::find($id);
 
         if ($branch == 'all') {
             $user_branches = auth()->user()->branch_ids();

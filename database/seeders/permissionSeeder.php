@@ -13,6 +13,39 @@ class permissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            // Dashboard
+            ['name' => 'Sales', 'group' => 'Dashboard'],
+            ['name' => 'Purchases', 'group' => 'Dashboard'],
+            ['name' => 'Expenses', 'group' => 'Dashboard'],
+            ['name' => 'Stocks Value', 'group' => 'Dashboard'],
+            ['name' => 'Customer Balance', 'group' => 'Dashboard'],
+            ['name' => 'Vendor Balance', 'group' => 'Dashboard'],
+            ['name' => 'Business Balance', 'group' => 'Dashboard'],
+            ['name' => 'Branch Balance', 'group' => 'Dashboard'],
+            ['name' => 'Sales Vs Expenses', 'group' => 'Dashboard'],
+            // accounts
+            ['name' => 'Create Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Business Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Vendor Accounts', 'group' => 'Accounts'],
+            ['name' => 'Create Customer Accounts', 'group' => 'Accounts'],
+            ['name' => 'Edit Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Business Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Vendor Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Customer Accounts', 'group' => 'Accounts'],
+            // reports
+            ['name' => 'Sales Report', 'group' => 'Reports'],
+            ['name' => 'Purchases Report', 'group' => 'Reports'],
+            ['name' => 'Stocks Report', 'group' => 'Reports'],
+            ['name' => 'Expenses Report', 'group' => 'Reports'],
+            ['name' => 'Profit and Loss Report', 'group' => 'Reports'],
+            ['name' => 'Balance Sheet Report', 'group' => 'Reports'],
+            ['name' => 'Branch Balance Sheet Report', 'group' => 'Reports'],
+            // stocks
+            ['name' => 'View Stocks', 'group' => 'Stocks'],
+            ['name' => 'Transfer Stocks', 'group' => 'Stocks'],
+            ['name' => 'Delete Transfer Stocks', 'group' => 'Stocks'],
+            ['name' => 'Stock Adjustments', 'group' => 'Stocks'],
+            ['name' => 'Delete Stock Adjustments', 'group' => 'Stocks'],
             // users
             ['name' => 'View Users', 'group' => 'Users'],
             ['name' => 'Create Users', 'group' => 'Users'],
@@ -52,21 +85,7 @@ class permissionSeeder extends Seeder
             ['name' => 'View Sales', 'group' => 'Sales'],
             ['name' => 'Edit Sales', 'group' => 'Sales'],
             ['name' => 'Delete Sales', 'group' => 'Sales'],
-            // accounts
-            ['name' => 'Create Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Business Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Vendor Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Customer Accounts', 'group' => 'Accounts'],
-            ['name' => 'Edit Accounts', 'group' => 'Accounts'],
-            ['name' => 'View Business Accounts', 'group' => 'Accounts'],
-            ['name' => 'View Vendor Accounts', 'group' => 'Accounts'],
-            ['name' => 'View Customer Accounts', 'group' => 'Accounts'],
-            // stocks
-            ['name' => 'View Stocks', 'group' => 'Stocks'],
-            ['name' => 'Transfer Stocks', 'group' => 'Stocks'],
-            ['name' => 'Delete Transfer Stocks', 'group' => 'Stocks'],
-            ['name' => 'Stock Adjustments', 'group' => 'Stocks'],
-            ['name' => 'Delete Stock Adjustments', 'group' => 'Stocks'],
+
             // expenses
             ['name' => 'Create Expenses', 'group' => 'Expenses'],
             ['name' => 'Delete Expenses', 'group' => 'Expenses'],
@@ -84,6 +103,7 @@ class permissionSeeder extends Seeder
             // payments
             ['name' => 'Payments', 'group' => 'Payments'],
             ['name' => 'Delete Payments', 'group' => 'Payments'],
+
         ];
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission['name']], $permission);

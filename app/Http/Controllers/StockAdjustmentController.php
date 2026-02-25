@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product_units;
-use App\Models\products;
+use App\Models\Products;
 use App\Models\stock;
 use App\Models\stockAdjustment;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class StockAdjustmentController extends Controller
     {
         $this->authorize('Stock Adjustments');
         $adjustments = stockAdjustment::orderBy('id', 'desc')->get();
-        $products = products::all();
+        $products = Products::all();
 
         return view('stock.adjustment.index', compact('adjustments', 'products'));
     }
