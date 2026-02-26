@@ -31,6 +31,18 @@ class ajaxController extends Controller
         return response()->json($accounts);
     }
 
+    public function getBranchesCustomers($branch_ids)
+    {
+        if ($branch_ids == 'all') {
+            $userBranches = auth()->user()->branch_ids();
+            $accounts = accounts::customer()->whereIn('branch_id', $userBranches)->select('id as value', 'title as text')->get();
+        } else {
+            $accounts = accounts::where('branch_id', $branch_ids)->customer()->select('id as value', 'title as text')->get();
+        }
+
+        return response()->json($accounts);
+    }
+
     public function getProductUnits($product_id)
     {
         $product = products::find($product_id);

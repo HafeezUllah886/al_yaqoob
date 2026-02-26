@@ -190,6 +190,36 @@
                         </div>
                     </li>
                 @endcanany
+                @canany([
+                    'Sales Report',
+                    'Purchases Report',
+                    'Stocks Report',
+                    'Expenses Report',
+                    'Profit and Loss
+                    Report',
+                    'Balance Sheet Report',
+                    'Branch Balance Sheet Report',
+                    ])
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="#reports" data-bs-toggle="collapse" role="button"
+                            aria-expanded="false" aria-controls="sidebarApps">
+                            <i class="ri-file-chart-line"></i><span data-key="t-apps">Reports</span>
+                        </a>
+                        <div class="collapse menu-dropdown" id="reports">
+                            <ul class="nav nav-sm flex-column">
+                                @can('Sales Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.sales.index') }}" class="nav-link"
+                                            data-key="t-chat">Sales
+                                            Report</a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </div>
+                    </li>
+                @endcanany
+
                 @canany(['View Users', 'View Roles'])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#sales" data-bs-toggle="collapse" role="button"
