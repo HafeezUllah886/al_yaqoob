@@ -50,4 +50,16 @@ class ajaxController extends Controller
 
         return response()->json($units);
     }
+
+    public function getBranchesVendors($branch_ids)
+    {
+        if ($branch_ids == 'all') {
+            $userBranches = auth()->user()->branch_ids();
+            $accounts = accounts::vendor()->whereIn('branch_id', $userBranches)->select('id as value', 'title as text')->get();
+        } else {
+            $accounts = accounts::where('branch_id', $branch_ids)->vendor()->select('id as value', 'title as text')->get();
+        }
+
+        return response()->json($accounts);
+    }
 }

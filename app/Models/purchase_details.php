@@ -20,4 +20,9 @@ class purchase_details extends Model
     {
         return $this->belongsTo(Product_units::class);
     }
+
+    public function purchases()
+    {
+        return $this->belongsTo(purchase::class, 'purchase_id', 'id');
+    }
 }
