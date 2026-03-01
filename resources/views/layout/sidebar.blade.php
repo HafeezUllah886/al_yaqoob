@@ -84,6 +84,12 @@
                                             data-key="t-chat">Customer Accounts</a>
                                     </li>
                                 @endcan
+                                @can('View Transporter Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('accountsList', 'Transporter') }}" class="nav-link"
+                                            data-key="t-chat">Transporter Accounts</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>
@@ -218,6 +224,13 @@
                                     <li class="nav-item">
                                         <a href="{{ route('reports.purchases.index') }}" class="nav-link"
                                             data-key="t-chat">Purchases
+                                            Report</a>
+                                    </li>
+                                @endcan
+                                @can('Expenses Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.expenses.index') }}" class="nav-link"
+                                            data-key="t-chat">Expenses
                                             Report</a>
                                     </li>
                                 @endcan

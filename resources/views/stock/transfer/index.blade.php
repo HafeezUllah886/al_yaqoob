@@ -56,6 +56,13 @@
                                                 </li>
                                                 @if (auth()->user()->id == $transfer->user_id)
                                                     <li>
+                                                        <button class="dropdown-item"
+                                                            onclick="newWindow('{{ route('stockTransfer.edit', $transfer->id) }}')">
+                                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                            Edit
+                                                        </button>
+                                                    </li>
+                                                    <li>
                                                         <a class="dropdown-item text-danger"
                                                             href="{{ route('stockTransfer.delete', $transfer->refID) }}">
                                                             <i

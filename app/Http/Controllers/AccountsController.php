@@ -56,7 +56,7 @@ class AccountsController extends Controller
                         'category' => $request->category,
                         'contact' => $request->contact,
                         'address' => $request->address,
-                        'branch_id' => $request->type == 'Vendor' ? 1 : $request->branch_id,
+                        'branch_id' => $request->type == 'Vendor' || $request->type == 'Transporter' ? 1 : $request->branch_id,
                     ]
                 );
             } else {

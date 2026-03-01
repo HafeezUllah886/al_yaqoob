@@ -44,5 +44,12 @@ class accountSeeder extends Seeder
                 'branch_id' => 1,
             ]
         );
+        accounts::create(
+            [
+                'title' => 'Test Transporter',
+                'type' => 'Transporter',
+                'branch_id' => 1,
+            ]
+        );
     }
 }

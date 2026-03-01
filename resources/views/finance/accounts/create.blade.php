@@ -33,6 +33,7 @@
                                         <option value="Business">Business</option>
                                         <option value="Customer">Customer</option>
                                         <option value="Vendor">Vendor</option>
+                                        <option value="Transporter">Transporter</option>
                                     </select>
                                 </div>
                             </div>
@@ -121,7 +122,7 @@
                 $(".customer").hide();
             }
 
-            if (type === "Vendor") {
+            if (type === "Vendor" || type === "Transporter") {
                 $(".branch").hide();
             } else {
                 $(".branch").show();

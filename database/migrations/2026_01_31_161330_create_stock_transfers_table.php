@@ -18,9 +18,15 @@ return new class extends Migration
             $table->foreignId('branch_to_id')->constrained('branches', 'id');
             $table->foreignId('product_id')->constrained('products', 'id');
             $table->foreignId('unit_id')->constrained('product_units', 'id');
+            $table->foreignId('transporter_id')->constrained('accounts', 'id');
+            $table->foreignId('account_id')->constrained('accounts', 'id');
+            $table->string('driver')->nullable();
+            $table->string('vehicle')->nullable();
+            $table->float('fare')->default(0);
             $table->float('unit_value')->default(0);
             $table->float('pcs')->default(0);
             $table->foreignId('user_id')->constrained('users', 'id');
+            $table->string('payment_status')->default('Unpaid');
             $table->bigInteger('refID');
             $table->string('notes')->nullable();
             $table->timestamps();

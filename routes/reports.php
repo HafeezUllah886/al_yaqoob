@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\reports\SalesReportController;
 use App\Http\Controllers\reports\PurchasesReportController;
+use App\Http\Controllers\reports\ExpenseReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -11,5 +12,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('reports/purchases', [PurchasesReportController::class, 'index'])->name('reports.purchases.index');
     Route::get('reports/purchases/details', [PurchasesReportController::class, 'details'])->name('reports.purchases.details');
+
+    Route::get('reports/expenses', [ExpenseReportController::class, 'index'])->name('reports.expenses.index');
+    Route::get('reports/expenses/details', [ExpenseReportController::class, 'details'])->name('reports.expenses.details');
 
 });
