@@ -48,8 +48,9 @@ class SaleController extends Controller
 
         $branch = Branches::find($request->branch_id);
         $customers = accounts::Customer()->where('branch_id', $request->branch_id)->get();
+        $accounts = accounts::where('branch_id', $request->branch_id)->business()->get();
 
-        return view('sale.create', compact('products', 'customers', 'branch'));
+        return view('sale.create', compact('products', 'customers', 'branch', 'accounts'));
     }
 
     /**
@@ -67,6 +68,8 @@ class SaleController extends Controller
                 [
                     'customer_id' => $request->customerID,
                     'branch_id' => $request->branch_id,
+                    'account_id' => $request->account,
+                    'paid_amount' => $request->paid_amount ?? 0,
                     'date' => $request->date,
                     'notes' => $request->notes,
                     'total' => 0,
@@ -111,8 +114,13 @@ class SaleController extends Controller
                 ]
             );
 
-            // Transaction for Customer: db = $net_total, cr = 0 (Customer owes us money)
-            createTransaction($request->customerID, $request->date, $net_total, 0, "Pending Amount of Sale No. $sale->id", $ref);
+            if ($request->paid_amount > 0) {
+                createTransaction($request->customerID, $request->date, $net_total, $request->paid_amount, "Payment Amount of Sale No. $sale->id", $ref);
+                createTransaction($request->account, $request->date, $request->paid_amount, 0, "Payment Amount of Sale No. $sale->id", $ref);
+            }
+            else{
+                createTransaction($request->customerID, $request->date, $net_total, 0, "Pending Amount of Sale No. $sale->id", $ref);
+            }
 
             if ($request->has('file')) {
                 createAttachment($request->file('file'), $ref);
@@ -146,8 +154,9 @@ class SaleController extends Controller
 
         $branch = Branches::find($sale->branch_id);
         $customers = accounts::Customer()->where('branch_id', $sale->branch_id)->get();
+        $accounts = accounts::where('branch_id', $sale->branch_id)->business()->get();
 
-        return view('sale.edit', compact('products', 'customers', 'branch', 'sale'));
+        return view('sale.edit', compact('products', 'customers', 'branch', 'sale', 'accounts'));
     }
 
     /**
@@ -171,6 +180,8 @@ class SaleController extends Controller
                 [
                     'customer_id' => $request->customerID,
                     'branch_id' => $request->branch_id,
+                    'account_id' => $request->account,
+                    'paid_amount' => $request->paid_amount ?? 0,
                     'date' => $request->date,
                     'notes' => $request->notes,
                     'discount' => $request->discount ?? 0,
@@ -212,9 +223,14 @@ class SaleController extends Controller
                     'total' => $net_total,
                 ]
             );
-
-            // Transaction for Customer: db = $net_total, cr = 0
-            createTransaction($request->customerID, $request->date, $net_total, 0, "Pending Amount of Sale No. $sale->id", $ref);
+            
+            if ($request->paid_amount > 0) {
+                createTransaction($request->customerID, $request->date, $net_total, $request->paid_amount, "Payment Amount of Sale No. $sale->id", $ref);
+                createTransaction($request->account, $request->date, $request->paid_amount, 0, "Payment Amount of Sale No. $sale->id", $ref);
+            }
+            else{
+                createTransaction($request->customerID, $request->date, $net_total, 0, "Pending Amount of Sale No. $sale->id", $ref);
+            }
 
             if ($request->has('file')) {
                 createAttachment($request->file('file'), $ref);

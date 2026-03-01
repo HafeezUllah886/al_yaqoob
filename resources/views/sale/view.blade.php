@@ -102,6 +102,18 @@
                                                     <th class="text-end p-1 m-1 text-primary">
                                                         {{ number_format($sale->total, 2) }}</th>
                                                 </tr>
+                                                @if ($sale->paid_amount < $sale->total)
+                                                    <tr>
+                                                        <th colspan="5" class="text-end p-1 m-1">Paid Amount</th>
+                                                        <th class="text-end p-1 m-1 text-primary">
+                                                            {{ number_format($sale->paid_amount, 2) }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="5" class="text-end p-1 m-1">Remaining Amount</th>
+                                                        <th class="text-end p-1 m-1 text-primary">
+                                                            {{ number_format($sale->total - $sale->paid_amount, 2) }}</th>
+                                                    </tr>
+                                                @endif
                                             </tfoot>
                                         </table><!--end table-->
                                     </div>

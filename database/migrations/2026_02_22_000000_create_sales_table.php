@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('accounts', 'id');
             $table->foreignId('branch_id')->constrained('branches', 'id');
+            $table->foreignId('account_id')->constrained('accounts', 'id');
+            $table->float('paid_amount')->default(0);
             $table->date('date');
             $table->text('notes')->nullable();
             $table->float('total')->default(0);

@@ -8,7 +8,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-6">
-                                    <h3> Create Sale </h3>
+                                    <h3> Create Sale | {{ $branch->name }}</h3>
                                 </div>
                                 <div class="col-6 d-flex flex-row-reverse"><a href="{{ route('sale.index') }}"
                                         class="btn btn-danger">Close</a></div>
@@ -18,6 +18,7 @@
                 </div><!--end row-->
                 <div class="card-body">
                     <form action="{{ route('sale.store') }}" method="post" enctype="multipart/form-data">
+                         <input type="hidden" name="branch_id" id="branch_id" value="{{ $branch->id }}">
                         @csrf
                         <div class="row">
                             <div class="col-12">
@@ -54,22 +55,15 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="date">Date</label>
                                     <input type="date" name="date" id="date" value="{{ date('Y-m-d') }}"
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="warehouse">Branch</label>
-                                    <input type="text" name="branch" id="branch" value="{{ $branch->name }}"
-                                        class="form-control" readonly>
-                                    <input type="hidden" name="branch_id" id="branch_id" value="{{ $branch->id }}">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
+                            
+                            <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="customer">Customer</label>
                                     <select name="customerID" id="customer" class="selectize1">
@@ -79,14 +73,31 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="discount">Discount</label>
                                     <input type="number" name="discount" id="discount" step="any" value="0"
                                         oninput="updateTotal()" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 mt-2">
+                                <div class="form-group">
+                                    <label for="paid_amount">Paid Amount</label>
+                                    <input type="number" name="paid_amount" id="paid_amount" step="any" value="0"
+                                       class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-2">
+                                <div class="form-group">
+                                    <label for="account">Account</label>
+                                    <select name="account" id="account" class="selectize1">
+                                        @foreach ($accounts as $account)
+                                            <option value="{{ $account->id }}">{{ $account->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="attachement">Attachment</label>
                                     <input type="file" name="file" id="attachement" class="form-control">
@@ -251,6 +262,7 @@
             var net = total - discount;
 
             $("#netAmount").html(net.toFixed(2));
+            $("#paid_amount").val(net);
         }
 
         function deleteRow(id) {
