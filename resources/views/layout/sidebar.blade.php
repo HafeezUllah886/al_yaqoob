@@ -234,6 +234,13 @@
                                             Report</a>
                                     </li>
                                 @endcan
+                                @can('Stocks Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.stock.index') }}" class="nav-link"
+                                            data-key="t-chat">Stock Movement
+                                            Report</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>

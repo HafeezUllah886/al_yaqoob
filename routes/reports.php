@@ -3,6 +3,7 @@
 use App\Http\Controllers\reports\SalesReportController;
 use App\Http\Controllers\reports\PurchasesReportController;
 use App\Http\Controllers\reports\ExpenseReportController;
+use App\Http\Controllers\reports\StockReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -15,5 +16,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('reports/expenses', [ExpenseReportController::class, 'index'])->name('reports.expenses.index');
     Route::get('reports/expenses/details', [ExpenseReportController::class, 'details'])->name('reports.expenses.details');
+
+    Route::get('reports/stock', [StockReportController::class, 'index'])->name('reports.stock.index');
+    Route::get('reports/stock/details', [StockReportController::class, 'details'])->name('reports.stock.details');
 
 });
