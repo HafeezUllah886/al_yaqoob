@@ -82,7 +82,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
                                         @foreach ($report_data as $key => $row)
                                             <tr>
                                                 <td class="p-1">{{ $key + 1 }}</td>
@@ -103,6 +102,22 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="table-light fw-bold text-end">
+                                            <td colspan="4" class="p-1">Total</td>
+                                            <td class="p-1">{{ number_format($totals['opening'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['purchase'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['stock_transfers_in'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['adj_in'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['total_in'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['sales'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['stock_transfers_out'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['adj_out'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['total_out'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['closing'], 1) }}</td>
+                                            <td class="p-1">{{ number_format($totals['current_stock'], 1) }}</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
