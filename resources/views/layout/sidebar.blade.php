@@ -241,6 +241,13 @@
                                             Report</a>
                                     </li>
                                 @endcan
+                                @can('Profit and Loss Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.profit_loss.index') }}" class="nav-link"
+                                            data-key="t-chat">Profit & Loss
+                                            Report</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>

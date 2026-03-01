@@ -4,6 +4,7 @@ use App\Http\Controllers\reports\SalesReportController;
 use App\Http\Controllers\reports\PurchasesReportController;
 use App\Http\Controllers\reports\ExpenseReportController;
 use App\Http\Controllers\reports\StockReportController;
+use App\Http\Controllers\reports\ProfitLossReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -20,4 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('reports/stock', [StockReportController::class, 'index'])->name('reports.stock.index');
     Route::get('reports/stock/details', [StockReportController::class, 'details'])->name('reports.stock.details');
 
+    // Profit & Loss Report
+    Route::get('/profit-loss', [ProfitLossReportController::class, 'index'])->name('reports.profit_loss.index');
+    Route::get('/profit-loss/details', [ProfitLossReportController::class, 'details'])->name('reports.profit_loss.details');
 });
