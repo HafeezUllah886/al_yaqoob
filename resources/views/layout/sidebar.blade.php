@@ -210,6 +210,7 @@
                     Report',
                     'Balance Sheet Report',
                     'Branch Balance Sheet Report',
+                    'Non-Business Expenses Report',
                     ])
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#reports" data-bs-toggle="collapse" role="button"

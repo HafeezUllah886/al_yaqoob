@@ -5,6 +5,7 @@ namespace App\Http\Controllers\reports;
 use App\Http\Controllers\Controller;
 use App\Models\Branches;
 use App\Models\expenses;
+use App\Models\NonBusinessExpenses;
 use App\Models\Products;
 use App\Models\purchase_details;
 use App\Models\Sale;
@@ -111,11 +112,12 @@ class ProfitLossReportController extends Controller
 
         // Expenses and other metrics
         $expenses = expenses::whereBetween('date', [$from, $to])->whereIn('branch_id', $branch_ids)->sum('amount');
+        $non_business_expenses = NonBusinessExpenses::whereBetween('date', [$from, $to])->whereIn('branch_id', $branch_ids)->sum('amount');
 
         return view('reports.profit_loss.details', compact(
             'from', 'to', 'branch_name', 'products', 
             'product_profit', 'stock_value',
-            'expenses'
+            'expenses', 'non_business_expenses'
         ));
     }
 }

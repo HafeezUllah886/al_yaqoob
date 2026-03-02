@@ -43,6 +43,7 @@ class permissionSeeder extends Seeder
             ['name' => 'Profit and Loss Report', 'group' => 'Reports'],
             ['name' => 'Balance Sheet Report', 'group' => 'Reports'],
             ['name' => 'Branch Balance Sheet Report', 'group' => 'Reports'],
+            ['name' => 'Non-Business Expenses Report', 'group' => 'Reports'],
             // stocks
             ['name' => 'View Stocks', 'group' => 'Stocks'],
             ['name' => 'Transfer Stocks', 'group' => 'Stocks'],
