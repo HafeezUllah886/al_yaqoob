@@ -89,14 +89,9 @@
                                             <th colspan="2" class="border-0"></th>
                                         </tr>
                                         <tr>
-                                            <th colspan="8" class="text-end p-1 border-0">Non-Business Expenses (-):</th>
-                                            <th class="text-end p-1 border-top">{{ number_format($non_business_expenses, 2) }}</th>
-                                            <th colspan="2" class="border-0"></th>
-                                        </tr>
-                                        <tr>
                                             <th colspan="8" class="text-end p-1 border-0">Net Profit:</th>
                                             <th class="text-end p-1 border-top border-bottom fw-bold fs-16">
-                                                {{ number_format($product_profit - $expenses - $non_business_expenses, 2) }}
+                                                {{ number_format($product_profit - $expenses, 2) }}
                                             </th>
                                             <th colspan="2" class="border-0"></th>
                                         </tr>
