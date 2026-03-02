@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\reports\BalanceSheetReportController;
 use App\Http\Controllers\reports\SalesReportController;
 use App\Http\Controllers\reports\PurchasesReportController;
 use App\Http\Controllers\reports\ExpenseReportController;
@@ -28,4 +29,8 @@ Route::middleware('auth')->group(function () {
     // Profit & Loss Report
     Route::get('/profit-loss', [ProfitLossReportController::class, 'index'])->name('reports.profit_loss.index');
     Route::get('/profit-loss/details', [ProfitLossReportController::class, 'details'])->name('reports.profit_loss.details');
+
+    // Balance Sheet Report
+    Route::get('/balance-sheet', [BalanceSheetReportController::class, 'index'])->name('reports.balance_sheet.index');
+    Route::get('/balance-sheet/details', [BalanceSheetReportController::class, 'details'])->name('reports.balance_sheet.details');
 });

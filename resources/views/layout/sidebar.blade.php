@@ -261,6 +261,13 @@
                                             Report</a>
                                     </li>
                                 @endcan
+                                @can('Balance Sheet Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.balance_sheet.index') }}" class="nav-link"
+                                            data-key="t-chat">Balance Sheet
+                                            Report</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>
