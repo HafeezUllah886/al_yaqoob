@@ -3,7 +3,9 @@
 use App\Http\Controllers\AccountAdjustmentController;
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\ExpenseCategoriesController;
+use App\Http\Controllers\NonBusinessExpenseCategoriesController;
 use App\Http\Controllers\ExpensesController;
+use App\Http\Controllers\NonBusinessExpensesController;
 use App\Http\Controllers\PaymentReceivingController;
 use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\TransferController;
@@ -26,6 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('expensesCategories', ExpenseCategoriesController::class);
     Route::resource('expenses', ExpensesController::class);
     Route::get('expense/delete/{ref}', [ExpensesController::class, 'delete'])->name('expense.delete')->middleware(confirmPassword::class);
+
+    Route::resource('nonBusinessExpensesCategories', NonBusinessExpenseCategoriesController::class);
+    Route::resource('nonBusinessExpenses', NonBusinessExpensesController::class);
+    Route::get('non_business_expense/delete/{ref}', [NonBusinessExpensesController::class, 'delete'])->name('non_business_expense.delete')->middleware(confirmPassword::class);
 
     Route::resource('receivings', PaymentReceivingController::class);
     Route::get('receiving/delete/{ref}', [PaymentReceivingController::class, 'delete'])->name('receiving.delete')->middleware(confirmPassword::class);

@@ -17,6 +17,7 @@ class permissionSeeder extends Seeder
             ['name' => 'Sales', 'group' => 'Dashboard'],
             ['name' => 'Purchases', 'group' => 'Dashboard'],
             ['name' => 'Expenses', 'group' => 'Dashboard'],
+            ['name' => 'Non-Business Expenses', 'group' => 'Dashboard'],
             ['name' => 'Stocks Value', 'group' => 'Dashboard'],
             ['name' => 'Customer Balance', 'group' => 'Dashboard'],
             ['name' => 'Vendor Balance', 'group' => 'Dashboard'],
@@ -87,12 +88,16 @@ class permissionSeeder extends Seeder
             ['name' => 'View Sales', 'group' => 'Sales'],
             ['name' => 'Edit Sales', 'group' => 'Sales'],
             ['name' => 'Delete Sales', 'group' => 'Sales'],
-
             // expenses
             ['name' => 'Create Expenses', 'group' => 'Expenses'],
             ['name' => 'Delete Expenses', 'group' => 'Expenses'],
             ['name' => 'Create Expense Categories', 'group' => 'Expenses'],
             ['name' => 'Edit Expense Categories', 'group' => 'Expenses'],
+            // non-business expenses
+            ['name' => 'Create Non-Business Expenses', 'group' => 'Expenses'],
+            ['name' => 'Delete Non-Business Expenses', 'group' => 'Expenses'],
+            ['name' => 'Create Non-Business Expense Categories', 'group' => 'Expenses'],
+            ['name' => 'Edit Non-Business Expense Categories', 'group' => 'Expenses'],
             // transfers
             ['name' => 'Transfers', 'group' => 'Transfers'],
             ['name' => 'Delete Transfers', 'group' => 'Transfers'],

@@ -131,6 +131,11 @@
                                         <a href="{{ route('expenses.index') }}" class="nav-link" data-key="t-chat">Expenses</a>
                                     </li>
                                 @endcan
+                                @can('Create Non-Business Expenses')
+                                    <li class="nav-item">
+                                        <a href="{{ route('nonBusinessExpenses.index') }}" class="nav-link" data-key="t-chat">Non-Business Expenses</a>
+                                    </li>
+                                @endcan
 
                             </ul>
                         </div>
@@ -231,6 +236,13 @@
                                     <li class="nav-item">
                                         <a href="{{ route('reports.expenses.index') }}" class="nav-link"
                                             data-key="t-chat">Expenses
+                                            Report</a>
+                                    </li>
+                                @endcan
+                                @can('Non-Business Expenses Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.non_business_expenses.index') }}" class="nav-link"
+                                            data-key="t-chat">Non-Business Expenses
                                             Report</a>
                                     </li>
                                 @endcan
