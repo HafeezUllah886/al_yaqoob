@@ -83,8 +83,6 @@
                                               $product_details = \App\Models\Products::find($product->product_id);
                                               $product_unit = \App\Models\Product_units::where('product_id', $product->product_id)->first();
                                               $totalAmount += $product->total_amount;
-                                             
-                                              
                                           @endphp
                                               <tr>
                                                 <td class="p-1">{{$key+1}}</td>

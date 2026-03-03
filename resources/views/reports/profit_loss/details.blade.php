@@ -26,11 +26,11 @@
                             <div class="row g-3">
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold fs-12">From</p>
-                                    <h5 class="fs-14 mb-0">{{ date('d-m-Y', strtotime($from)) }}</h5>
+                                    <h5 class="fs-14 mb-0">{{ date('d M Y', strtotime($from)) }}</h5>
                                 </div>
                                 <div class="col-lg-3 col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold fs-12">To</p>
-                                    <h5 class="fs-14 mb-0">{{ date('d-m-Y', strtotime($to)) }}</h5>
+                                    <h5 class="fs-14 mb-0">{{ date('d M Y', strtotime($to)) }}</h5>
                                 </div>
                             </div>
                         </div>

@@ -30,48 +30,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 mt-2 {{$account->type != "Business" ? "d-none" : ""}}"  id="catBox">
-                                <div class="form-group">
-                                    <label for="category">Category</label>
-                                    <select name="category" id="category" class="form-control">
-                                        <option value="Cash">Cash</option>
-                                        <option value="Bank">Bank</option>
-                                        <option value="Cheque">Cheque</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            @if ($account->type == 'Customer')
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="area">Area</label>
-                                    <select name="areaID" id="area" class="form-control">
-                                        @foreach ($areas as $area)
-                                            <option value="{{ $area->id }}" @selected($area->id == $account->areaID)>{{ $area->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="cnic">Customer Category</label>
-                                    <select name="c_type" id="c_type" class="form-control">
-                                        <option value="Distributor" @selected($account->c_type == "Distributor")>Distributor</option>
-                                        <option value="Retailer" @selected($account->c_type == "Retailer")>Retailer</option>
-                                        <option value="Wholeseller" @selected($account->c_type == "Wholeseller")>Wholeseller</option>
-                                        <option value="Super Mart" @selected($account->c_type == "Super Mart")>Super Mart</option>
-                                        <option value="Sub Dealer" @selected($account->c_type == "Sub Dealer")>Sub Dealer</option>
-                                        <option value="Other" @selected($account->c_type == "Other")>Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="cnic">CNIC #</label>
-                                    <input type="text" name="cnic" id="cnic" value="{{ $account->cnic }}"
-                                        class="form-control">
-                                </div>
-                            </div>
+                          
+                           @if($account->type == "Customer")
                             <div class="col-6 mt-2 customer" >
                                 <div class="form-group">
                                     <label for="contact">Contact #</label>
@@ -86,22 +46,7 @@
                                         class="form-control">
                                 </div>
                             </div>
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="ntn">NTN #</label>
-                                    <input type="text" name="ntn" id="ntn" value="{{ $account->ntn }}"
-                                        class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-6 mt-2 customer" >
-                                <div class="form-group">
-                                    <label for="strn">STRN #</label>
-                                    <input type="text" name="strn" id="strn" value="{{ $account->strn }}"
-                                        class="form-control">
-                                </div>
-                            </div>
-                            @endif
-
+                           @endif
                             <div class="col-12 mt-3">
                                 <button type="submit" class="btn btn-secondary w-100">Update</button>
                             </div>

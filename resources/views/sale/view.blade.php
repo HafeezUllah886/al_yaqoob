@@ -9,7 +9,7 @@
                             <a href="javascript:window.print()" class="btn btn-success ml-4"><i
                                     class="ri-printer-line mr-4"></i> Print</a>
                         </div>
-                        <div class="card-header border-bottom-dashed p-4">
+                        {{-- <div class="card-header border-bottom-dashed p-4">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <h1>{{ projectName() }}</h1>
@@ -18,10 +18,16 @@
                                     <h3>Sales Invoice</h3>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
+                        @include('layout.header')
                         <!--end card-header-->
                     </div><!--end col-->
                     <div class="col-lg-12 ">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h5 class="bg-dark-subtle text-dark p-2 fw-bold" style="width: 200px; margin: 0 auto; border-radius: 10px;">Sales Invoice</h5>
+                            </div>
+                        </div>
 
                         <div class="card-body p-4">
                             <div class="row g-3">
@@ -38,6 +44,7 @@
                                 <div class="col-6">
                                     <p class="text-muted mb-2 text-uppercase fw-semibold">Customer</p>
                                     <h5 class="fs-14 mb-0">{{ $sale->customer->title }}</h5>
+                                    <h5 class="fs-14 mb-0">{{ $sale->customer->address }}</h5>
                                 </div>
                                 <!--end col-->
                                 <div class="col-2">

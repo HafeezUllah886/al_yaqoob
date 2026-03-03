@@ -55,9 +55,9 @@ class AccountAdjustmentController extends Controller
             );
 
             if ($request->type == 'Credit') {
-                createTransaction($request->accountID, $request->date, $request->amount, 0, 'Credit: '.$request->notes, $ref, 'Credit');
+                createTransaction($request->accountID, $request->date, $request->amount, 0, 'Account Adjustment Credit: '.$request->notes, $ref);
             } else {
-                createTransaction($request->accountID, $request->date, 0, $request->amount, 'Debit: '.$request->notes, $ref, 'Debit');
+                createTransaction($request->accountID, $request->date, 0, $request->amount, 'Account Adjustment Debit: '.$request->notes, $ref);
             }
             if ($request->has('file')) {
                 createAttachment($request->file('file'), $ref);

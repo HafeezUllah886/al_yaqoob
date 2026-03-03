@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\reports\BalanceSheetReportController;
+use App\Http\Controllers\reports\CashFlowReportController;
 use App\Http\Controllers\reports\SalesReportController;
 use App\Http\Controllers\reports\PurchasesReportController;
 use App\Http\Controllers\reports\ExpenseReportController;
@@ -33,4 +34,8 @@ Route::middleware('auth')->group(function () {
     // Balance Sheet Report
     Route::get('/balance-sheet', [BalanceSheetReportController::class, 'index'])->name('reports.balance_sheet.index');
     Route::get('/balance-sheet/details', [BalanceSheetReportController::class, 'details'])->name('reports.balance_sheet.details');
+
+    // Cash Flow Report
+    Route::get('/cash-flow', [CashFlowReportController::class, 'index'])->name('reports.cash_flow.index');
+    Route::get('/cash-flow/details', [CashFlowReportController::class, 'details'])->name('reports.cash_flow.details');
 });

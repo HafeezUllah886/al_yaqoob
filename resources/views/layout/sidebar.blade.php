@@ -268,7 +268,13 @@
                                             Report</a>
                                     </li>
                                 @endcan
-
+                                @can('Daily Cash Flow Report')
+                                    <li class="nav-item">
+                                        <a href="{{ route('reports.cash_flow.index') }}" class="nav-link"
+                                            data-key="t-chat">Daily Cash Flow
+                                            Report</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>
