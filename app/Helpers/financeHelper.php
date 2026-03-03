@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AccountAdjustment;
+use App\Models\accounts;
 use App\Models\transactions;
 
 function createTransaction($accountID, $date, $cr, $db, $notes, $ref)
@@ -49,4 +51,20 @@ function spotBalance($id, $ref)
     $db = transactions::where('account_id', $id)->where('refID', '<=', $ref)->sum('db');
 
     return $balance = $cr - $db;
+}
+
+function branchAccountCategoryBalance($branch, $category){
+    if ($branch == 'All') {
+        $branch_ids = Auth()->user()->branch_ids();
+    } else {
+        $branch_ids = [$branch];
+    }
+
+    $accounts = accounts::where('category', $category)->whereIn('branch_id', $branch_ids)->get();
+   $balance = 0;
+   foreach ($accounts as $account) {
+       $balance += getAccountBalance($account->id);
+   }
+    return $balance;
+    
 }

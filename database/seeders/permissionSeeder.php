@@ -22,6 +22,7 @@ class permissionSeeder extends Seeder
             ['name' => 'Customer Balance', 'group' => 'Dashboard'],
             ['name' => 'Vendor Balance', 'group' => 'Dashboard'],
             ['name' => 'Business Balance', 'group' => 'Dashboard'],
+            ['name' => 'Transporter Balance', 'group' => 'Dashboard'],
             ['name' => 'Branch Balance', 'group' => 'Dashboard'],
             ['name' => 'Sales Vs Expenses', 'group' => 'Dashboard'],
             // accounts
