@@ -14,8 +14,6 @@ use App\Models\transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use function App\Helpers\createStock;
-use function App\Helpers\getProductBranchStock;
 
 class StockTransferController extends Controller
 {

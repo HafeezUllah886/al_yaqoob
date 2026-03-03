@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function branches()
     {
-        return $this->belongsToMany(Branches::class, 'branch_users', 'branch_id', 'user_id');
+        return $this->belongsToMany(Branches::class, 'branch_users', 'user_id', 'branch_id');
     }
 
     public function syncBranches($branches)
