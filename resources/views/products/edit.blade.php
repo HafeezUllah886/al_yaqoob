@@ -31,7 +31,7 @@
                             <div class="col-md-6">
                                 <div class="form-group ">
                                     <label for="catID">Category</label>
-                                    <select name="catID" id="catID" class="selectize">
+                                    <select name="category_id" id="catID" class="selectize">
                                         @foreach ($cats as $cat)
                                             <option value="{{ $cat->id }}" @selected($cat->id == $product->catID)>
                                                 {{ $cat->name }}</option>
