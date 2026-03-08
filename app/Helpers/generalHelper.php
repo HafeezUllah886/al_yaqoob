@@ -63,10 +63,12 @@ function lastDayOfPreviousYear()
 function deleteAttachment($ref)
 {
     $attachment = attachment::where('refID', $ref)->first();
-    if (file_exists(public_path($attachment->path))) {
-        unlink(public_path($attachment->path));
+    if ($attachment) {
+        if (file_exists(public_path($attachment->path))) {
+            unlink(public_path($attachment->path));
+        }
+        $attachment->delete();
     }
-    $attachment->delete();
 }
 
 function createAttachment($file, $ref)
