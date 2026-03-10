@@ -193,8 +193,8 @@
                         <a href="{{ route('accountsList', 'Vendor') }}" class="text-decoration-underline">View Details</a>
                     </div>
                     <div class="avatar-sm flex-shrink-0">
-                        <span class="avatar-title bg-dark-subtle rounded fs-3">
-                            <i class="bx bx-store text-dark"></i>
+                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                            <i class="bx bx-store text-primary"></i>
                         </span>
                     </div>
                 </div>

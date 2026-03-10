@@ -34,6 +34,7 @@
                                         <option value="Customer">Customer</option>
                                         <option value="Vendor">Vendor</option>
                                         <option value="Transporter">Transporter</option>
+                                        <option value="Others">Others</option>
                                     </select>
                                 </div>
                             </div>

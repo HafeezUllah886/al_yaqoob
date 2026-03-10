@@ -95,7 +95,7 @@ class StockTransferController extends Controller
                 expenses::create(
                     [
                         'account_id' => $request->account_id,
-                        'category_id' => 1,
+                        'category_id' => 2,
                         'date' => $request->date,
                         'amount' => $request->fare,
                         'notes' => $notes,
@@ -117,6 +117,28 @@ class StockTransferController extends Controller
             }
             if ($request->has('file')) {
                 createAttachment($request->file('file'), $ref);
+            }
+            $categories = $request->category;
+            if ($categories) {
+                foreach ($categories as $key => $category) {
+                    $expense_account = accounts::find($request->expense_account[$key]);
+                    expenses::create(
+                        [
+                            'account_id' => $request->expense_account[$key],
+                            'category_id' => $category,
+                            'date' => $request->date,
+                            'amount' => $request->expense_amount[$key],
+                            'notes' => $request->expense_notes[$key],
+                            'branch_id' => $expense_account->branch_id,
+                            'source' => 'Stock Transfer',
+                            'refID' => $ref,
+                        ]
+                    );
+
+                    $notes = $request->expense_notes[$key];
+
+                    createTransaction($request->expense_account[$key], $request->date, 0, $request->expense_amount[$key], "Expense of Stock Transfer No. $stockTransfer->id Notes: $notes", $ref);
+                }
             }
             DB::commit();
 
@@ -151,9 +173,10 @@ class StockTransferController extends Controller
         $stock = getProductBranchStock($stockTransfer->product_id, $stockTransfer->branch_from_id) + ($stockTransfer->pcs * $stockTransfer->unit_value);
         $expense_categories = expenseCategories::all();
         $transporters = accounts::transporter()->get();
+        $expenses = expenses::where('refID', $stockTransfer->refID)->where('category_id', '!=', 1)->get();
         $accounts = accounts::with('branch')->business()->whereIn('branch_id', [$stockTransfer->branch_from_id, $stockTransfer->branch_to_id])->get();
 
-        return view('stock.transfer.edit', compact('stockTransfer', 'product', 'branchFrom', 'branchTo', 'stock', 'accounts', 'expense_categories', 'transporters'));
+        return view('stock.transfer.edit', compact('stockTransfer', 'product', 'branchFrom', 'branchTo', 'stock', 'accounts', 'expense_categories', 'transporters', 'expenses'));
     }
 
     /**
@@ -203,7 +226,7 @@ class StockTransferController extends Controller
             if ($request->fare > 0) {
                 expenses::create([
                     'account_id' => $request->account_id,
-                    'category_id' => 1,
+                    'category_id' => 2,
                     'date' => $request->date,
                     'amount' => $request->fare,
                     'notes' => $notes,
@@ -229,6 +252,28 @@ class StockTransferController extends Controller
                 createAttachment($request->file('file'), $ref);
             }
 
+            $categories = $request->category;
+            if ($categories) {
+                foreach ($categories as $key => $category) {
+                     $expense_account = accounts::find($request->expense_account[$key]);
+                    expenses::create(
+                        [
+                            'account_id' => $request->expense_account[$key],
+                            'category_id' => $category,
+                            'date' => $request->date,
+                            'amount' => $request->expense_amount[$key],
+                            'notes' => $request->expense_notes[$key],
+                            'branch_id' => $expense_account->branch_id,
+                            'source' => 'Stock Transfer',
+                            'refID' => $ref,
+                        ]
+                    );
+
+                    $notes = $request->expense_notes[$key];
+
+                    createTransaction($request->expense_account[$key], $request->date, 0, $request->expense_amount[$key], "Expense of Stock Transfer No. $stockTransfer->id Notes: $notes", $ref);
+                }
+            }
             DB::commit();
 
             return redirect()->route('stockTransfer.index')->with('success', 'Stock Transfer Updated Successfully');

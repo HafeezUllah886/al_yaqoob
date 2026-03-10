@@ -27,15 +27,12 @@ class permissionSeeder extends Seeder
             ['name' => 'Sales Vs Expenses', 'group' => 'Dashboard'],
             // accounts
             ['name' => 'Create Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Business Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Vendor Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Customer Accounts', 'group' => 'Accounts'],
-            ['name' => 'Create Transporter Accounts', 'group' => 'Accounts'],
             ['name' => 'Edit Accounts', 'group' => 'Accounts'],
             ['name' => 'View Business Accounts', 'group' => 'Accounts'],
             ['name' => 'View Vendor Accounts', 'group' => 'Accounts'],
             ['name' => 'View Customer Accounts', 'group' => 'Accounts'],
             ['name' => 'View Transporter Accounts', 'group' => 'Accounts'],
+            ['name' => 'View Other Accounts', 'group' => 'Accounts'],
             // reports
             ['name' => 'Sales Report', 'group' => 'Reports'],
             ['name' => 'Purchases Report', 'group' => 'Reports'],

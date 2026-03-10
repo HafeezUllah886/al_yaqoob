@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountAdjustment;
 use App\Models\accounts;
 use App\Models\transactions;
 use Illuminate\Http\Request;
@@ -73,8 +74,32 @@ class AccountsController extends Controller
             if ($request->initial > 0) {
                 if ($request->initialType == '0') {
                     createTransaction($account->id, now(), $request->initial, 0, 'Initial Amount', $ref);
+                    AccountAdjustment::create(
+                        [
+                            'account_id' => $account->id,
+                            'branch_id' => $account->branch_id,
+                            'user_id' => auth()->id(),
+                            'date' => now(),
+                            'type' => 'Credit',
+                            'amount' => $request->initial,
+                            'notes' => 'Initial Amount',
+                            'refID' => $ref,
+                        ]
+                    );
                 } else {
                     createTransaction($account->id, now(), 0, $request->initial, 'Initial Amount', $ref);
+                    AccountAdjustment::create(
+                        [
+                            'account_id' => $account->id,
+                            'branch_id' => $account->branch_id,
+                            'user_id' => auth()->id(),
+                            'date' => now(),
+                            'type' => 'Debit',
+                            'amount' => $request->initial,
+                            'notes' => 'Initial Amount',
+                            'refID' => $ref,
+                        ]
+                    );
                 }
             }
             DB::commit();
@@ -121,7 +146,7 @@ class AccountsController extends Controller
     {
         $request->validate(
             [
-                'title' => 'required|unique:accounts,title,'.$request->accountID,
+                'title' => 'required|unique:accounts,title,' . $request->accountID,
             ],
             [
                 'title.required' => 'Please Enter Account Title',

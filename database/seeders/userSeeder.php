@@ -17,12 +17,12 @@ class userSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'email' => 'admin@email.com',
-                'password' => Hash::make('admin'),
+                'password' => Hash::make('admin789'),
             ],
             [
                 'name' => 'Operator',
                 'email' => 'operator@email.com',
-                'password' => Hash::make('operator'),
+                'password' => Hash::make('operator789'),
             ],
         ];
         foreach ($users as $user) {

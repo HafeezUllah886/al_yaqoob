@@ -90,6 +90,12 @@
                                             data-key="t-chat">Transporter Accounts</a>
                                     </li>
                                 @endcan
+                                @can('View Other Accounts')
+                                    <li class="nav-item">
+                                        <a href="{{ route('accountsList', 'Others') }}" class="nav-link"
+                                            data-key="t-chat">Others Accounts</a>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>

@@ -82,7 +82,7 @@
                             <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="transporter">Transporter</label>
-                                    <select name="transporter" id="transporter" class="form-control">
+                                    <select name="transporter" id="transporter" required class="form-control">
                                         <option value="">Select Transporter</option>
                                         @foreach ($transporters as $transporter)
                                             <option value="{{ $transporter->id }}">{{ $transporter->title }}</option>
@@ -126,6 +126,30 @@
                                         @endforeach
                                     </select>
                                 </div>
+                            </div>
+                             <div class="col-12 mt-2">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3> Expenses </h3>
+                                        </div>
+                                        <div class="col-6 d-flex flex-row-reverse"><span onclick="addExpense()"
+                                                class="btn btn-primary">Add</span></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Account</th>
+                                            <th>Amount</th>
+                                            <th>Notes</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="expenses">
+                                    </tbody>
+                                </table>
                             </div>
 
                             <div class="col-12 mt-2">

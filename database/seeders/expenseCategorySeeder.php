@@ -14,6 +14,7 @@ class expenseCategorySeeder extends Seeder
     {
         $cats = [
             ['name' => 'Transport'],
+            ['name' => 'Fare'],
             ['name' => 'Labor'],
         ];
 

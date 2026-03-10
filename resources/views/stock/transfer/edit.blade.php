@@ -77,13 +77,13 @@
                             <div class="col-md-3 mt-2">
                                 <div class="form-group">
                                     <label for="qty">Transfer Quantity</label>
-                                    <input type="number" value="{{ $stockTransfer->pcs }}" name="qty" class="form-control">
+                                    <input type="number" value="{{ $stockTransfer->pcs }}" required min="1" name="qty" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-2 mt-2">
                                 <div class="form-group">
                                     <label for="transporter">Transporter</label>
-                                    <select name="transporter" id="transporter" class="form-control">
+                                    <select name="transporter" id="transporter" required class="form-control">
                                         <option value="">Select Transporter</option>
                                         @foreach ($transporters as $transporter)
                                             <option value="{{ $transporter->id }}" {{ $stockTransfer->transporter_id == $transporter->id ? 'selected' : '' }}>{{ $transporter->title }}</option>
@@ -128,6 +128,66 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12 mt-2">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h3> Expenses </h3>
+                                        </div>
+                                        <div class="col-6 d-flex flex-row-reverse"><span onclick="addExpense()"
+                                                class="btn btn-primary">Add</span></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Account</th>
+                                            <th>Amount</th>
+                                            <th>Notes</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="expenses">
+                                        @foreach ($expenses as $key => $expense )
+                                              @php $ser = $key + 1; @endphp
+                                            <tr id="expense_{{ $ser }}">
+                                                <td>
+                                                    <select name="category[]" required class="form-control">
+                                                        <option value="">Select Category</option>
+                                                        @foreach ($expense_categories as $category)
+                                                            <option value="{{ $category->id }}"
+                                                                @selected($category->id == $expense->category_id)>{{ $category->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="expense_account[]" required class="form-control">
+                                                        <option value="">Select Account</option>
+                                                        @foreach ($accounts as $account)
+                                                            <option value="{{ $account->id }}"
+                                                                @selected($account->id == $expense->account_id)>{{ $account->title }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="expense_amount[]" required
+                                                        class="form-control" value="{{ $expense->amount }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="expense_notes[]" class="form-control"
+                                                        value="{{ $expense->notes && str_contains($expense->notes, ':') ? trim(last(explode(':', $expense->notes))) : $expense->notes }}">
+                                                </td>
+                                                <td>
+                                                    <span class="btn btn-sm btn-danger"
+                                                        onclick="deleteExpense({{ $ser }})">X</span>
+                                                </td>
+                                            </tr>
+
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="col-12 mt-2">
                                 <div class="form-group">
@@ -169,6 +229,50 @@
             var unit_value = select.options[select.selectedIndex].getAttribute('data-value');
             var base_stock = document.getElementById('base_stock').value;
             document.getElementById('available_stock').value = (base_stock / unit_value).toFixed(2);
+        }
+
+         var categories = @json($expense_categories);
+        var accounts = @json($accounts);
+        var expense_ser = {{ $expenses->count() }};
+
+        function addExpense() {
+            console.log("Function Called");
+            expense_ser++;
+            html = '<tr id="expense_' + expense_ser + '">';
+            html += '<td>';
+            html += '<select name="category[]" required class="form-control">';
+            html += '<option value="">Select Category</option>';
+            categories.forEach(function(category) {
+                html += '<option value="' + category.id + '">' + category.name + '</option>';
+            });
+            html += '</select>';
+            html += '</td>';
+            html += '<td>';
+            html += '<select name="expense_account[]" required class="form-control">';
+            html += '<option value="">Select Account</option>';
+            accounts.forEach(function(account) {
+                html += '<option value="' + account.id + '">' + account.title + ' - ' + account.branch.name +
+                    '</option>';
+            });
+            html += '</select>';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="number" name="expense_amount[]" required class="form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<input type="text" name="expense_notes[]"  class="form-control">';
+            html += '</td>';
+            html += '<td>';
+            html += '<span class="btn btn-sm btn-danger" onclick="deleteExpense(' + expense_ser + ')">X</span>';
+            html += '</td>';
+            html += '</tr>';
+
+            $("#expenses").append(html);
+
+        }
+
+        function deleteExpense(id) {
+            $('#expense_' + id).remove();
         }
     </script>
 @endsection
