@@ -9,7 +9,6 @@ use App\Models\stockAdjustment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use function App\Helpers\createStock;
 
 class StockAdjustmentController extends Controller
 {
